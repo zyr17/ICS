@@ -38,8 +38,8 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char *args) {
     int times = 1, len = strlen(args);
-    sscanf(args, "%d", &times);
     printf("%d %s\n", len, args);
+    sscanf(args, "%d", &times);
     return 0;
     if (times < 1 || len == 0){
         printf("Wrong input\n");
