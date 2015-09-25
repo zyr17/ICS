@@ -38,12 +38,15 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char *args) {
     //printf("%s\n", args);
-    if (args == NULL) return 0;
-    int times = 1, len = strlen(args);
+    if (args == NULL){
+        cpu_exec(1);
+        return 0;
+    }
+    int times, len = strlen(args);
     printf("%d %s\n", len, args);
     sscanf(args, "%d", &times);
     return 0;
-    if (times < 1 || len == 0){
+    if (times < 1){
         printf("Wrong input\n");
         return 0;
     }
