@@ -37,9 +37,9 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_si(char *args) {
-    int times = 1;
+    int times = 1, len = strlen(args);
     sscanf(args, "%d", &times);
-    if (times < 1){
+    if (times < 1 || len == 0){
         printf("Wrong input\n");
         return 0;
     }
