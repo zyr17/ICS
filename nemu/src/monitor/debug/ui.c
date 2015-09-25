@@ -42,13 +42,13 @@ static int cmd_si(char *args) {
         cpu_exec(1);
         return 0;
     }
-    int times;
+    int times = 1;
     sscanf(args, "%d", &times);
     if (times < 1){
         printf("Wrong input\n");
         return 0;
     }
-    printf("times:%d\n", times);
+    //printf("times:%d\n", times);
 	cpu_exec(times);
 	return 0;
 }
