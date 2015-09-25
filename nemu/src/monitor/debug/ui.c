@@ -37,6 +37,7 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_si(char *args) {
+    printf("%s\n", args);
     int times = 1, len = strlen(args);
     printf("%d %s\n", len, args);
     sscanf(args, "%d", &times);
