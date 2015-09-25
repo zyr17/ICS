@@ -44,7 +44,6 @@ static int cmd_si(char *args) {
     }
     int times;
     sscanf(args, "%d", &times);
-    return 0;
     if (times < 1){
         printf("Wrong input\n");
         return 0;
