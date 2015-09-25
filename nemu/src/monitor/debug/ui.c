@@ -42,8 +42,7 @@ static int cmd_si(char *args) {
         cpu_exec(1);
         return 0;
     }
-    int times, len = strlen(args);
-    printf("|%d|%s|\n", len, args);
+    int times;
     sscanf(args, "%d", &times);
     return 0;
     if (times < 1){
