@@ -49,6 +49,7 @@ static int cmd_si(char *args) {
         printf("Wrong input\n");
         return 0;
     }
+    printf("times:%d\n", times);
 	cpu_exec(times);
 	return 0;
 }
