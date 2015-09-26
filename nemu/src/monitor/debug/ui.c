@@ -53,9 +53,12 @@ static int cmd_si(char *args) {
 
 static int cmd_i(char *args) {
     if (args == NULL){
+        NOCMD:;
         printf("No command\n");
         return 0;
     }
+    char *cmd = strtok(args, " ");
+    if(cmd == NULL) goto NOCMD;
     return 0;
 }
 
