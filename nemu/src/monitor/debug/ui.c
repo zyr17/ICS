@@ -95,7 +95,7 @@ static int cmd_x(char *args) {
         return 0;
     }
     unsigned memaddr = 0;
-    if (sscanf(cmd2, "%x", &memaddr) == - 1){
+    if (sscanf(cmd2, "%x", &memaddr) != 1){
         printf("x: expr input error\n");
         return 0;
     }
