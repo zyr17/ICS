@@ -99,7 +99,24 @@ static int cmd_x(char *args) {
         printf("x: expr input error\n");
         return 0;
     }
-    printf("need to output %x\n", memaddr);
+    int i = 0;
+    for (; i < times; i ++ ){
+        int now = i + memaddr;
+        if (i % 4){
+            printf("\t%d", now);
+        }
+        else{
+            if (i && i % 96 == 0){
+                printf("--Type <return> to continue, or q <return> to quit---\n");
+                for (; ; ){
+                    int tch = getchar();
+                    if (tch == '\n') break;
+                    if (tch == 'q') return 0;
+                }
+            }
+            printf("0x%x:\t%d", now, now);
+        }
+    }
     return 0;
 }
 
@@ -115,7 +132,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
 	{ "info", "[info <r,w>] r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
-	{ "x", "[x N expr] calculate the expression(TBC), the answer is a address, and print the memory N bitsstart with that. 4 bits a line.", cmd_x},
+	{ "x", "[x N expr] calculate the expression(TBC), the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
 
 	/* TODO: Add more commands */
 
