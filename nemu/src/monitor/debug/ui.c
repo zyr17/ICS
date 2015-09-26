@@ -37,7 +37,6 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_si(char *args) {
-    //printf("%s\n", args);
     if (args == NULL){
         cpu_exec(1);
         return 0;
@@ -48,9 +47,16 @@ static int cmd_si(char *args) {
         printf("Wrong input\n");
         return 0;
     }
-    //printf("times:%d\n", times);
 	cpu_exec(times);
 	return 0;
+}
+
+static int cmd_i(char *args) {
+    if (args == NULL){
+        printf("No command\n");
+        return 0;
+    }
+    return 0;
 }
 
 static int cmd_help(char *args);
@@ -63,7 +69,8 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-	{"si", "Do N steps and pause. Default N = 1.", cmd_si },
+	{ "si", "Do N steps and pause. Default N = 1.", cmd_si },
+	{ "i", "nimabi", cmd_i},
 
 	/* TODO: Add more commands */
 
