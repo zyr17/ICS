@@ -98,7 +98,7 @@ static int cmd_x(char *args) {
     int cmd2len = strlen(cmd2);
     if (cmd2len < 2 || cmd2[0] != '0' || cmd2len != 'x'){
         CMD2ERR:;
-        printf("x: expr inpur error\n");
+        printf("x: expr input error\n");
         return 0;
     }
     char *tmp = cmd2 + 2;
