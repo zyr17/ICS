@@ -117,9 +117,9 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-	{ "si N", "Do N steps and pause. Default N = 1.", cmd_si },
-	{ "info <r/w>", "r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
-	{ "x N expr", "calculate the expression(TBC), the answer is a address, and print the memory N bitsstart with that. 4 bits a line.", cmd_x},
+	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
+	{ "info", "[info <r,w>] r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
+	{ "x", "[x N expr] calculate the expression(TBC), the answer is a address, and print the memory N bitsstart with that. 4 bits a line.", cmd_x},
 
 	/* TODO: Add more commands */
 
