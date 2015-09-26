@@ -117,7 +117,7 @@ static int cmd_x(char *args) {
             }
             printf("\n0x%x:\t%d", now, number);
         }
-    }
+    }printf("\n");
     return 0;
 }
 
