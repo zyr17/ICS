@@ -114,7 +114,7 @@ static int cmd_x(char *args) {
                     if (tch == 'q') return 0;
                 }
             }
-            printf("0x%x:\t%d", now, now);
+            printf("\n0x%x:\t%d", now, now);
         }
     }
     return 0;
