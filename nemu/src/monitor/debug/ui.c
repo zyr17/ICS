@@ -107,7 +107,7 @@ static int cmd_x(char *args) {
         }
         else{
             if (i && i % 96 == 0){
-                printf("--Type <return> to continue, or q <return> to quit---\n");
+                printf("\n--Type <return> to continue, or q <return> to quit---\n");
                 for (; ; ){
                     int tch = getchar();
                     if (tch == '\n') break;
