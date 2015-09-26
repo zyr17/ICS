@@ -53,12 +53,12 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
     if (args == NULL){
-        NOCMD:;
-        printf("No command\n");
+        NOCMD_i:;
+        printf("info: No command\n");
         return 0;
     }
     char *cmd = strtok(args, " ");
-    if(cmd == NULL) goto NOCMD;
+    if(cmd == NULL) goto NOCMD_i;
     if (strcmp(cmd, "r") == 0){
         //eax, ecx, edx, ebx, esp, ebp, esi, edi
         printf("eax\t\t0x%x\n", cpu.eax);
@@ -75,6 +75,38 @@ static int cmd_info(char *args) {
     return 0;
 }
 
+static int cmd_x(char *args) {
+    if (args == NULL){
+        NOCMD_x:;
+        printf("x: No command\n");
+        return 0;
+    }
+    char *cmd = strtok(args, " ");
+    if(cmd == NULL) goto NOCMD_x;
+    char *cmd2 = strtok(NULL, " ");
+    if (cmd2 == NULL){
+        printf("x: Expression missed\n");
+        return 0;
+    }
+    int times = - 1;
+    sscanf(cmd, "%d", &times);
+    if (times < 0){
+        printf("x: N input error\n");
+        return 0;
+    }
+    unsigned memaddr = 0;
+    int cmd2len = strlen(cmd2);
+    if (cmd2len < 2 || cmd2[0] != '0' || cmd2len != 'x'){
+        CMD2ERR:;
+        printf("x: expr inpur error\n");
+        return 0;
+    }
+    char *tmp = cmd2 + 2;
+    if (sscanf(tmp, "%u", &memaddr) == - 1) goto CMD2ERR;
+    printf("need to output\n");
+    return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -85,8 +117,9 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-	{ "si", "Do N steps and pause. Default N = 1.", cmd_si },
-	{ "info", "nimabi", cmd_info},
+	{ "si N", "Do N steps and pause. Default N = 1.", cmd_si },
+	{ "info <r/w>", "r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
+	{ "x N expr", "calculate the expression(TBC), the answer is a address, and print the memory N bitsstart with that. 4 bits a line.", cmd_x},
 
 	/* TODO: Add more commands */
 
