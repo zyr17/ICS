@@ -102,7 +102,7 @@ static int cmd_x(char *args) {
         return 0;
     }
     char *tmp = cmd2 + 2;printf("|cmd2len|%d|tmp|%s\n", cmd2len,tmp);
-    if (sscanf(cmd2, "%x", &memaddr) == - 1) goto CMD2ERR;
+    if (sscanf(tmp, "%x", &memaddr) == - 1) goto CMD2ERR;
     printf("need to output %x\n", memaddr);
     return 0;
 }
