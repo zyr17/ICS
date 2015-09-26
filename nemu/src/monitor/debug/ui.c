@@ -106,7 +106,7 @@ static int cmd_x(char *args) {
             printf("\t%d", now);
         }
         else{
-            if (i && i % 96 == 0){
+            if (i && i % 92 == 0){
                 printf("\n--Type <return> to continue, or q <return> to quit---");
                 for (; ; ){
                     int tch = getchar();
