@@ -101,7 +101,7 @@ static int cmd_x(char *args) {
         printf("x: expr input error\n");
         return 0;
     }
-    char *tmp = cmd2 + 2;
+    char *tmp = cmd2 + 2;printf("|cmd2len|%d|tmp|%s\n", cmd2len,tmp);
     if (sscanf(tmp, "%u", &memaddr) == - 1) goto CMD2ERR;
     printf("need to output\n");
     return 0;
