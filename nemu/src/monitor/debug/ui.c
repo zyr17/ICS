@@ -104,7 +104,7 @@ static int cmd_x(char *args) {
         int now = i + memaddr;
         int number = swaddr_read(now, 1);
         if (i % 4){
-            printf("\t%2x", number);
+            printf("\t%02x", number);
         }
         else{
             if (i && i % 92 == 0){
@@ -115,7 +115,7 @@ static int cmd_x(char *args) {
                     if (tch == 'q') return 0;
                 }
             }
-            printf("\n0x%x:\t%2x", now, number);
+            printf("\n0x%x:\t%02x", now, number);
         }
     }printf("\n");
     return 0;
