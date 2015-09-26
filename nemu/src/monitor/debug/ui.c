@@ -61,7 +61,14 @@ static int cmd_info(char *args) {
     if(cmd == NULL) goto NOCMD;
     if (strcmp(cmd, "r") == 0){
         //eax, ecx, edx, ebx, esp, ebp, esi, edi
-        printf("eax\t\t%x\n", cpu.eax);
+        printf("eax\t\t0x%x\n", cpu.eax);
+        printf("ecx\t\t0x%x\n", cpu.ecx);
+        printf("edx\t\t0x%x\n", cpu.edx);
+        printf("ebx\t\t0x%x\n", cpu.ebx);
+        printf("esp\t\t0x%x\n", cpu.esp);
+        printf("ebp\t\t0x%x\n", cpu.ebp);
+        printf("esi\t\t0x%x\n", cpu.esi);
+        printf("edi\t\t0x%x\n", cpu.edi);
         return 0;
     }
     printf("Unknown command '%s'\n", cmd);
