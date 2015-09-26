@@ -51,7 +51,7 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
-static int cmd_i(char *args) {
+static int cmd_info(char *args) {
     if (args == NULL){
         NOCMD:;
         printf("No command\n");
@@ -59,6 +59,12 @@ static int cmd_i(char *args) {
     }
     char *cmd = strtok(args, " ");
     if(cmd == NULL) goto NOCMD;
+    if (strcmp(cmd, "r") == 0){
+        //eax, ecx, edx, ebx, esp, ebp, esi, edi
+        printf("eax\t\t%x\n", cpu.eax);
+        return 0;
+    }
+    printf("Unknown command '%s'\n", cmd);
     return 0;
 }
 
@@ -73,7 +79,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Do N steps and pause. Default N = 1.", cmd_si },
-	{ "i", "nimabi", cmd_i},
+	{ "info", "nimabi", cmd_info},
 
 	/* TODO: Add more commands */
 
