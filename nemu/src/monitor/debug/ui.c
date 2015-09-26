@@ -95,14 +95,10 @@ static int cmd_x(char *args) {
         return 0;
     }
     unsigned memaddr = 0;
-    int cmd2len = strlen(cmd2);printf("cmd2|%s|cmd2len|%d\n", cmd2,cmd2len);
-    if (cmd2len < 2 || cmd2[0] != '0' || cmd2[1] != 'x'){
-        CMD2ERR:;
+    if (sscanf(cmd2, "%x", &memaddr) == - 1){
         printf("x: expr input error\n");
         return 0;
     }
-    char *tmp = cmd2 + 2;printf("|cmd2len|%d|tmp|%s\n", cmd2len,tmp);
-    if (sscanf(tmp, "%x", &memaddr) == - 1) goto CMD2ERR;
     printf("need to output %x\n", memaddr);
     return 0;
 }
