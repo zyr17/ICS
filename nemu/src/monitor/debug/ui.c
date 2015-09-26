@@ -95,7 +95,7 @@ static int cmd_x(char *args) {
         return 0;
     }
     unsigned memaddr = 0;
-    int cmd2len = strlen(cmd2);
+    int cmd2len = strlen(cmd2);printf("cmd2|%s\n", cmd2);
     if (cmd2len < 2 || cmd2[0] != '0' || cmd2len != 'x'){
         CMD2ERR:;
         printf("x: expr input error\n");
