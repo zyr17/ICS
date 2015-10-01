@@ -50,7 +50,7 @@ static struct rule {
     {":", ':'},
     {"\'[^\']+\'", LTR},
     {"\\$[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM]+", REG},
-    {"[1234567890]*\\.[1234567890]*", FLOAT},
+    {"[1234567890]*\\.[1234567890]*|[1234567890]*\\.{0,1}[1234567890]*[eE][1234567890]+", FLOAT},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"[1234567980][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", DIG},
     {"[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", VAR},
@@ -82,7 +82,7 @@ void init_regex() {
 #define TOKEN_TOT 32
 
 typedef struct token {
-	int type, num;
+	int type;
 	char str[TOKEN_LEN];
 } Token;
 
@@ -112,10 +112,11 @@ static bool make_token(char *e) {
 				}
 				if (rules[i].token_type == NOTYPE)
                     break;
-				if ( ++ nr_token >= TOKEN_TOT){
+				if (nr_token >= TOKEN_TOT - 1){
                     printf("Too many tokens.\n");
                     return false;
 				}
+				nr_token ++ ;
                 memcpy(tokens[nr_token].str, substr_start, substr_len);
                 tokens[nr_token].type = rules[i].token_type;
 
@@ -141,15 +142,52 @@ static bool make_token(char *e) {
 	return true;
 }
 
+//success:   1:dig  2:hex  3:float  4:bool
+
+/*Token doexpr(int head, int tail, int *success){
+    if (head > tail){
+        *success = 0;
+        return Token[0];
+    }
+    if (head == tail){
+        if (tokens[head].type == DIG){
+
+        }
+        else if (tokens[head].type == HEX){
+
+        }
+        else if (tokens[head].type == LTR){
+
+        }
+        else if (tokens[head].type == FLOAT){
+
+        }
+        else if (tokens[head].type == REG){
+
+        }
+        else if (tokens[head].type == VAR){
+
+        }
+        else{
+            success = 0;
+            return tokens[0];
+        }
+    }
+}*/
+
 uint32_t expr(char *e, int *success) {
 	if(!make_token(e)) {
 		*success = 0;
 		return 0;
 	}
 	*success = 1;
+	return 0;
+
+    //Token ans = doexpr(0, nr_token, success);
+    //if (!success) return 0;
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//panic("please implement me");
-	return 0;
+	//return ans;
 }
 
