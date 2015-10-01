@@ -148,7 +148,7 @@ static bool make_token(char *e) {
 #define SFLO 3
 #define SBOO 4
 
-Token doexpr(int head, int tail, int *success){
+Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail);
     if (head > tail){
         *success = 0;
         return tokens[0];
