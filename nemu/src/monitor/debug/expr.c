@@ -8,7 +8,7 @@
 
 enum {
 	NOTYPE = 256, EQ, LL, RR, BEQ, SEQ, NEQ,
-    BAA, BOO, REG, HEX, DIG, TRUE, FALSE, VAR,
+    BAA, BOO, REG, HEX, DIG, VAR,
 
 	/* TODO: Add more token types */
 
@@ -47,10 +47,8 @@ static struct rule {
     {"\\^", '^'},
     {"\\|", '|'},
     {"\\?", '?'},
-    {"::*+*))(%^&*{(){}{..,~~!?\\/\\y", ':'},
+    {":", ':'},
     {"\\$\\w+", REG},
-    {"true(?![\\d\\w])", TRUE},
-    {"false(?![\\d\\w])", FALSE},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"\\d[\\w\\d]+", DIG},
     {"\\w[\\w\\d]+", VAR},
@@ -71,6 +69,7 @@ void init_regex() {
 
 	for(i = 0; i < NR_REGEX; i ++) {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+		Log("%d\n", ret);
 		if(ret != 0) {
 			regerror(ret, &re[i], error_msg, 128);
 			Assert(ret != 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
