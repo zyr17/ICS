@@ -48,7 +48,7 @@ static struct rule {
     {"\\|", '|'},
     {"\\?", '?'},
     {":", ':'},
-    {"\'.+\'", LTR},
+    {"\'[^\']+\'", LTR},
     {"\\$[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM]+", REG},
     {"[1234567890]*\\.[1234567890]*", FLOAT},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
