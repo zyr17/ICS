@@ -96,9 +96,9 @@ static bool make_token(char *e) {
 
 	nr_token = 0;
 
-	while(e[position] != '\0') {Log("%d\n", position);
+	while(e[position] != '\0') {//Log("%d\n", position);
 		/* Try all rules one by one. */
-		for(i = 0; i < NR_REGEX; i ++) {
+		for(i = 0; i < NR_REGEX; i ++) {Log("%d %s\n", position, rules[i].regex);
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
