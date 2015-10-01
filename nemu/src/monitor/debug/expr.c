@@ -400,14 +400,39 @@ uint32_t expr(char *e, int *success) {
 		*success = 0;
 		return 0;
 	}
-	*success = 1;
-	return 0;
+	//*success = 1;
+	//return 0;
 
-    //Token ans = doexpr(0, nr_token, success);
-    //if (!success) return 0;
+    Token ans = doexpr(0, nr_token, success);
+    if (*success == 0) return 0;
+    else if (*success == SDIG){
+        int tmp;
+        sscanf(ans.str, "%d", &tmp);
+        return (uint32_t)tmp;
+    }
+    else if (*success == SHEX){
+        uint32_t tmp;
+        sscanf(ans.str, "%x", &tmp);
+        return tmp;
+    }
+    else if (*success == SFLO){
+        union{
+            float x;
+            uint32_t y;
+        }tmp;
+        sscanf(ans.str, "%f", &tmp.x);
+        return tmp.y;
+    }
+    else if (*success == SBOO){
+        if (ans.str[0]) return 1;
+        else return 0;
+    }
+    else{
+        printf("dididididididididididbabababababababababa\n");
+        return 34535;
+    }
 
 	/* TODO: Insert codes to evaluate the expression. */
 	//panic("please implement me");
-	//return ans;
 }
 
