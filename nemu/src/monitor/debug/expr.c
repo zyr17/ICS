@@ -72,7 +72,7 @@ void init_regex() {
 		if(ret != 0) {
 			regerror(ret, &re[i], error_msg, 128);
 			Assert(ret != 0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
-			Log("%d\n", ret);
+			assert(ret != 0);
 		}
 	}
 }
