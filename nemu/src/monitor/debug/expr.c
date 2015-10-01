@@ -211,8 +211,8 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
                     if ((s[i] >= '0' && s[i] <= '9') ||
                         (s[i] >= 'a' && s[i] <= 'f') ||
                         (s[i] >= 'A' && s[i] <= 'F')){
-                        if (s[i] >= 'A' && s[i] <= 'F') s[i] -= 'A' + '0' + 10;
-                        if (s[i] >= 'a' && s[i] <= 'f') s[i] -= 'a' + '0' + 10;
+                        if (s[i] >= 'A' && s[i] <= 'F') s[i] -= 'A' - '0' - 10;
+                        if (s[i] >= 'a' && s[i] <= 'f') s[i] -= 'a' - '0' - 10;
                         s[i] -= '0';
                         temp = temp * 16 + s[i];
                     }
