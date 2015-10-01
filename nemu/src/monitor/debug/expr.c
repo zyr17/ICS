@@ -50,8 +50,8 @@ static struct rule {
     {":", ':'},
     {"\\$\\w+", REG},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
-    {"\\d[\\w\\d]+", DIG},
-    {"\\w[\\w\\d]+", VAR},
+    {"\\d[\\w\\d]*", DIG},
+    {"\\w[\\w\\d]*", VAR},
 
 };
 
