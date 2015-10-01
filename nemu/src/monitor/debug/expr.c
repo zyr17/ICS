@@ -136,7 +136,6 @@ static bool make_token(char *e) {
 				}
 				nr_token ++ ;
 				if (rules[i].token_type == '(') bup += BRACKET_STEP;
-				if (rules[i].token_type == ')') bup -= BRACKET_STEP;
                 memcpy(tokens[nr_token].str, substr_start, substr_len);
                 tokens[nr_token].str[substr_len] = 0;
                 tokens[nr_token].type = rules[i].token_type;
@@ -148,6 +147,7 @@ static bool make_token(char *e) {
                     rules[i].token_type == VAR) prio[nr_token] = MAXX;
                 else prio[nr_token] = bup + ff[rules[i].token_type];
                 printf("Type priority: %d\n", prio[nr_token]);
+				if (rules[i].token_type == ')') bup -= BRACKET_STEP;
 
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
