@@ -133,7 +133,12 @@ static int cmd_p(char *args) {
         printf("p: Calc error.\n");
         return 0;
     }
-    printf("Success: %u\n", ans);
+    union{
+        uint32_t a;
+        float b;
+    }tttmp;
+    tttmp.a = ans;
+    printf("Success: %u %f\n", ans, tttmp.b);
     return 0;
 }
 
