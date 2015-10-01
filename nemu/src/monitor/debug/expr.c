@@ -403,7 +403,7 @@ uint32_t expr(char *e, int *success) {
 	//*success = 1;
 	//return 0;
 
-    Token ans = doexpr(0, nr_token, success);
+    Token ans = doexpr(1, nr_token, success);
     if (*success == 0) return 0;
     else if (*success == SDIG){
         int tmp;
