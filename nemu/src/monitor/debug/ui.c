@@ -123,7 +123,7 @@ static int cmd_x(char *args) {
 
 static int cmd_p(char *args) {
     if (args == NULL){
-        //NOTHING_P:;
+        NOTHING_P:;
         printf("p: Input nothing.\n");
         return 0;
     }
@@ -133,6 +133,8 @@ static int cmd_p(char *args) {
         printf("p: Calc error.\n");
         return 0;
     }
+    else if (suc == - 1)
+        goto NOTHING_P;
     union{
         uint32_t a;
         float b;

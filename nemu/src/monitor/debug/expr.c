@@ -407,7 +407,11 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
 uint32_t expr(char *e, int *success) {
 	if(!make_token(e)) {
 		*success = 0;
-		return 0;
+		return 13452;
+	}
+	if (!nr_token){
+        *success = - 1;
+        return 5464;
 	}
 	//*success = 1;
 	//return 0;
