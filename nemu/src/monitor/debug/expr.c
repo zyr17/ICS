@@ -175,7 +175,9 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
                 return tokens[head];
             }
             for (i = 2; i < tlen; i ++ )
-                if (tokens[head].str[i] < '0' || tokens[head].str[i] > '9')
+                if ((tokens[head].str[i] < '0' || tokens[head].str[i] > '9') &&
+                    (tokens[head].str[i] < 'a' || tokens[head].str[i] > 'f') &&
+                    (tokens[head].str[i] < 'A' || tokens[head].str[i] > 'F'))
                     goto HEXERR;
             *success = SHEX;
             return tokens[head];
