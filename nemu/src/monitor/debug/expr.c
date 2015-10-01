@@ -50,7 +50,7 @@ static struct rule {
     {":", ':'},
     {"\\$\\w+", REG},
     {"(?<![\\d\\w])true(?![\\d\\w])", TRUE},
-    {"(?<![\\d\\w])false(?![\\d\\w])", FALSE},
+    {"(()(?<![\\d\\w])false(?![\\d\\w])", FALSE},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"\\d[\\w\\d]+", DIG},
     {"\\w[\\w\\d]+", VAR},
