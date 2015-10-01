@@ -234,7 +234,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
             return tokens[head];
         }
         else if (tokens[head].type == REG){
-            int tlen = strlen(tokens[head].str);
+            int tlen = strlen(tokens[head].str), i;
             char *s = tokens[head].str;
             if (tlen != 3 && tlen != 4){
                 REGERR:;
@@ -242,6 +242,9 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
                 *success = FAIL;
                 return tokens[head];
             }
+            for (i = 1; i < tlen; i ++ )
+                if (s[i] >= 'A' && s[i] <= 'Z')
+                    s[i] -= 'A' - 'a';
             if (tlen == 3){
                 /*if (s[1] == 'a' && s[2] == 'x'){
                     sprintf(s, "0x%x", cpu.ax);
