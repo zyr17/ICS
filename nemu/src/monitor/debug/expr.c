@@ -118,6 +118,7 @@ static bool make_token(char *e) {
 				}
 				nr_token ++ ;
                 memcpy(tokens[nr_token].str, substr_start, substr_len);
+                tokens[nr_token].str[substr_len] = 0;
                 tokens[nr_token].type = rules[i].token_type;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
