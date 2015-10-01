@@ -51,7 +51,7 @@ static struct rule {
     {"\\$\\w+", REG},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"[1234567980][\\w1234567890]*", DIG},
-    {"\\w[\\w\\d]*", VAR},
+    {"\\w[\\w1234567890]*", VAR},
 
 };
 
