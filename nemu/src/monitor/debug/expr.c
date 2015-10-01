@@ -145,7 +145,12 @@ static bool make_token(char *e) {
                     rules[i].token_type == LTR ||
                     rules[i].token_type == REG ||
                     rules[i].token_type == VAR) prio[nr_token] = MAXX;
-                else prio[nr_token] = bup + ff[rules[i].token_type];
+                else{
+                    prio[nr_token] = bup + ff[rules[i].token_type];
+                    if (rules[i].token_type != '(' && rules[i].token_type != ')')
+                        if (nr_token == 1 || ff[tokens[nr_token - 1].type] > 0)
+                            prio[nr_token] = bup + ff['~'];
+                }
                 printf("Type priority: %d\n", prio[nr_token]);
 				if (rules[i].token_type == ')') bup -= BRACKET_STEP;
 
