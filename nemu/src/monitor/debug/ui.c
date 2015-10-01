@@ -121,6 +121,22 @@ static int cmd_x(char *args) {
     return 0;
 }
 
+static int cmd_p(char *args) {
+    if (args == NULL){
+        //NOTHING_P:;
+        printf("p: Input nothing.\n");
+        return 0;
+    }
+    int suc = 0;
+    uint32_t ans = expr(args, &suc);
+    if (suc == 0){
+        printf("p: Calc error.\n");
+        return 0;
+    }
+    printf("Success: %u\n", ans);
+    return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -134,6 +150,7 @@ static struct {
 	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
 	{ "info", "[info <r,w>] r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
 	{ "x", "[x N expr] calculate the expression(TBC), the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
+	{ "p", "[p expr] calculate the expr and print it.", cmd_p},
 
 	/* TODO: Add more commands */
 

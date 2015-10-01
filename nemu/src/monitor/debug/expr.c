@@ -49,8 +49,8 @@ static struct rule {
     {"\\?", '?'},
     {":", ':'},
     {"\\$\\w+", REG},
-    {"(?<![\\d\\w])true(?![\\d\\w])", TRUE},
-    {"(?<![\\d\\w])false(?![\\d\\w])", FALSE},
+    {"true(?![\\d\\w])", TRUE},
+    {"false(?![\\d\\w])", FALSE},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"\\d[\\w\\d]+", DIG},
     {"\\w[\\w\\d]+", VAR},
@@ -78,12 +78,15 @@ void init_regex() {
 	}
 }
 
+#define TOKEN_LEN 32
+#define TOKEN_TOT 32
+
 typedef struct token {
 	int type;
-	char str[32];
+	char str[TOKEN_LEN];
 } Token;
 
-Token tokens[32];
+Token tokens[TOKEN_TOT];
 int nr_token;
 
 static bool make_token(char *e) {
@@ -102,15 +105,26 @@ static bool make_token(char *e) {
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
+				if (substr_len >= TOKEN_LEN){
+                    e[position] = 0;
+                    printf("Token too long: %s\n", substr_start);
+                    return false;
+				}
+				if ( ++ nr_token >= TOKEN_TOT){
+                    printf("Too many tokens.\n");
+                    return false;
+				}
+                memcpy(tokens[nr_token].str, substr_start, substr_len);
+                tokens[nr_token].type = i;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain
 				 * types of tokens, some extra actions should be performed.
 				 */
 
-				switch(rules[i].token_type) {
+				/*switch(rules[i].token_type) {
 					default: panic("please implement me");
-				}
+				}*/
 
 				break;
 			}
@@ -125,14 +139,15 @@ static bool make_token(char *e) {
 	return true;
 }
 
-uint32_t expr(char *e, bool *success) {
+uint32_t expr(char *e, int *success) {
 	if(!make_token(e)) {
-		*success = false;
+		*success = 0;
 		return 0;
 	}
+	*success = 1;
 
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
+	//panic("please implement me");
 	return 0;
 }
 
