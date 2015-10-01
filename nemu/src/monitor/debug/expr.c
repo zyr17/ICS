@@ -50,7 +50,7 @@ static struct rule {
     {":", ':'},
     {"\'[^\']+\'", LTR},
     {"\\$[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM]+", REG},
-    {"[1234567890]*\\.[1234567890]*|[1234567890]*\\.{0,1}[1234567890]*[eE][1234567890]+", FLOAT},
+    {"([1234567890]+\\.|[1234567890]+\\.[1234567890]+|\\.[1234567890]+)([eE][1234567890]*){0,1}", FLOAT},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"[1234567980][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", DIG},
     {"[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", VAR},
@@ -142,38 +142,258 @@ static bool make_token(char *e) {
 	return true;
 }
 
-//success:   1:dig  2:hex  3:float  4:bool
+#define FAIL 0
+#define SDIG 1
+#define SHEX 2
+#define SFLO 3
+#define SBOO 4
 
-/*Token doexpr(int head, int tail, int *success){
+Token doexpr(int head, int tail, int *success){
     if (head > tail){
         *success = 0;
-        return Token[0];
+        return tokens[0];
     }
     if (head == tail){
         if (tokens[head].type == DIG){
-
+            int tlen = strlen(tokens[head].str), i;
+            for (i = 0; i < tlen; i ++ )
+                if (tokens[head].str[i] < '0' || tokens[head].str[i] > '9'){
+                    Log("DIG error: %s\n", tokens[head].str);
+                    *success = FAIL;
+                    return tokens[head];
+                }
+            *success = SDIG;
+            return tokens[head];
         }
         else if (tokens[head].type == HEX){
-
+            int tlen = strlen(tokens[head].str), i;
+            if (tlen < 3){
+                HEXERR:;
+                Log("HEX error: %s\n", tokens[head].str);
+                *success = FAIL;
+                return tokens[head];
+            }
+            for (i = 2; i < tlen; i ++ )
+                if (tokens[head].str[i] < '0' || tokens[head].str[i] > '9')
+                    goto HEXERR;
+            *success = SHEX;
+            return tokens[head];
         }
         else if (tokens[head].type == LTR){
-
+            int tlen = strlen(tokens[head].str), i;
+            int temp = 0;
+            char *s = tokens[head].str;
+            if (tlen < 3 || tlen > 6){
+                LTRERR:;
+                Log("LTR error: %s\n", s);
+                *success = FAIL;
+                return tokens[head];
+            }
+            if (tlen == 3) temp = s[1];
+            else if (s[1] != '\\') goto LTRERR;
+            else if (s[2] == 'a') temp = '\a';
+            else if (s[2] == 'b') temp = '\b';
+            else if (s[2] == 'r') temp = '\r';
+            else if (s[2] == 'n') temp = '\n';
+            else if (s[2] == 'f') temp = '\f';
+            else if (s[2] == 't') temp = '\t';
+            else if (s[2] == 'v') temp = '\v';
+            else if (s[2] == '\\') temp = '\\';
+            else if (s[2] == '\'') temp = '\'';
+            else if (s[2] == '\"') temp = '\"';
+            else if (s[2] == 'x'){
+                temp = 0;
+                if (tlen < 5) goto LTRERR;
+                for (i = 3; i < tlen - 1; i ++ )
+                    if ((s[i] >= '0' && s[i] <= '9') ||
+                        (s[i] >= 'a' && s[i] <= 'f') ||
+                        (s[i] >= 'A' && s[i] <= 'F')){
+                        if (s[i] >= 'A' && s[i] <= 'F') s[i] -= 'A' + '0' + 10;
+                        if (s[i] >= 'a' && s[i] <= 'f') s[i] -= 'a' + '0' + 10;
+                        s[i] -= '0';
+                        temp = temp * 16 + s[i];
+                    }
+                    else goto LTRERR;
+            }
+            else{
+                temp = 0;
+                if (tlen < 4) goto LTRERR;
+                for (i = 2; i < tlen - 1; i ++ )
+                    if (s[i] < '0' || s[i] > '7') goto LTRERR;
+                    else temp = temp * 8 + s[i] - '0';
+            }
+            sprintf(s, "%d", temp);
+            *success = SDIG;
+            return tokens[head];
         }
         else if (tokens[head].type == FLOAT){
-
+            *success = SFLO;
+            return tokens[head];
         }
         else if (tokens[head].type == REG){
-
+            int tlen = strlen(tokens[head].str);
+            char *s = tokens[head].str;
+            if (tlen != 3 && tlen != 4){
+                REGERR:;
+                Log("REG error: %s\n", tokens[head].str);
+                *success = FAIL;
+                return tokens[head];
+            }
+            if (tlen == 3){
+                /*if (s[1] == 'a' && s[2] == 'x'){
+                    sprintf(s, "0x%x", cpu.ax);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'b' && s[2] == 'x'){
+                    sprintf(s, "0x%x", cpu.bx);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'c' && s[2] == 'x'){
+                    sprintf(s, "0x%x", cpu.cx);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'b' && s[2] == 'p'){
+                    sprintf(s, "0x%x", cpu.bp);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 's' && s[2] == 'p'){
+                    sprintf(s, "0x%x", cpu.sp);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 's' && s[2] == 'i'){
+                    sprintf(s, "0x%x", cpu.si);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'd' && s[2] == 'i'){
+                    sprintf(s, "0x%x", cpu.di);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'a' && s[2] == 'l'){
+                    sprintf(s, "0x%x", cpu.al);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'b' && s[2] == 'l'){
+                    sprintf(s, "0x%x", cpu.bl);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'c' && s[2] == 'l'){
+                    sprintf(s, "0x%x", cpu.cl);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'd' && s[2] == 'l'){
+                    sprintf(s, "0x%x", cpu.dl);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'd' && s[2] == 'x'){
+                    sprintf(s, "0x%x", cpu.dx);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'a' && s[2] == 'h'){
+                    sprintf(s, "0x%x", cpu.ah);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'b' && s[2] == 'h'){
+                    sprintf(s, "0x%x", cpu.bh);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'c' && s[2] == 'h'){
+                    sprintf(s, "0x%x", cpu.ch);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[1] == 'd' && s[2] == 'h'){
+                    sprintf(s, "0x%x", cpu.dh);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else */goto REGERR;
+            }
+            else{
+                if (s[2] == 'a' && s[3] == 'x' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.eax);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 'b' && s[3] == 'x' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.ebx);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 'c' && s[3] == 'x' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.ecx);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 'd' && s[3] == 'x' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.edx);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 'b' && s[3] == 'p' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.ebp);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 's' && s[3] == 'p' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.esp);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 's' && s[3] == 'i' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.esi);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else if (s[2] == 'd' && s[3] == 'i' && s[1] == 'e'){
+                    sprintf(s, "0x%x", cpu.edi);
+                    *success = SHEX;
+                    return tokens[head];
+                }
+                else goto REGERR;
+            }
+            *success = SHEX;
+            return tokens[head];
         }
         else if (tokens[head].type == VAR){
-
+            if (strcmp(tokens[head].str, "true") == 0){
+                *success = SBOO;
+                return tokens[head];
+            }
+            else if (strcmp(tokens[head].str, "false") == 0){
+                *success = SBOO;
+                tokens[head].str[0] = 0;
+                return tokens[head];
+            }
+            else{
+                Log("Now can't calculate variable: %s\n", tokens[head].str);
+                *success = 0;
+                return tokens[head];
+            }
         }
         else{
+            Log("1 length error: %s\n", tokens[head].str);
             success = 0;
             return tokens[0];
         }
     }
-}*/
+    printf("more to do\n");
+    *success = 0;
+    return tokens[0];
+}
 
 uint32_t expr(char *e, int *success) {
 	if(!make_token(e)) {
