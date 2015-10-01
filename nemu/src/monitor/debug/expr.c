@@ -8,7 +8,7 @@
 
 enum {
 	NOTYPE = 256, EQ, LL, RR, BEQ, SEQ, NEQ,
-    BAA, BOO, REG, HEX, DIG, VAR,
+    BAA, BOO, REG, HEX, DIG, VAR, FLOAT,
 
 	/* TODO: Add more token types */
 
@@ -48,7 +48,8 @@ static struct rule {
     {"\\|", '|'},
     {"\\?", '?'},
     {":", ':'},
-    {"\\$\\w+", REG},
+    {"\\$[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM]+", REG},
+    {"[1234567890]+.[1234567890]*", FLOAT},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"[1234567980][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", DIG},
     {"[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", VAR},
