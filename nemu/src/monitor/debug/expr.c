@@ -14,6 +14,8 @@ enum {
 
 };
 
+int ff[300];
+
 static struct rule {
 	char *regex;
 	int token_type;
@@ -68,6 +70,18 @@ void init_regex() {
 	int i;
 	char error_msg[128];
 	int ret;
+	ff['?'] = ff[':'] = 1;
+    ff[BOO] = 2;
+    ff[BAA] = 3;
+    ff['|'] = 4;
+    ff['^'] = 5;
+    ff['&'] = 6;
+    ff[NEQ] = ff[EQ] = 7;
+    ff[BEQ] = ff[SEQ] = ff['<'] = ff['>'] = 8;
+    ff[LL] = ff[RR] = 9;
+    ff['+'] = ff['-'] = 10;
+    ff['*'] = ff['/'] = ff['%'] = 11;
+    ff['!'] = ff['~'] = 12;
 
 	for(i = 0; i < NR_REGEX; i ++) {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
@@ -80,6 +94,8 @@ void init_regex() {
 
 #define TOKEN_LEN 32
 #define TOKEN_TOT 32
+#define BRACKET_STEP 15
+#define MAXX 2100000000
 
 typedef struct token {
 	int type;
@@ -88,11 +104,13 @@ typedef struct token {
 
 Token tokens[TOKEN_TOT];
 int nr_token;
+int prio[TOKEN_TOT];
 
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
 	regmatch_t pmatch;
+	int bup = 0;
 
 	nr_token = 0;
 
@@ -117,9 +135,20 @@ static bool make_token(char *e) {
                     return false;
 				}
 				nr_token ++ ;
+				if (rules[i].token_type == '(') bup += BRACKET_STEP;
+				if (rules[i].token_type == ')') bup -= BRACKET_STEP;
                 memcpy(tokens[nr_token].str, substr_start, substr_len);
                 tokens[nr_token].str[substr_len] = 0;
                 tokens[nr_token].type = rules[i].token_type;
+                if (rules[i].token_type == DIG ||
+                    rules[i].token_type == HEX ||
+                    rules[i].token_type == FLOAT ||
+                    rules[i].token_type == LTR ||
+                    rules[i].token_type == REG ||
+                    rules[i].token_type == VAR) prio[nr_token] = MAXX;
+                else prio[nr_token] = bup + ff[rules[i].token_type];
+                Log("Type priority: %d\n", prio[nr_token]);
+
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain
