@@ -47,7 +47,7 @@ static struct rule {
     {"\\^", '^'},
     {"\\|", '|'},
     {"\\?", '?'},
-    {"true(?![\\w\\d])", ':'},
+    {"true(?=k)", ':'},
     {"\\$\\w+", REG},
     {"0[xX][\\dabcdefABCDEF]+", HEX},
     {"\\d[\\w\\d]+", DIG},
