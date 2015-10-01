@@ -147,7 +147,7 @@ static bool make_token(char *e) {
                     rules[i].token_type == REG ||
                     rules[i].token_type == VAR) prio[nr_token] = MAXX;
                 else prio[nr_token] = bup + ff[rules[i].token_type];
-                Log("Type priority: %d\n", prio[nr_token]);
+                printf("Type priority: %d\n", prio[nr_token]);
 
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
