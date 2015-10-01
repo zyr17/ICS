@@ -192,7 +192,10 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
                 *success = FAIL;
                 return tokens[head];
             }
-            if (tlen == 3) temp = s[1];
+            if (tlen == 3){
+                if (s[1] == '\\') goto LTRERR;
+                temp = s[1];
+            }
             else if (s[1] != '\\') goto LTRERR;
             else if (s[2] == 'a') temp = '\a';
             else if (s[2] == 'b') temp = '\b';
