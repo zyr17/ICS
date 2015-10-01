@@ -114,8 +114,10 @@ static bool make_token(char *e) {
                     printf("Too many tokens.\n");
                     return false;
 				}
+				if (rules[i].token_type == NOTYPE)
+                    break;
                 memcpy(tokens[nr_token].str, substr_start, substr_len);
-                tokens[nr_token].type = i;
+                tokens[nr_token].type = rules[i].token_type;
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain
