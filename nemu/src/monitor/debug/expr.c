@@ -751,6 +751,61 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         step1.str[0] = 0;
         return step1;
     }//             '==' '!=' end.
+    else if (prio[left] % BRACKET_STEP == 8){
+        int suc1 = 0, suc2 = 0, change = 0, equal = 0;
+        if (tokens[right].type == '<' ||
+            tokens[right].type == SEQ) change = 1;
+        if (tokens[right].type == '<' ||
+            tokens[right].type == BEQ) equal = 1;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        step2 = doexpr(right + 1, tail, &suc2);
+        if (suc1 == FAIL || suc2 == FAIL){
+            *success = 0;
+            return tokens[0];
+        }
+        int flag = max(suc1, suc2);
+        Type_convert(flag, &suc1, &step1);
+        Type_convert(flag, &suc2, &step2);
+        if (flag == SBOO){
+            int t1 = !!step1.str[0], t2 = !!step1.str[0];
+            if (((t1 > t2) || (equal && (t1 == t2))) ^ change)
+                goto EIGHT_TRUE;
+            else goto EIGHT_FALSE;
+        }
+        if (flag == SDIG){
+            int t1, t2;
+            sscanf(step1.str, "%d", &t1);
+            sscanf(step2.str, "%d", &t2);
+            if (((t1 > t2) || (equal && (t1 == t2))) ^ change)
+                goto EIGHT_TRUE;
+            else goto EIGHT_FALSE;
+        }
+        if (flag == SHEX){
+            unsigned t1, t2;
+            sscanf(step1.str, "%x", &t1);
+            sscanf(step2.str, "%x", &t2);
+            if (((t1 > t2) || (equal && (t1 == t2))) ^ change)
+                goto EIGHT_TRUE;
+            else goto EIGHT_FALSE;
+        }
+        if (flag == SFLO){
+            float t1, t2;
+            sscanf(step1.str, "%f", &t1);
+            sscanf(step2.str, "%f", &t2);
+            if (((t1 > t2) || (equal && (t1 == t2))) ^ change)
+                goto EIGHT_TRUE;
+            else goto EIGHT_FALSE;
+        }
+        EIGHT_TRUE:;
+        *success = SBOO;
+        step1.str[0] = 't';
+        return step1;
+        EIGHT_FALSE:;
+        *success = SBOO;
+        step1.str[0] = 0;
+        return step1;
+    }//             '>' '>=' '<' '<='end.
     printf("more to do\n");
     *success = 0;
     return tokens[0];
