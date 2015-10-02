@@ -891,7 +891,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
             if (tokens[right].type == '+') t1 += t2;
             else t1 -= t2;
             sprintf(step1.str, "%.20e", t1);
-            *success = SHEX;
+            *success = SFLO;
             return step1;
         }
         *success = 0;
