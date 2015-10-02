@@ -806,6 +806,51 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         step1.str[0] = 0;
         return step1;
     }//             '>' '>=' '<' '<='end.
+    else if (prio[left] % BRACKET_STEP == 9){
+        int suc1, suc2;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        if (suc1 == FAIL){
+            _LLRRFAIL:;
+            *success = 0;
+            return tokens[0];
+        }
+        if (suc1 == SFLO){
+            _LLRRFLO:;
+            Log("cannot calculate float with \'<<\' or \'>>\': [%d, %d]\n", head, tail);
+            *success = 0;
+            return tokens[0];
+        }
+        step2 = doexpr(right + 1, tail, &suc2);
+        if (suc2 == FAIL) goto _LLRRFAIL;
+        if (suc2 == SFLO) goto _LLRRFLO;
+        int flag = max(suc1, suc2);
+        if (flag == SBOO) flag = SDIG;
+        Type_convert(flag, &suc1, &step1);
+        Type_convert(flag, &suc2, &step2);
+        if (flag == SDIG){
+            int t1, t2;
+            sscanf(step1.str, "%d", &t1);
+            sscanf(step2.str, "%d", &t2);
+            //printf("%d %d\n", t1, t2);
+            if (tokens[right].type == LL) t1 <<= t2;
+            else t1 >>= t2;
+            sprintf(step1.str, "%d", t1);
+            *success = SDIG;
+            return step1;
+        }
+        else{
+            uint32_t t1, t2;
+            sscanf(step1.str, "%x", &t1);
+            sscanf(step2.str, "%x", &t2);
+            //printf("%d %d\n", t1, t2);
+            if (tokens[right].type == LL) t1 <<= t2;
+            else t1 >>= t2;
+            sprintf(step1.str, "%x", t1);
+            *success = SHEX;
+            return step1;
+        }
+    }//             '<<' '>>' end.
     printf("more to do\n");
     *success = 0;
     return tokens[0];
