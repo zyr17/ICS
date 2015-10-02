@@ -569,6 +569,24 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
             return part3;
         }
     }//         '?:' end.
+    else if (prio[left] % BRACKET_STEP == 2){
+        int suc1 = 0, suc2 = 0;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        if (suc1 == FAIL){
+            *success = FAIL;
+            return step1;
+        }
+        Type_convert(SBOO, &suc1, &step1);
+        if (step1.str[0]){
+            *success = SBOO;
+            return step1;
+        }
+        step2 = doexpr(right + 1, tail, &suc2);
+        Type_convert(SBOO, &suc2, &step2);
+        *success = suc2;
+        return step2;
+    }
     printf("more to do\n");
     *success = 0;
     return tokens[0];
