@@ -113,6 +113,7 @@ static bool make_token(char *e) {
 	int bup = 0;
 
 	nr_token = 0;
+    prio[0] = MAXX - 1;
 
 	while(e[position] != '\0') {//Log("%d\n", position);
 		/* Try all rules one by one. */
@@ -183,8 +184,98 @@ static bool make_token(char *e) {
 #define SFLO 3
 #define SBOO 4
 
+void Type_convert(const int totype, int *nowsuc, Token *ttok){
+    if (*nowsuc == totype) return;
+    if (*nowsuc == FAIL) return;
+    int now = *nowsuc;
+    *nowsuc = totype;
+    if (totype == SDIG && now == SHEX){
+        union{
+            uint32_t x;
+            int y;
+        }ttt;
+        sscanf((*ttok).str, "%x", &ttt.x);
+        sprintf((*ttok).str, "%d", ttt.y);
+        return;
+    }
+    if (totype == SDIG && now == SFLO){
+        float ttt;
+        sscanf((*ttok).str, "%f", &ttt);
+        sprintf((*ttok).str, "%d", (int)ttt);
+        return;
+    }
+    if (totype == SDIG && now == SBOO){
+        int ttt = (*ttok).str[0] ? 1 : 0;
+        sprintf((*ttok).str, "%d", ttt);
+        return;
+    }
+    if (totype == SHEX && now == SDIG){
+        union{
+            uint32_t x;
+            int y;
+        }ttt;
+        sscanf((*ttok).str, "%d", &ttt.y);
+        sprintf((*ttok).str, "0x%x", ttt.x);
+        return;
+    }
+    if (totype == SHEX && now == SFLO){
+        float ttt;
+        sscanf((*ttok).str, "%f", &ttt);
+        sprintf((*ttok).str, "0x%x", (uint32_t)ttt);
+        return;
+    }
+    if (totype == SHEX && now == SBOO){
+        int ttt = (*ttok).str[0] ? 1 : 0;
+        sprintf((*ttok).str, "0x%x", ttt);
+        return;
+    }
+    if (totype == SFLO && now == SDIG){
+        int ttt;
+        sscanf((*ttok).str, "%d", &ttt);
+        sprintf((*ttok).str, "%.20e", (float)ttt);
+        return;
+    }
+    if (totype == SFLO && now == SHEX){
+        uint32_t ttt;
+        sscanf((*ttok).str, "%x", &ttt);
+        sprintf((*ttok).str, "%.20e", (float)ttt);
+        return;
+    }
+    if (totype == SFLO && now == SBOO){
+        int ttt = (*ttok).str[0] ? 1 : 0;
+        sprintf((*ttok).str, "%.20e", (float)ttt);
+        return;
+    }
+    if (totype == SBOO && now == SDIG){
+        int ttt;
+        sscanf((*ttok).str, "%d", &ttt);
+        if (ttt) sprintf((*ttok).str, "true");
+        else (*ttok).str[0] = 0;
+        return;
+    }
+    if (totype == SBOO && now == SHEX){
+        uint32_t ttt;
+        sscanf((*ttok).str, "%x", &ttt);
+        if (ttt) sprintf((*ttok).str, "true");
+        else (*ttok).str[0] = 0;
+        return;
+    }
+    if (totype == SBOO && now == SFLO){
+        union{
+            uint32_t y;
+            float x;
+        }ttt;
+        sscanf((*ttok).str, "%f", &ttt.x);
+        ttt.y &= 0x7FFFFFFF;
+        if (ttt.y) sprintf((*ttok).str, "true");
+        else (*ttok).str[0] = 0;
+        return;
+    }
+}
+
 Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail);
     if (head > tail){
+        Log("head > tail error: [%d, %d]\n", head, tail);
         *success = 0;
         return tokens[0];
     }
@@ -433,6 +524,51 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
             return tokens[0];
         }
     }
+    int i, left = 0, right = 0;
+    for (i = head; i <= tail; i ++ )
+        if (prio[i] < prio[left])
+            left = right = i;
+        else if (prio[i] == prio[right])
+            right = i;
+    if (!left){
+        Log("Too nums and no operator: [%d, %d]\n", head, tail);
+        *success = 0;
+        return tokens[0];
+    }
+    if (prio[left] % BRACKET_STEP == 1){
+        int tmp = 0, i, suc1 = 0, suc2 = 0, suc3 = 0;
+        Token part1, part2, part3;
+        for (i = left + 1; i <= tail; i ++ )
+            if (tokens[i].type == '?') tmp ++ ;
+            else if (tokens[i].type == ':'){
+                if (!tmp){
+                    right = i;
+                    break;
+                }
+                tmp -- ;
+            }
+        if (tokens[right].type != ':'){
+            Log("operator\'?:\' error: [%d, %d]\n", head, tail);
+            *success = 0;
+            return tokens[0];
+        }
+        part1 = doexpr(head, left - 1, &suc1);
+        if (suc1 == FAIL){
+            *success = 0;
+            return tokens[0];
+        }
+        Type_convert(SBOO, &suc1, &part1);
+        if (part1.str[0]){
+            part2 = doexpr(left + 1, right - 1, &suc2);
+            *success = suc2;
+            return part2;
+        }
+        else{
+            part3 = doexpr(right + 1, tail, &suc3);
+            *success = suc3;
+            return part3;
+        }
+    }//         '?:' end.
     printf("more to do\n");
     *success = 0;
     return tokens[0];
