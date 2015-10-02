@@ -535,7 +535,16 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = 0;
         return tokens[0];
     }
-    if (prio[left] % BRACKET_STEP == 1){
+    if (prio[left] % BRACKET_STEP == 0){
+        if (left != head || tokens[head].type != '(' ||
+            right != tail || tokens[tail].type != ')'){
+            Log("Brackets error: [%d, %d]\n", head, tail);
+            *success = 0;
+            return tokens[0];
+        }
+        return doexpr(head + 1, tail - 1, success);
+    }//             '()' end.
+    else if (prio[left] % BRACKET_STEP == 1){
         int tmp = 0, i, suc1 = 0, suc2 = 0, suc3 = 0;
         Token part1, part2, part3;
         for (i = left + 1; i <= tail; i ++ )
@@ -604,7 +613,8 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         Type_convert(SBOO, &suc2, &step2);
         *success = suc2;
         return step2;
-    }
+    }//             '&&' end.
+    else {}
     printf("more to do\n");
     *success = 0;
     return tokens[0];
