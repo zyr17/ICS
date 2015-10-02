@@ -576,7 +576,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
 
 uint32_t expr(char *e, int *success) {
 
-    //
+    /*/
     for (;;){
         int t1, t2;
         Token t3;
@@ -586,7 +586,7 @@ uint32_t expr(char *e, int *success) {
         Type_convert(t1, &t2, &t3);
         printf("%s %d\n", t3.str, gua);
     }
-    //
+    /*/
 
 	if(!make_token(e)) {
 		*success = 0;
