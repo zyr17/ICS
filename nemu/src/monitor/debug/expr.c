@@ -179,10 +179,12 @@ static bool make_token(char *e) {
 }
 
 #define FAIL 0
-#define SDIG 1
-#define SHEX 2
-#define SFLO 3
-#define SBOO 4
+#define SBOO 1
+#define SDIG 2
+#define SHEX 3
+#define SFLO 4
+
+#define max(A,B) (((A)>(B))?(A):(B))
 
 void Type_convert(const int totype, int *nowsuc, Token *ttok){
     if (*nowsuc == totype) return;
@@ -701,6 +703,54 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = SDIG;
         return step1;
     }//             '&' end.
+    else if (prio[left] % BRACKET_STEP == 7){
+        int suc1 = 0, suc2 = 0, change = 0;
+        if (tokens[right].type == NEQ) change = 1;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        step2 = doexpr(right + 1, tail, &suc2);
+        if (suc1 == FAIL || suc2 == FAIL){
+            *success = 0;
+            return tokens[0];
+        }
+        int flag = max(suc1, suc2);
+        Type_convert(flag, &suc1, &step1);
+        Type_convert(flag, &suc2, &step2);
+        if (flag == SBOO){
+            if (((step1.str[0] == 0) == (step2.str[0] == 0)) ^ change)
+                goto SEVEN_TRUE;
+            else goto SEVEN_FALSE;
+        }
+        if (flag == SDIG){
+            int t1, t2;
+            sscanf(step1.str, "%d", &t1);
+            sscanf(step2.str, "%d", &t2);
+            if ((t1 == t2) ^ change) goto SEVEN_TRUE;
+            else goto SEVEN_FALSE;
+        }
+        if (flag == SHEX){
+            unsigned t1, t2;
+            sscanf(step1.str, "%x", &t1);
+            sscanf(step2.str, "%x", &t2);
+            if ((t1 == t2) ^ change) goto SEVEN_TRUE;
+            else goto SEVEN_FALSE;
+        }
+        if (flag == SFLO){
+            float t1, t2;
+            sscanf(step1.str, "%f", &t1);
+            sscanf(step2.str, "%f", &t2);
+            if ((t1 == t2) ^ change) goto SEVEN_TRUE;
+            else goto SEVEN_FALSE;
+        }
+        SEVEN_TRUE:;
+        *success = SBOO;
+        step1.str[0] = 't';
+        return step1;
+        SEVEN_FALSE:;
+        *success = SBOO;
+        step1.str[0] = 0;
+        return step1;
+    }//             '==' '!=' end.
     printf("more to do\n");
     *success = 0;
     return tokens[0];
