@@ -637,6 +637,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         int t1, t2;
         sscanf(step1.str, "%d", &t1);
         sscanf(step2.str, "%d", &t2);
+        printf("%d %d\n", t1, t2);
         t1 |= t2;
         sprintf(step1.str, "%d", t1);
         *success = SDIG;
