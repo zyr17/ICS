@@ -537,7 +537,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = 0;
         return tokens[0];
     }
-    if (prio[left] % BRACKET_STEP == 0){
+    if (prio[left] % BRACKET_STEP == 0){//          '(' ')'
         if (left != head || tokens[head].type != '(' ||
             right != tail || tokens[tail].type != ')'){
             Log("Brackets error: [%d, %d]\n", head, tail);
@@ -546,7 +546,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         }
         return doexpr(head + 1, tail - 1, success);
     }//             '()' end.
-    else if (prio[left] % BRACKET_STEP == 1){
+    else if (prio[left] % BRACKET_STEP == 1){//     '?' ':'
         int tmp = 0, i, suc1 = 0, suc2 = 0, suc3 = 0;
         Token part1, part2, part3;
         for (i = left + 1; i <= tail; i ++ )
@@ -580,7 +580,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
             return part3;
         }
     }//         '?:' end.
-    else if (prio[left] % BRACKET_STEP == 2){
+    else if (prio[left] % BRACKET_STEP == 2){//     '||'
         int suc1 = 0, suc2 = 0;
         Token step1, step2;
         step1 = doexpr(head, right - 1, &suc1);
@@ -598,7 +598,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = suc2;
         return step2;
     }//            '||' end.
-    else if (prio[left] % BRACKET_STEP == 3){
+    else if (prio[left] % BRACKET_STEP == 3){//     '&&'
         int suc1 = 0, suc2 = 0;
         Token step1, step2;
         step1 = doexpr(head, right - 1, &suc1);
@@ -616,7 +616,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = suc2;
         return step2;
     }//             '&&' end.
-    else if (prio[left] % BRACKET_STEP == 4){
+    else if (prio[left] % BRACKET_STEP == 4){//     '|'
         int suc1, suc2;
         Token step1, step2;
         step1 = doexpr(head, right - 1, &suc1);
@@ -645,7 +645,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = SDIG;
         return step1;
     }//             '|' end.
-    else if (prio[left] % BRACKET_STEP == 5){
+    else if (prio[left] % BRACKET_STEP == 5){//     '^'
         int suc1, suc2;
         Token step1, step2;
         step1 = doexpr(head, right - 1, &suc1);
@@ -674,7 +674,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = SDIG;
         return step1;
     }//             '^' end.
-    else if (prio[left] % BRACKET_STEP == 6){
+    else if (prio[left] % BRACKET_STEP == 6){//     '&'
         int suc1, suc2;
         Token step1, step2;
         step1 = doexpr(head, right - 1, &suc1);
@@ -703,7 +703,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = SDIG;
         return step1;
     }//             '&' end.
-    else if (prio[left] % BRACKET_STEP == 7){
+    else if (prio[left] % BRACKET_STEP == 7){//     '==' '!='
         int suc1 = 0, suc2 = 0, change = 0;
         if (tokens[right].type == NEQ) change = 1;
         Token step1, step2;
@@ -751,7 +751,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         step1.str[0] = 0;
         return step1;
     }//             '==' '!=' end.
-    else if (prio[left] % BRACKET_STEP == 8){
+    else if (prio[left] % BRACKET_STEP == 8){//     '>' '>=' '<' '<='
         int suc1 = 0, suc2 = 0, change = 0, equal = 0;
         if (tokens[right].type == '<' ||
             tokens[right].type == SEQ) change = 1;
@@ -806,7 +806,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         step1.str[0] = 0;
         return step1;
     }//             '>' '>=' '<' '<='end.
-    else if (prio[left] % BRACKET_STEP == 9){
+    else if (prio[left] % BRACKET_STEP == 9){//     '>>' '<<'
         int suc1, suc2;
         Token step1, step2;
         step1 = doexpr(head, right - 1, &suc1);
@@ -851,6 +851,52 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
             return step1;
         }
     }//             '<<' '>>' end.
+    else if (prio[left] % BRACKET_STEP == 10){//    '+' '-'
+        int suc1 = 0, suc2 = 0;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        step2 = doexpr(right + 1, tail, &suc2);
+        if (suc1 == FAIL || suc2 == FAIL){
+            *success = 0;
+            return tokens[0];
+        }
+        int flag = max(suc1, suc2);
+        if (flag == SBOO) flag = SDIG;
+        Type_convert(flag, &suc1, &step1);
+        Type_convert(flag, &suc2, &step2);
+        if (flag == SDIG){
+            int t1, t2;
+            sscanf(step1.str, "%d", &t1);
+            sscanf(step2.str, "%d", &t2);
+            if (tokens[right].type == '+') t1 += t2;
+            else t1 -= t2;
+            sprintf(step1.str, "%d", t1);
+            *success = SDIG;
+            return step1;
+        }
+        else if (flag == SHEX){
+            uint32_t t1, t2;
+            sscanf(step1.str, "%x", &t1);
+            sscanf(step2.str, "%x", &t2);
+            if (tokens[right].type == '+') t1 += t2;
+            else t1 -= t2;
+            sprintf(step1.str, "0x%x", t1);
+            *success = SHEX;
+            return step1;
+        }
+        else if (flag == SFLO){
+            float t1, t2;
+            sscanf(step1.str, "%f", &t1);
+            sscanf(step2.str, "%f", &t2);
+            if (tokens[right].type == '+') t1 += t2;
+            else t1 -= t2;
+            sprintf(step1.str, "%f", t1);
+            *success = SHEX;
+            return step1;
+        }
+        *success = 0;
+        return tokens[0];
+    }
     printf("more to do\n");
     *success = 0;
     return tokens[0];
