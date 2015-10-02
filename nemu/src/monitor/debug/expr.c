@@ -672,6 +672,35 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = SDIG;
         return step1;
     }//             '^' end.
+    else if (prio[left] % BRACKET_STEP == 6){
+        int suc1, suc2;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        if (suc1 == FAIL){
+            _AFAIL:;
+            *success = 0;
+            return tokens[0];
+        }
+        if (suc1 == SFLO){
+            _AFLO:;
+            Log("cannot calculate float with \'&\': [%d, %d]\n", head, tail);
+            *success = 0;
+            return tokens[0];
+        }
+        Type_convert(SDIG, &suc1, &step1);
+        step2 = doexpr(right + 1, tail, &suc2);
+        if (suc2 == FAIL) goto _AFAIL;
+        if (suc2 == SFLO) goto _AFLO;
+        Type_convert(SDIG, &suc2, &step2);
+        int t1, t2;
+        sscanf(step1.str, "%d", &t1);
+        sscanf(step2.str, "%d", &t2);
+        printf("%d %d\n", t1, t2);
+        t1 &= t2;
+        sprintf(step1.str, "%d", t1);
+        *success = SDIG;
+        return step1;
+    }//             '&' end.
     printf("more to do\n");
     *success = 0;
     return tokens[0];
