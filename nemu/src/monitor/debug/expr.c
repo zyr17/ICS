@@ -149,7 +149,7 @@ static bool make_token(char *e) {
                 else{
                     prio[nr_token] = bup + ff[rules[i].token_type];
                     if (rules[i].token_type != '(' && rules[i].token_type != ')')
-                        if (nr_token == 1 || ff[tokens[nr_token - 1].type] > 0)
+                        if (nr_token == 1 || ff[tokens[nr_token - 1].type] > 0 || tokens[nr_token - 1].type == '(')
                             prio[nr_token] = bup + ff['~'];
                 }
                 printf("Type priority: %d\n", prio[nr_token]);
