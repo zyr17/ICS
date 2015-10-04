@@ -236,7 +236,7 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
-                printf("\x1b[34;1m");
+                printf("\x1b[32;1m");
 				if(cmd_table[i].handler(args) < 0) { printf("\033[0m");return; }
 				printf("\033[0m");
 				break;
