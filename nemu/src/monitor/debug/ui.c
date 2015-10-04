@@ -7,6 +7,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#define FAIL 0
+#define SBOO 1
+#define SDIG 2
+#define SHEX 3
+#define SFLO 4
+
 void cpu_exec(uint32_t);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -97,8 +103,16 @@ static int cmd_x(char *args) {
     uint32_t memaddr = 0;
     int suc = 0;
     memaddr = expr(cmd2, &suc);
-    if (suc == 0){
+    if (suc == - 1){
         printf("x: expr input error\n");
+        return 0;
+    }
+    else if (suc == 0){
+        printf("x: Calc error.\n");
+        return 0;
+    }
+    else if (suc == SFLO){
+        printf("x: expr get an float.\n");
         return 0;
     }
     int i = 0;
@@ -131,13 +145,6 @@ static int cmd_p(char *args) {
     }
     int suc = 0;
     uint32_t ans = expr(args, &suc);
-
-    #define FAIL 0
-    #define SBOO 1
-    #define SDIG 2
-    #define SHEX 3
-    #define SFLO 4
-
     if (suc == 0){
         printf("p: Calc error.\n");
         return 0;
