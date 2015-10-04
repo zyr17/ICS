@@ -1003,6 +1003,49 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
                 return step;
             }
         }
+        else if (tokens[left].type == '!'){
+            if (suc == SBOO){
+                step.str[0] ^= 't';
+                *success = suc;
+                return step;
+            }
+            else{
+                union{
+                    int x;
+                    uint32_t y;
+                    float z;
+                }t;
+                if (suc == SDIG) sscanf(step.str, "%d", &t.x);
+                else if (suc == SHEX) sscanf(step.str, "%x", &t.y);
+                else if (suc == SFLO) sscanf(step.str, "%f", &t.z);
+                sprintf(step.str, "%d", !t.x);
+                *success = SDIG;
+                return step;
+            }
+        }
+        else if (tokens[left].type == '~'){
+            if (suc == SBOO)
+                Type_convert(SDIG, &suc, &step);
+            if (suc == SDIG){
+                int t;
+                sscanf(step.str, "%d", &t);
+                sprintf(step.str, "%d", ~t);
+                *success = suc;
+                return step;
+            }
+            else if (suc == SHEX){
+                uint32_t t;
+                sscanf(step.str, "%x", &t);
+                sprintf(step.str, "0x%x", ~t);
+                *success = suc;
+                return step;
+            }
+            else{
+                Log("cannot calculate float with \'~\': [%d, %d]", head, tail);
+                *success = 0;
+                return tokens[0];
+            }
+        }
         else{
             Log("Unknown unary operator: [%d, %d]\n", head, tail);
             *success = 0;
