@@ -91,7 +91,7 @@ static int cmd_x(char *args) {
     if(cmd == NULL) goto NOCMD_x;
     char *cmd2 = cmd;
     for (; *cmd2; cmd2 ++ );
-    cmd2 ++ ;
+    for (cmd2 ++ ; *cmd2 == ' '; cmd2 ++ );
     if (*cmd2 == 0){
         printf("x: Expression missed\n");
         return 0;
