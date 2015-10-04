@@ -81,7 +81,7 @@ void init_regex() {
     ff[LL] = ff[RR] = 9;
     ff['+'] = ff['-'] = 10;
     ff['*'] = ff['/'] = ff['%'] = 11;
-    ff['!'] = ff['~'] = 12;
+    ff['!'] = ff['~'] = ff['&'] = 12;
 
 	for(i = 0; i < NR_REGEX; i ++) {
 		ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
@@ -961,9 +961,60 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         *success = 0;
         return tokens[0];
     }//             '*' '/' '%' end.
-    printf("more to do\n");
-    *success = 0;
-    return tokens[0];
+    else if (prio[left] % BRACKET_STEP == 12){//    '+' '-' '*' '!' '~' '&'
+        int suc = 0;
+        Token step;
+        step = doexpr(left + 1, tail, &suc);
+        if (suc == FAIL){
+            *success = 0;
+            return tokens[0];
+        }
+        if (tokens[left].type == '+'){
+            if (suc == SBOO){
+                Type_convert(SDIG, &suc, &step);
+                *success = suc;
+                return step;
+            }
+            *success = suc;
+            return step;
+        }
+        else if (tokens[left].type == '-'){
+            if (suc == SBOO)
+                Type_convert(SDIG, &suc, &step);
+            if (suc == SDIG){
+                int t;
+                sscanf(step.str, "%d", &t);
+                sprintf(step.str, "%d", t * - 1);
+                *success = suc;
+                return step;
+            }
+            else if (suc == SHEX){
+                uint32_t t;
+                sscanf(step.str, "%x", &t);
+                sprintf(step.str, "0x%x", t * - 1);
+                *success = suc;
+                return step;
+            }
+            else{
+                float t;
+                sscanf(step.str, "%f", &t);
+                sprintf(step.str, "%.20e", t * - 1);
+                *success = suc;
+                return step;
+            }
+        }
+        else{
+            Log("Unknown unary operator: [%d, %d]\n", head, tail);
+            *success = 0;
+            return tokens[0];
+        }
+
+    }
+    else{
+        printf("more to do\n");
+        *success = 0;
+        return tokens[0];
+    }
 }
 
 uint32_t expr(char *e, int *success) {
