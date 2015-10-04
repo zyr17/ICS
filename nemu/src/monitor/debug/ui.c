@@ -257,6 +257,6 @@ void ui_mainloop() {
 			}
 		}
 
-		if(i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+		if(i == NR_CMD) { printf("\x1b[32;1mUnknown command '%s'\n\033[0m", cmd); }
 	}
 }
