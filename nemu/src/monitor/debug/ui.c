@@ -115,7 +115,7 @@ static int cmd_x(char *args) {
         return 0;
     }
     else if (suc == SFLO){
-        printf("x: expr get an float.\n");
+        printf("x: expr get a float.\n");
         return 0;
     }
     int i = 0;
