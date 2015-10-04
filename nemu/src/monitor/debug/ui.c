@@ -89,8 +89,10 @@ static int cmd_x(char *args) {
     }
     char *cmd = strtok(args, " ");
     if(cmd == NULL) goto NOCMD_x;
-    char *cmd2 = strtok(NULL, " ");
-    if (cmd2 == NULL){
+    char *cmd2 = cmd;
+    for (; *cmd2; cmd2 ++ );
+    cmd2 ++ ;
+    if (*cmd2 == 0){
         printf("x: Expression missed\n");
         return 0;
     }
