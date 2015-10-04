@@ -105,6 +105,7 @@ static int cmd_x(char *args) {
     uint32_t memaddr = 0;
     int suc = 0;
     memaddr = expr(cmd2, &suc);
+    printf("\x1b[32;1m");
     if (suc == - 1){
         printf("x: expr input error\n");
         return 0;
@@ -147,6 +148,7 @@ static int cmd_p(char *args) {
     }
     int suc = 0;
     uint32_t ans = expr(args, &suc);
+    printf("\x1b[32;1m");
     if (suc == 0){
         printf("p: Calc error.\n");
         return 0;
