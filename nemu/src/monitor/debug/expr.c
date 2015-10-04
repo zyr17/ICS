@@ -122,7 +122,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s, |%d|", i, rules[i].regex, position, substr_len, substr_len, substr_start, nr_token);
+				//Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s, |%d|", i, rules[i].regex, position, substr_len, substr_len, substr_start, nr_token);
 				position += substr_len;
 				if (substr_len >= TOKEN_LEN){
                     e[position] = 0;
@@ -152,7 +152,7 @@ static bool make_token(char *e) {
                         if (nr_token == 1 || ff[tokens[nr_token - 1].type] > 0 || tokens[nr_token - 1].type == '(')
                             prio[nr_token] = bup + ff['~'];
                 }
-                printf("Type priority: %d\n", prio[nr_token]);
+                //printf("Type priority: %d\n", prio[nr_token]);
 				if (rules[i].token_type == ')') bup -= BRACKET_STEP;
 
 
