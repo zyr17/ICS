@@ -213,8 +213,6 @@ static int cmd_help(char *args) {
 
 void ui_mainloop() {
 	while(1) {
-
-
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);
 
@@ -238,7 +236,7 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
-                printf("\x1b[31m");
+                printf("\x1b[32m");
 				if(cmd_table[i].handler(args) < 0) { return; }
 				break;
 				printf("\033[0m");
