@@ -94,8 +94,10 @@ static int cmd_x(char *args) {
         printf("x: N input error\n");
         return 0;
     }
-    unsigned memaddr = 0;
-    if (sscanf(cmd2, "%x", &memaddr) != 1){
+    uint32_t memaddr = 0;
+    int suc = 0;
+    memaddr = expr(cmd2, &suc);
+    if (suc == 0){
         printf("x: expr input error\n");
         return 0;
     }
@@ -179,8 +181,8 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
 	{ "info", "[info <r,w>] r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
-	{ "x", "[x N expr] calculate the expression(TBC), the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
-	{ "p", "[p expr] calculate the expr and print it.", cmd_p},
+	{ "x", "[x N expr] calculate the expression, the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
+	{ "p", "[p expr] calculate the expr and print it in several ways.", cmd_p},
 
 	/* TODO: Add more commands */
 
