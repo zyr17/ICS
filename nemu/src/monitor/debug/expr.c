@@ -275,7 +275,7 @@ void Type_convert(const int totype, int *nowsuc, Token *ttok){
     }
 }
 
-Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail);
+Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tail);
     if (head > tail){
         Log("head > tail error: [%d, %d]\n", head, tail);
         *success = 0;
@@ -1078,7 +1078,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
 
     }
     else{
-        printf("more to do\n");
+        printf("What happened?!\n");
         *success = 0;
         return tokens[0];
     }
