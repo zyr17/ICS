@@ -238,8 +238,8 @@ void ui_mainloop() {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
                 printf("\x1b[32m");
 				if(cmd_table[i].handler(args) < 0) { printf("\033[0m");return; }
-				break;
 				printf("\033[0m");
+				break;
 			}
 		}
 
