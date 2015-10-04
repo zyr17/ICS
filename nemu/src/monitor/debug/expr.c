@@ -1046,7 +1046,7 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
                 return tokens[0];
             }
         }
-        else if (tokens[left].type == '~'){
+        else if (tokens[left].type == '*'){
             if (suc == SBOO){
                 Log("cannot calculate bool with \'*\': [%d, %d]\n", head, tail);
                 *success = 0;
