@@ -129,6 +129,13 @@ static int cmd_p(char *args) {
     }
     int suc = 0;
     uint32_t ans = expr(args, &suc);
+
+    #define FAIL 0
+    #define SBOO 1
+    #define SDIG 2
+    #define SHEX 3
+    #define SFLO 4
+
     if (suc == 0){
         printf("p: Calc error.\n");
         return 0;
@@ -138,9 +145,25 @@ static int cmd_p(char *args) {
     union{
         uint32_t a;
         float b;
+        int c;
     }tttmp;
     tttmp.a = ans;
-    printf("Success: %u %f\n", ans, tttmp.b);
+    if (suc == SBOO){
+        printf("Success:\n");
+        if (tttmp.a) printf("bool: true\n");
+        else printf("boolean: false\n");
+        printf("Hex: 0x%X\n", tttmp.a);
+    }
+    else if (suc == SDIG){
+        printf("Success:\nInt: %d\nHex: 0x%X\n", tttmp.c, tttmp.a);
+    }
+    else if (suc == SHEX){
+        printf("Success:\nHex: 0x%X\nInt: %d\n", tttmp.a, tttmp.c);
+    }
+    else{
+        printf("Success:\nFloat: %.10e\nHex: 0x%X\n", tttmp.b, tttmp.a);
+    }
+    //printf("Success: %u %f\n", ans, tttmp.b);
     return 0;
 }
 
