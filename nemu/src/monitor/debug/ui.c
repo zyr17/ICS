@@ -102,6 +102,7 @@ static int cmd_x(char *args) {
         printf("x: N input error\n");
         return 0;
     }
+    #define MAXADD 134217727
     uint32_t memaddr = 0;
     int suc = 0;
     memaddr = expr(cmd2, &suc);
@@ -118,9 +119,13 @@ static int cmd_x(char *args) {
         printf("x: expr get a float.\n");
         return 0;
     }
-    int i = 0;
+    uint32_t i = 0;
     for (; i < times; i ++ ){
-        int now = i + memaddr;
+        uint32_t now = i + memaddr;
+        if (now >> 27){
+            printf("\n");
+            return 0;
+        }
         int number = swaddr_read(now, 1);
         if (i % 4){
             printf("\t%02x", number);
