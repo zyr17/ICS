@@ -896,7 +896,71 @@ Token doexpr(int head, int tail, int *success){printf("doexpr%d %d\n",head,tail)
         }
         *success = 0;
         return tokens[0];
-    }
+    }//             '+' '-' end.
+    else if (prio[left] % BRACKET_STEP == 11){//    '*' '/' '%'
+        int suc1 = 0, suc2 = 0;
+        Token step1, step2;
+        step1 = doexpr(head, right - 1, &suc1);
+        step2 = doexpr(right + 1, tail, &suc2);
+        if (suc1 == FAIL || suc2 == FAIL){
+            *success = 0;
+            return tokens[0];
+        }
+        int flag = max(suc1, suc2);
+        if (flag == SBOO) flag = SDIG;
+        Type_convert(flag, &suc1, &step1);
+        Type_convert(flag, &suc2, &step2);
+        if (flag == SDIG){
+            int t1, t2;
+            sscanf(step1.str, "%d", &t1);
+            sscanf(step2.str, "%d", &t2);
+            if (tokens[right].type == '*') t1 *= t2;
+            else{
+                if (t2 == 0){
+                    DIV0:;
+                    Log("Divide by zero: [%d, %d]\n", head, tail);
+                    *success = 0;
+                    return tokens[0];
+                }
+                if (tokens[right].type == '/') t1 /= t2;
+                else t1 %= t2;
+            }
+            sprintf(step1.str, "%d", t1);
+            *success = SDIG;
+            return step1;
+        }
+        else if (flag == SHEX){
+            uint32_t t1, t2;
+            sscanf(step1.str, "%x", &t1);
+            sscanf(step2.str, "%x", &t2);
+            if (tokens[right].type == '*') t1 *= t2;
+            else{
+                if (t2 == 0) goto DIV0;
+                if (tokens[right].type == '/') t1 /= t2;
+                else t1 %= t2;
+            }
+            sprintf(step1.str, "0x%x", t1);
+            *success = SHEX;
+            return step1;
+        }
+        else if (flag == SFLO){
+            float t1, t2;
+            sscanf(step1.str, "%f", &t1);
+            sscanf(step2.str, "%f", &t2);
+            if (tokens[right].type == '*') t1 *= t2;
+            else if (tokens[right].type == '/') t1 /= t2;
+            else{
+                Log("Cannot calculate float with \'%%\': [%d , %d]\n", head, tail);
+                *success = 0;
+                return tokens[0];
+            }
+            sprintf(step1.str, "%.20e", t1);
+            *success = SFLO;
+            return step1;
+        }
+        *success = 0;
+        return tokens[0];
+    }//             '*' '/' '%' end.
     printf("more to do\n");
     *success = 0;
     return tokens[0];
