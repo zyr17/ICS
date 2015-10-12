@@ -226,7 +226,7 @@ static int cmd_d(char *args) {
     goto NOTHING_D;
     BIBIBABA_D:;
     sscanf(args, "%d", &tmp);
-    if (tmp < 1){
+    if (tmp < 0){
         printf("d: N input error.\n");
         return 0;
     }
