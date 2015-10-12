@@ -18,7 +18,7 @@ void init_wp_list() {
 	free_ = wp_list;
 }
 
-WP* new_wp(){if (free_ == NULL) Log("free is NULL.\n");
+WP* new_wp(){
     if (free_ == NULL){
         Log("No enough space for a new watchpoint.");
         return NULL;
@@ -31,14 +31,17 @@ WP* new_wp(){if (free_ == NULL) Log("free is NULL.\n");
 
 void free_wp(WP *wp){
     if (wp == head){
-        head = (*head).next;
+        WP *tmp = (*head).next;
+        (*head).next = free_;
+        free_ = head;
+        head = tmp;
         return;
     }
     WP *now = head;
     for (; (*now).next != wp; now = (*now).next);
     (*now).next = (*(*now).next).next;
     (*wp).next = free_;
-    free_ = wp;if (free_ == NULL) Log("free is NULL.\n");
+    free_ = wp;
 }
 
 WP *find_wp(int k){
