@@ -232,7 +232,7 @@ static int cmd_d(char *args) {
     }
     WP *pos = find_wp(tmp);
     if (pos == NULL){
-        printf("d: NO not found.\n");
+        printf("d: NO %d not found.\n", tmp);
         return 0;
     }
     printf("d: Success, deleted watchpoint with NO = %d, expr = %s.\n", tmp, (*pos).e);
