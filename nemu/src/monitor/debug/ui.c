@@ -74,6 +74,28 @@ static int cmd_info(char *args) {
         return 0;
     }
     else if (strcmp(cmd, "w") == 0){
+        char *tmp = strtok(NULL, " ");
+        if (tmp != NULL){
+            int num = - 1;
+            sscanf(tmp, "%d", &num);
+            if (num < 0){
+                printf("info w: N input error.\n");
+                return 0;
+            }
+            WP *now = find_wp(num);
+            if (now == NULL){
+                printf("info w: cannot find watchpoint with NO %d.\n", num);
+                return 0;
+            }
+            printf("Watchpoint details\nNO\t%d\nExpr\t%s\nvalue\t", (*now).NO, (*now).e);
+            if ((*now).success == SDIG) printf("%d\n", (*now).number.a);
+            else if ((*now).success == SHEX) printf("0x%X\n", (*now).number.b);
+            else if ((*now).success == SFLO) printf("%f\n", (*now).number.c);
+            else if ((*now).number.a) printf("true\n");
+            else printf("false\n");
+            return 0;
+
+        }
         output_wp();
         return 0;
     }
