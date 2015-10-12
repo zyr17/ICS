@@ -1095,7 +1095,6 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
 }
 
 uint32_t expr(char *e, int *success) {
-
     /*/
     for (;;){
         int t1, t2;
@@ -1107,6 +1106,8 @@ uint32_t expr(char *e, int *success) {
         printf("%s %d\n", t3.str, gua);
     }
     /*/
+
+    printf("\x1b[34;1m");
 
 	if(!make_token(e)) {
 		*success = 0;
