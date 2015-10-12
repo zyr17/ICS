@@ -208,6 +208,7 @@ static int cmd_w(char *args) {
         return 0;
     }
     memcpy((*now).e, args, len + 1);
+    printf("w: Success.\n");
     return 0;
 }
 
