@@ -191,12 +191,13 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-    int len = strlen(args), i;
+    int len, i;
     if (args == NULL){
         NOTHING_W:;
         printf("w: Input nothing.\n");
         return 0;
     }
+    len = strlen(args);
     for (i = 0; i < len; i ++ )
         if (args[i] > 32) goto BIBIBABA_W;
     goto NOTHING_W;
@@ -213,12 +214,13 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-    int tmp = - 1, i, len = strlen(args);
+    int tmp = - 1, i, len;
     if (args == NULL){
         NOTHING_D:;
         printf("d: Input nothing.\n");
         return 0;
     }
+    len = strlen(args);
     for (i = 0; i < len; i ++ )
         if (args[i] > 32) goto BIBIBABA_D;
     goto NOTHING_D;
