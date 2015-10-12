@@ -73,8 +73,8 @@ bool wp_is_change(){
             re = 1;
         }
         else if (suc == SDIG ||suc == SHEX || suc == SFLO || suc == SBOO){
-            re = 1;
             if (tnum != (*i).number.b){
+                re = 1;
                 printf("Watchpoint NO %d has changed from ", (*i).NO);
                 if (suc == SDIG){
                     printf("%d to ", (*i).number.a);
