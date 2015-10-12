@@ -499,7 +499,7 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
                     *success = SHEX;
                     return tokens[head];
                 }
-                else if (s[2] == 'e' && s[3] == 'i' && s[1] == 'p'){
+                else if (s[2] == 'i' && s[3] == 'p' && s[1] == 'e'){
                     sprintf(s, "0x%x", cpu.eip);
                     *success = SHEX;
                     return tokens[head];
