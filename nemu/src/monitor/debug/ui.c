@@ -191,7 +191,7 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-    int len, i;
+    int len, i, suc;
     if (args == NULL){
         NOTHING_W:;
         printf("w: Input nothing.\n");
@@ -202,14 +202,29 @@ static int cmd_w(char *args) {
         if (args[i] > 32) goto BIBIBABA_W;
     goto NOTHING_W;
     BIBIBABA_W:;
-    WP *now = new_wp();
-    if (now == NULL) return 0;
     if (len >= __WATCHPOINT_CLEN__){
         printf("w: Expr too long.\n");
         return 0;
     }
+    uint32_t tnum = expr(args, &suc);
+    if (suc == FAIL){
+        printf("w: Expr illegal.\n");
+        return 0;
+    }
+    WP *now = new_wp();
+    if (now == NULL) return 0;
     memcpy((*now).e, args, len + 1);
-    printf("w: Success, watchpoint NO = %d.\n", (*now).NO);
+    (*now).success = suc;
+    (*now).number.b = tnum;
+    printf("w: Success, watchpoint NO = %d, now Expr = ", (*now).NO);
+    if (suc == SDIG) printf("%d\n", (*now).number.a);
+    else if (suc == SHEX) printf("0x%x\n", (*now).number.b);
+    else if (suc == SFLO) printf("%f\n", (*now).number.c);
+    else if (suc == SBOO){
+        if ((*now).number.b) printf("true\n");
+        else printf("false\n");
+    }
+    else printf("???\n");
     return 0;
 }
 

@@ -5,14 +5,13 @@
 #define __WATCHPOINT_CLEN__ 1111
 
 typedef struct watchpoint {
-	int NO;
+	int NO, success;
 	struct watchpoint *next;
 	char e[__WATCHPOINT_CLEN__];
 	union{
         int a;
         uint32_t b;
         float c;
-        bool d;
 	}number;
 
 	/* TODO: Add more members if necessary */
