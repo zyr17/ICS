@@ -61,6 +61,49 @@ void output_wp(){
         printf("%d\t%s\n", (*i).NO, (*i).e);
 }
 
+bool is_change(){
+    bool re = 0;
+    WP *i = head;
+    for (; i != NULL; i = (*i).next){
+        int suc = 0;
+        uint32_t tnum = expr((*i).e, &suc);
+        if (suc == FAIL){
+            printf("An error occuredon calculating Expr \"%s\", NO %d.\n", (*i).e, (*i).NO);
+            re = 1;
+        }
+        else if (suc == SDIG ||suc == SHEX || suc == SFLO || suc == SBOO){
+            if (tnum != (*i).number.b){
+                printf("Watchpoint NO %d has changed from ", (*i).NO);
+                if (suc == SDIG){
+                    printf("%d to ", (*i).number.a);
+                    (*i).number.b = tnum;
+                    printf("%d.\n", (*i).number.a);
+                    (*i).success = suc;
+                }
+                else if (suc == SHEX){
+                    printf("0x%X to ", (*i).number.b);
+                    (*i).number.b = tnum;
+                    printf("0x%X.\n", (*i).number.b);
+                    (*i).success = suc;
+                }
+                else if (suc == SFLO){
+                    printf("%f to ", (*i).number.c);
+                    (*i).number.b = tnum;
+                    printf("%f.\n", (*i).number.c);
+                    (*i).success = suc;
+                }
+                else{
+                    if ((*i).number.b) printf("true to false.\n");
+                    else printf("false to true.\n");
+                    (*i).number.b = tnum;
+                    (*i).success = suc;
+                }
+            }
+        }
+    }
+    return re;
+}
+
 /* TODO: Implement the functionality of watchpoint */
 
 

@@ -9,12 +9,6 @@
 
 #define C_COLOR printf("\x1b[32;1m");
 
-#define FAIL 0
-#define SBOO 1
-#define SDIG 2
-#define SHEX 3
-#define SFLO 4
-
 void cpu_exec(uint32_t);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -221,7 +215,7 @@ static int cmd_w(char *args) {
     (*now).number.b = tnum;
     printf("w: Success, watchpoint NO = %d, now Expr = ", (*now).NO);
     if (suc == SDIG) printf("%d\n", (*now).number.a);
-    else if (suc == SHEX) printf("0x%x\n", (*now).number.b);
+    else if (suc == SHEX) printf("0x%X\n", (*now).number.b);
     else if (suc == SFLO) printf("%f\n", (*now).number.c);
     else if (suc == SBOO){
         if ((*now).number.b) printf("true\n");
