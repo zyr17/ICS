@@ -25,7 +25,8 @@ WP* new_wp(){
     }
     WP *re = free_;
     free_ = (*free_).next;
-    return re;
+    (*re).next = head;
+    return head = re;
 }
 
 void free_wp(WP *wp){
@@ -38,6 +39,21 @@ void free_wp(WP *wp){
     (*now).next = (*(*now).next).next;
     (*wp).next = free_;
     free_ = wp;
+}
+
+WP *find_wp(int k){
+    WP *now = head;
+    for (; now != NULL && (*now).NO != k; now = (*now).next);
+    return now;
+}
+
+void output_wp(){
+    int tot = 0;
+    WP *i;
+    for (i = head; i != NULL; tot ++ , i = (*i).next);
+    printf("There's %d watchpoint(s).\n\nNO\tExpr\n", tot);
+    for (i = head; i != NULL; i = (*i).next)
+        printf("%d\t%s\n", (*i).NO, (*i).e);
 }
 
 /* TODO: Implement the functionality of watchpoint */

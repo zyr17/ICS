@@ -77,6 +77,10 @@ static int cmd_info(char *args) {
         printf("edi\t\t0x%x\n", cpu.edi);
         return 0;
     }
+    else if (strcmp(cmd, "w") == 0){
+        output_wp();
+        return 0;
+    }
     printf("Unknown command '%s'\n", cmd);
     return 0;
 }
@@ -186,6 +190,53 @@ static int cmd_p(char *args) {
     return 0;
 }
 
+static int cmd_w(char *args) {
+    int len = strlen(args), i;
+    if (args == NULL){
+        NOTHING_W:;
+        printf("w: Input nothing.\n");
+        return 0;
+    }
+    for (i = 0; i < len; i ++ )
+        if (args[i] > 32) goto BIBIBABA_W;
+    goto NOTHING_W;
+    BIBIBABA_W:;
+    WP *now = new_wp();
+    if (now == NULL) return 0;
+    if (len >= __WATCHPOINT_CLEN__){
+        printf("w: Expr too long.\n");
+        return 0;
+    }
+    memcpy((*now).e, args, len + 1);
+    return 0;
+}
+
+static int cmd_d(char *args) {
+    int tmp = - 1, i, len = strlen(args);
+    if (args == NULL){
+        NOTHING_D:;
+        printf("d: Input nothing.\n");
+        return 0;
+    }
+    for (i = 0; i < len; i ++ )
+        if (args[i] > 32) goto BIBIBABA_D;
+    goto NOTHING_D;
+    BIBIBABA_D:;
+    sscanf(args, "%d", &tmp);
+    if (tmp < 1){
+        printf("d: N input error.\n");
+        return 0;
+    }
+    WP *pos = find_wp(tmp);
+    if (pos == NULL){
+        printf("d: NO not found.\n");
+        return 0;
+    }
+    printf("d: Success, deleted watchpoint with NO = %d, expr = %s.\n", tmp, (*pos).e);
+    free_wp(pos);
+    return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -200,6 +251,8 @@ static struct {
 	{ "info", "[info <r,w>] r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
 	{ "x", "[x N expr] calculate the expression, the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
 	{ "p", "[p expr] calculate the expr and print it in several ways.", cmd_p},
+	{ "w", "[w expr] set a watchpoint, when expr = 1, stop.", cmd_w},
+	{ "d", "[d N] delete the Nth watchpoint.", cmd_d},
 
 	/* TODO: Add more commands */
 
