@@ -51,7 +51,9 @@ void output_wp(){
     int tot = 0;
     WP *i;
     for (i = head; i != NULL; tot ++ , i = (*i).next);
-    printf("There's %d watchpoint(s).\n\nNO\tExpr\n", tot);
+    printf("There's %d watchpoint(s).\n", tot);
+    if (!tot) return;
+    printf("\nNO\tExpr\n");
     for (i = head; i != NULL; i = (*i).next)
         printf("%d\t%s\n", (*i).NO, (*i).e);
 }
