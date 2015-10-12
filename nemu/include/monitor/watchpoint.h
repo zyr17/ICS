@@ -23,5 +23,6 @@ WP* new_wp();
 void free_wp(WP *wp);
 WP *find_wp(int k);
 void output_wp();
+bool wp_is_change();
 
 #endif

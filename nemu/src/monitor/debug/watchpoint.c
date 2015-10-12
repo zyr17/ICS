@@ -61,17 +61,19 @@ void output_wp(){
         printf("%d\t%s\n", (*i).NO, (*i).e);
 }
 
-bool is_change(){
+bool wp_is_change(){
     bool re = 0;
     WP *i = head;
     for (; i != NULL; i = (*i).next){
         int suc = 0;
         uint32_t tnum = expr((*i).e, &suc);
+        printf("\x1b[32;1m");
         if (suc == FAIL){
             printf("An error occuredon calculating Expr \"%s\", NO %d.\n", (*i).e, (*i).NO);
             re = 1;
         }
         else if (suc == SDIG ||suc == SHEX || suc == SFLO || suc == SBOO){
+            re = 1;
             if (tnum != (*i).number.b){
                 printf("Watchpoint NO %d has changed from ", (*i).NO);
                 if (suc == SDIG){

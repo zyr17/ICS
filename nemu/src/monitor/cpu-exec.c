@@ -9,6 +9,8 @@
  */
 #define MAX_INSTR_TO_PRINT 10
 
+bool wp_is_change();
+
 int nemu_state = STOP;
 
 int exec(swaddr_t);
@@ -73,7 +75,9 @@ void cpu_exec(volatile uint32_t n) {
 #endif
 
 
-        //asdf
+        if (wp_is_change()){
+            nemu_state = STOP;
+        }
 		/* TODO: check watchpoints here. */
 
 
