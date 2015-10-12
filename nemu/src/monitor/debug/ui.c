@@ -7,6 +7,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#define C_COLOR printf("\x1b[32;1m");
+
 #define FAIL 0
 #define SBOO 1
 #define SDIG 2
@@ -110,7 +112,7 @@ static int cmd_x(char *args) {
     uint32_t memaddr = 0;
     int suc = 0;
     memaddr = expr(cmd2, &suc);
-    printf("\x1b[32;1m");
+    C_COLOR
     if (suc == - 1){
         printf("x: expr input error\n");
         return 0;
@@ -158,7 +160,7 @@ static int cmd_p(char *args) {
     }
     int suc = 0;
     uint32_t ans = expr(args, &suc);
-    printf("\x1b[32;1m");
+    C_COLOR
     if (suc == 0){
         printf("p: Calc error.\n");
         return 0;
@@ -207,6 +209,7 @@ static int cmd_w(char *args) {
         return 0;
     }
     uint32_t tnum = expr(args, &suc);
+    C_COLOR;
     if (suc == FAIL){
         printf("w: Expr illegal.\n");
         return 0;
@@ -326,7 +329,7 @@ void ui_mainloop() {
 		int i;
 		for(i = 0; i < NR_CMD; i ++) {
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
-                printf("\x1b[32;1m");
+                C_COLOR;
 				if(cmd_table[i].handler(args) < 0) { printf("\033[0m");return; }
 				printf("\033[0m");
 				break;
