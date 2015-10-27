@@ -285,10 +285,10 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
-	{ "info", "[info <r,w>] r: to print the register. w(TBC): to print the checkpoint.", cmd_info},
+	{ "info", "[info r][info w (N)] r: to print the register. w: to print the checkpoint(s). w N: to show details about Nth checkpoint.", cmd_info},
 	{ "x", "[x N expr] calculate the expression, the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
 	{ "p", "[p expr] calculate the expr and print it in several ways.", cmd_p},
-	{ "w", "[w expr] set a watchpoint, when expr = 1, stop.", cmd_w},
+	{ "w", "[w expr] set a watchpoint, when expr changes, stop.", cmd_w},
 	{ "d", "[d N] delete the Nth watchpoint.", cmd_d},
 
 	/* TODO: Add more commands */
