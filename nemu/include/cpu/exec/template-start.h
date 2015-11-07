@@ -59,5 +59,8 @@ do {\
     cpu.SF = res  >> (byte - 1);\
 }while (0)
 
+#define push_push(_byte, _data) MEM_W(cpu.esp -= (_byte), (_data))
+
+
 //#endif
 
