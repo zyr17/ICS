@@ -45,18 +45,19 @@ do {\
     byte *= 8;\
     uint32_t y = sub ? ~ src : src;\
     uint32_t res = dest + y + sub;\
-    res &= (1 << byte) - 1;\
-    dest &= (1 << byte) - 1;\
-    src &= (1 << byte) - 1;\
-    cpu.ZF = !!res;\
+    res &= ((1 << (byte - 1)) << 1) - 1;\
+    dest &= ((1 << (byte - 1)) << 1) - 1;\
+    src &= ((1 << (byte - 1)) << 1) - 1;\
+    y &= ((1 << (byte - 1)) << 1) - 1;\
+    cpu.ZF = !res;\
     cpu.OF = (dest & (1 << (byte - 1))) == (y  & (1 << (byte - 1))) && (y  & (1 << (byte - 1))) != (res  & (1 << (byte - 1)));\
     cpu.CF = sub ^ (res < dest || res < y);\
     cpu.PF = 1;\
     uint32_t i = 1, j = res;\
     for (; i <= 8; i ++ , j /= 2)\
         cpu.PF ^= j & 1;\
-    cpu.SF = res  & (1 << (byte - 1));\
-}while (0);
+    cpu.SF = res  >> (byte - 1);\
+}while (0)
 
 //#endif
 
