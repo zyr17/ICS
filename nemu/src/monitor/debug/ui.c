@@ -71,6 +71,8 @@ static int cmd_info(char *args) {
         printf("ebp\t\t0x%x\n", cpu.ebp);
         printf("esi\t\t0x%x\n", cpu.esi);
         printf("edi\t\t0x%x\n", cpu.edi);
+        printf("edi\t\t0x%x\n", cpu.eip);
+        printf("edi\t\t0x%x\n", cpu.eflags);
         return 0;
     }
     else if (strcmp(cmd, "w") == 0){
