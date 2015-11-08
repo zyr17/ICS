@@ -1,44 +1,62 @@
 #include "cpu/exec/template-start.h"
+#include <string.h>
 
 #define instr jcc
 
 static void do_execute () {
-    int flag, init = swaddr_read(cpu.eip, 1);
-    if (init == 0x77) flag = cpu.CF == 0 && cpu.ZF == 0;                  //JA
-    else if (init == 0x73) flag = cpu.CF == 0;                            //JAE
-    else if (init == 0x72) flag = cpu.CF == 1;                            //JB
-    else if (init == 0x76) flag = cpu.CF == 1 && cpu.ZF == 1;             //JBE
-    else if (init == 0x72) flag = cpu.CF == 1;                            //JC
-    else if (init == 0xE3) flag = cpu.ecx == 0;                           //JCXZ
-    else if (init == 0xE3) flag = cpu.ecx == 0;                           //JECXZ
-    else if (init == 0x74) flag = cpu.ZF == 1;                            //JE
-    else if (init == 0x74) flag = cpu.ZF == 1;                            //JZ
-    else if (init == 0x7F) flag = cpu.ZF == 0 && cpu.SF == cpu.OF;        //JG
-    else if (init == 0x7D) flag = cpu.SF == cpu.OF;                       //JGE
-    else if (init == 0x7C) flag = cpu.SF != cpu.OF;                       //JL
-    else if (init == 0x7E) flag = cpu.ZF == 1 || cpu.SF != cpu.OF;        //JLE
-    else if (init == 0x76) flag = cpu.CF == 1 && cpu.ZF == 1;             //JNA
-    else if (init == 0x72) flag = cpu.CF == 1;                            //JNAE
-    else if (init == 0x73) flag = cpu.CF == 0;                            //JNB
-    else if (init == 0x77) flag = cpu.CF == 0 && cpu.ZF == 0;             //JNBE
-    else if (init == 0x73) flag = cpu.CF == 0;                            //JNC
-    else if (init == 0x75) flag = cpu.ZF == 0;                            //JNE
-    else if (init == 0x7E) flag = cpu.ZF == 1 || cpu.SF != cpu.OF;        //JNG
-    else if (init == 0x7C) flag = cpu.SF != cpu.OF;                       //JNGE
-    else if (init == 0x7D) flag = cpu.SF == cpu.OF;                       //JNL
-    else if (init == 0x7F) flag = cpu.ZF == 0 && cpu.SF == cpu.OF;        //JNLE
-    else if (init == 0x71) flag = cpu.OF == 0;                            //JNO
-    else if (init == 0x7B) flag = cpu.PF == 0;                            //JNP
-    else if (init == 0x79) flag = cpu.SF == 0;                            //JNS
-    else if (init == 0x75) flag = cpu.ZF == 0;                            //JNZ
-    else if (init == 0x70) flag = cpu.OF == 1;                            //JO
-    else if (init == 0x7A) flag = cpu.PF == 1;                            //JP
-    else if (init == 0x7A) flag = cpu.PF == 1;                            //JPE
-    else if (init == 0x7B) flag = cpu.PF == 0;                            //JPO
-    else if (init == 0x78) flag = cpu.SF == 1;                            //JS
-    else if (init == 0x74) flag = cpu.ZF == 1;                            //JZ
+    int flag, init = swaddr_read(cpu.eip, 1) & 0xf;
+    char nowins[10] = {0};
+    if (swaddr_read(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,     strcpy(nowins, "jcxz");
+    else if (swaddr_read(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,strcpy(nowins, "jecxz");
+    else if (init == 0x7) flag = cpu.CF == 0 && cpu.ZF == 0,      strcpy(nowins, "ja");
+    else if (init == 0x3) flag = cpu.CF == 0,                     strcpy(nowins, "jae");
+    else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jb");
+    else if (init == 0x6) flag = cpu.CF == 1 && cpu.ZF == 1,      strcpy(nowins, "jbe");
+    else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jc");
+    else if (init == 0x4) flag = cpu.ZF == 1,                     strcpy(nowins, "je");
+    else if (init == 0x4) flag = cpu.ZF == 1,                     strcpy(nowins, "jz");
+    else if (init == 0xF) flag = cpu.ZF == 0 && cpu.SF == cpu.OF, strcpy(nowins, "jg");
+    else if (init == 0xD) flag = cpu.SF == cpu.OF,                strcpy(nowins, "jge");
+    else if (init == 0xC) flag = cpu.SF != cpu.OF,                strcpy(nowins, "jl");
+    else if (init == 0xE) flag = cpu.ZF == 1 || cpu.SF != cpu.OF, strcpy(nowins, "jle");
+    else if (init == 0x6) flag = cpu.CF == 1 && cpu.ZF == 1,      strcpy(nowins, "jna");
+    else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jnae");
+    else if (init == 0x3) flag = cpu.CF == 0,                     strcpy(nowins, "jnb");
+    else if (init == 0x7) flag = cpu.CF == 0 && cpu.ZF == 0,      strcpy(nowins, "jnbe");
+    else if (init == 0x3) flag = cpu.CF == 0,                     strcpy(nowins, "jnc");
+    else if (init == 0x5) flag = cpu.ZF == 0,                     strcpy(nowins, "jne");
+    else if (init == 0xE) flag = cpu.ZF == 1 || cpu.SF != cpu.OF, strcpy(nowins, "jng");
+    else if (init == 0xC) flag = cpu.SF != cpu.OF,                strcpy(nowins, "jnge");
+    else if (init == 0xD) flag = cpu.SF == cpu.OF,                strcpy(nowins, "jnl");
+    else if (init == 0xF) flag = cpu.ZF == 0 && cpu.SF == cpu.OF, strcpy(nowins, "jnle");
+    else if (init == 0x1) flag = cpu.OF == 0,                     strcpy(nowins, "jno");
+    else if (init == 0xB) flag = cpu.PF == 0,                     strcpy(nowins, "jnp");
+    else if (init == 0x9) flag = cpu.SF == 0,                     strcpy(nowins, "jns");
+    else if (init == 0x5) flag = cpu.ZF == 0,                     strcpy(nowins, "jnz");
+    else if (init == 0x0) flag = cpu.OF == 1,                     strcpy(nowins, "jo");
+    else if (init == 0xA) flag = cpu.PF == 1,                     strcpy(nowins, "jp");
+    else if (init == 0xA) flag = cpu.PF == 1,                     strcpy(nowins, "jpe");
+    else if (init == 0xB) flag = cpu.PF == 0,                     strcpy(nowins, "jpo");
+    else if (init == 0x8) flag = cpu.SF == 1,                     strcpy(nowins, "js");
+    else if (init == 0x4) flag = cpu.ZF == 1,                     strcpy(nowins, "jz");
+    else{
+        flag = 0;
+        panic("Jcc ERROR!");
+    }
 
-    printf("%s ")
+    if (flag == 1){
+        DATA_TYPE_S tmp =  op_src -> val;
+        cpu.eip += (int32_t) tmp;
+        if (DATA_BYTE == 2) cpu.eip &= 0xffff;
+    }
+
+    if (DATA_BYTE == 1) printf("%8x:   %2x %2x                                 %s $0x%x\n",
+                        cpu.eip, swaddr_read(cpu.eip, 1), swaddr_read(cpu.eip + 1, 1), nowins, swaddr_read(cpu.eip + 1, 1));
+    else if (DATA_BYTE == 2) printf("%8x:   %2x %2x %2x                              %s $0x%x\n",
+                             cpu.eip, swaddr_read(cpu.eip, 1), swaddr_read(cpu.eip + 1, 1), swaddr_read(cpu.eip + 2, 1), nowins, swaddr_read(cpu.eip + 1, 2));
+    else if (DATA_BYTE == 4) printf("%8x:   %2x %2x %2x %2x %2x                        %s $0x%x\n",
+                             cpu.eip, swaddr_read(cpu.eip, 1), swaddr_read(cpu.eip + 1, 1), swaddr_read(cpu.eip + 2, 1),
+                             swaddr_read(cpu.eip + 3, 1), swaddr_read(cpu.eip + 4, 1), nowins, swaddr_read(cpu.eip + 1, 4));
 	//print_asm_template1();
 }
 
