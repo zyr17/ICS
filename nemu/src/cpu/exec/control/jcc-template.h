@@ -50,14 +50,15 @@ static void do_execute () {
         if (DATA_BYTE == 2) cpu.eip &= 0xffff;
     }
 
-    if (DATA_BYTE == 1) printf("%8x:   %2x %2x                                 %s $0x%x\n",
+    /*if (DATA_BYTE == 1) printf("%8x:   %2x %2x                                 %s $0x%x\n",
                         cpu.eip, swaddr_read(cpu.eip, 1), swaddr_read(cpu.eip + 1, 1), nowins, swaddr_read(cpu.eip + 1, 1));
     else if (DATA_BYTE == 2) printf("%8x:   %2x %2x %2x                              %s $0x%x\n",
                              cpu.eip, swaddr_read(cpu.eip, 1), swaddr_read(cpu.eip + 1, 1), swaddr_read(cpu.eip + 2, 1), nowins, swaddr_read(cpu.eip + 1, 2));
     else if (DATA_BYTE == 4) printf("%8x:   %2x %2x %2x %2x %2x                        %s $0x%x\n",
                              cpu.eip, swaddr_read(cpu.eip, 1), swaddr_read(cpu.eip + 1, 1), swaddr_read(cpu.eip + 2, 1),
-                             swaddr_read(cpu.eip + 3, 1), swaddr_read(cpu.eip + 4, 1), nowins, swaddr_read(cpu.eip + 1, 4));
+                             swaddr_read(cpu.eip + 3, 1), swaddr_read(cpu.eip + 4, 1), nowins, swaddr_read(cpu.eip + 1, 4));*/
 	//print_asm_template1();
+	print_asm("%s" str(SUFFIX) " %s", nowins, op_src->str);
 }
 
 make_instr_helper(i)
