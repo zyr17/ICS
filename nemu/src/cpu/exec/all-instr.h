@@ -1,9 +1,10 @@
 #include "prefix/prefix.h"
 
 #include "data-mov/mov.h"
-#include "data-mov/xchg.h"
 #include "data-mov/push.h"
+#include "data-mov/xchg.h"
 
+#include "arith/cmp.h"
 #include "arith/dec.h"
 #include "arith/inc.h"
 #include "arith/neg.h"
