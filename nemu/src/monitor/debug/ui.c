@@ -72,7 +72,9 @@ static int cmd_info(char *args) {
         printf("esi\t\t0x%x\n", cpu.esi);
         printf("edi\t\t0x%x\n", cpu.edi);
         printf("eip\t\t0x%x\n", cpu.eip);
-        printf("eflags\t\t0x%x\n", cpu.eflags);
+        printf("eflags\t\t0x%x\nDetails for eflags:\n ... VM RF . NT IOPL OF DF IF TF SF ZF . AF . PF . CF\n", cpu.eflags);
+        printf(" 0..  %d  %d 0  %d   %d%d  %d  %d  %d  %d  %d  %d 0  %d 0  %d 1  %d\n",
+               cpu.VM, cpu.RF, cpu.NT, cpu.IOPL / 2, cpu.IOPL & 1, cpu.OF, cpu.DF, cpu.IF, cpu.TF, cpu.SF, cpu.ZF, cpu.AF, cpu.PF, cpu.CF);
         return 0;
     }
     else if (strcmp(cmd, "w") == 0){
