@@ -5,7 +5,7 @@ int b;
 
 int main() {
 	int i = 1;
-	if (i <= 1){
+	if (i >= 1){
 		A[0] = 0;
 		A[1] = 1;
 		A[2] = 2;
