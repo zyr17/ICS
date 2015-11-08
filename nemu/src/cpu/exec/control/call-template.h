@@ -3,7 +3,7 @@
 #define instr call
 
 static void do_execute () {
-    push_push(DATA_BYTE, cpu.eip);
+    push_push(DATA_BYTE, cpu.eip + DATA_BYTE + 1);
     cpu.eip += op_src->val;
 
 	print_asm_template1();
