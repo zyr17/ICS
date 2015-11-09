@@ -6,6 +6,8 @@
 
 static void do_execute () {
     pop_pop(DATA_BYTE, cpu.eip);
+    cpu.eip -= DATA_BYTE + 1;
+    if (DATA_BYTE == 2) cpu.eip -- ;
     cpu.esp += op_src -> val;
 
 	print_asm_template1();
@@ -22,6 +24,8 @@ make_helper(ret_i_l) {
 
 make_helper(concat(ret_0_, SUFFIX)) {
     pop_pop(DATA_BYTE, cpu.eip);
+    cpu.eip -- ;
+    if (DATA_BYTE == 2) cpu.eip -- ;
 
     print_asm("ret" str(SUFFIX));
     return 1;
