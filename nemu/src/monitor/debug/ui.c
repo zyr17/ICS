@@ -10,6 +10,7 @@
 #define C_COLOR printf("\x1b[32;1m");
 
 void cpu_exec(uint32_t);
+void bt_print(int now, int ebp, int eip);
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -260,6 +261,10 @@ static int cmd_w(char *args) {
     return 0;
 }
 
+static int cmd_bt(char *args) {
+    bt_print(0, cpu.ebp, cpu.eip);
+    return 0;
+}
 static int cmd_d(char *args) {
     int tmp = - 1, i, len;
     if (args == NULL){
@@ -299,11 +304,12 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
 	{ "info", "[info r][info w (N)] r: to print the register. w: to print the checkpoint(s). w N: to show details about Nth checkpoint.", cmd_info},
-	{ "x", "[x N expr] calculate the expression, the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
+	{ "x", "[x N expr] Calculate the expression, the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
 	{ "str", "[str N expr] the same as command \"x\", but output the number as char.", cmd_str},
-	{ "p", "[p expr] calculate the expr and print it in several ways.", cmd_p},
-	{ "w", "[w expr] set a watchpoint, when expr changes, stop.", cmd_w},
-	{ "d", "[d N] delete the Nth watchpoint.", cmd_d},
+	{ "p", "[p expr] Calculate the expr and print it in several ways.", cmd_p},
+	{ "w", "[w expr] Set a watchpoint, when expr changes, stop.", cmd_w},
+	{ "d", "[d N] Delete the Nth watchpoint.", cmd_d},
+	{ "bt", "Print backtrace of all stack frames.", cmd_bt},
 
 	/* TODO: Add more commands */
 

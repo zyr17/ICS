@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <elf.h>
 
+uint32_t swaddr_read(swaddr_t, size_t);
+
 char *exec_file = NULL;
 
 static char *strtab = NULL;
@@ -99,3 +101,29 @@ uint32_t find_var(char *s, int *suc){
 }
 
 
+void bt_print(int now, uint32_t ebp, uint32_t eip){
+    int i = 0;
+    if (!ebp){
+        for (; i < nr_symtab_entry; i ++ )
+            if (symtab[i].st_value <= eip && symtab[i].st_value + symtab[i].st_size >= eip)
+                printf("#%03d 0x%x in %s\n", now, eip, strtab + symtab[i].st_name);
+        return;
+    }
+    for (; i < nr_symtab_entry; i ++ )
+        if (symtab[i].st_value <= eip && symtab[i].st_value + symtab[i].st_size >= eip){
+            printf("#%03d 0x%x in %s (0x%x 0x%x 0x%x 0x%x)\n", now, eip, strtab + symtab[i].st_name,
+                   swaddr_read(ebp + 8, 4), swaddr_read(ebp + 12, 4), swaddr_read(ebp + 16, 4), swaddr_read(ebp + 20, 4));
+            eip = swaddr_read(ebp + 4, 4);
+            ebp = swaddr_read(ebp, 4);
+            break;
+        }
+    if ((now + 1) % 23 == 0){
+        printf("\n--Type <return> to continue, or q <return> to quit---");
+        for (; ; ){
+            int tch = getchar();
+            if (tch == '\n') break;
+            if (tch == 'q') return;
+        }
+    }
+    bt_print(now + 1, ebp, eip);
+}
