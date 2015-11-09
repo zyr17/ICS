@@ -52,11 +52,11 @@ static struct rule {
     {"\\?", '?'},
     {":", ':'},
     {"\'[^\']+\'", LTR},
-    {"\\$[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM]+", REG},
-    {"([1234567890]+\\.|[1234567890]+\\.[1234567890]+|\\.[1234567890]+)([eE][\\+-]{0,1}[1234567890]*){0,1}|[0123456789]+[eE][\\+-]{0,1}[0123456789]*", FLOAT},
-    {"0[xX][0123456789dabcdefABCDEF]+", HEX},
-    {"[1234567980][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", DIG},
-    {"[qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM][qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890]*", VAR},
+    {"\\$[a-zA-Z]+", REG},
+    {"([0-9]+\\.|[0-9]+\\.[0-9]+|\\.[0-9]+)([eE][\\+-]{0,1}[0-9]*){0,1}|[0-9]+[eE][\\+-]{0,1}[0-9]*", FLOAT},
+    {"0[xX][0-9a-fA-F]+", HEX},
+    {"[0-9][a-zA-Z0-9]*", DIG},
+    {"[a-zA-Z][a-zA-Z0-9_]*", VAR},
 
 };
 
