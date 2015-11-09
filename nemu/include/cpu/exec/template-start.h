@@ -61,6 +61,12 @@ do {\
 
 #define push_push(_byte, _data) MEM_W(cpu.esp -= (_byte), (_data))
 
+#define pop_pop(_byte, _data)\
+do{\
+    _data = MEM_R(cpu.esp);\
+    cpu.esp += _byte;\
+}while (0)
+
 
 //#endif
 
