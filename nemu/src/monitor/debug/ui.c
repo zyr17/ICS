@@ -107,10 +107,10 @@ static int cmd_info(char *args) {
     return 0;
 }
 
-static int cmd_x(char *args) {
+static int cmd_x_str(char *args, const char *istr, int type) {
     if (args == NULL){
         NOCMD_x:;
-        printf("x: No command\n");
+        printf("%s: No command\n", istr);
         return 0;
     }
     char *cmd = strtok(args, " ");
@@ -154,7 +154,8 @@ static int cmd_x(char *args) {
         }
         int number = swaddr_read(now, 1);
         if (i % 4){
-            printf("\t%02x", number);
+            if (type) printf("\t%02x", number);
+            else printf("\t\'%c\'", number);
         }
         else{
             if (i && i % 92 == 0){
@@ -166,10 +167,18 @@ static int cmd_x(char *args) {
                 }
             }
             if (i) printf("\n");
-            printf("0x%x:\t%02x", now, number);
+            if (type) printf("0x%x:\t%02x", now, number);
+            else printf("0x%x:\t\'%c\'", now, number);
         }
     }printf("\n");
     return 0;
+}
+
+static int cmd_x(char *args) {
+    return cmd_x_str(args, "x", 1);
+}
+static int cmd_str(char *args) {
+    return cmd_x_str(args, "str", 0);
 }
 
 static int cmd_p(char *args) {
@@ -291,6 +300,7 @@ static struct {
 	{ "si", "[si N] Do N steps and pause. Default N = 1.", cmd_si },
 	{ "info", "[info r][info w (N)] r: to print the register. w: to print the checkpoint(s). w N: to show details about Nth checkpoint.", cmd_info},
 	{ "x", "[x N expr] calculate the expression, the answer is a address, and print the memory N bits start with that. 4 bits a line.", cmd_x},
+	{ "str", "[str N expr] the same as command \"x\", but output the number as char.", cmd_str},
 	{ "p", "[p expr] calculate the expr and print it in several ways.", cmd_p},
 	{ "w", "[w expr] set a watchpoint, when expr changes, stop.", cmd_w},
 	{ "d", "[d N] delete the Nth watchpoint.", cmd_d},
