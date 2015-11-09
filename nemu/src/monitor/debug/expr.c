@@ -521,7 +521,7 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
                 return tokens[head];
             }
             else{
-                Log("Now can't calculate variable: %s\n", tokens[head].str);
+                //Log("Now can't calculate variable: %s\n", tokens[head].str);
                 sprintf(tokens[head].str, "%x", find_var(tokens[head].str, success));
                 return tokens[head];
             }
