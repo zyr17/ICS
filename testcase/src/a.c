@@ -1,7 +1,11 @@
 #include "trap.h"
 char str[] = "123456789adsgfbre";
+int func(int k){
+	if (!k) return 0;
+	return func(k - 1) + 1;
+}
 int main(){
-	if (str[0] == '1')
-		HIT_GOOD_TRAP;
+	if (func(4) == 4) HIT_GOOD_TRAP;
+	HIT_BAD_TRAP;
 	return 0;
 }
