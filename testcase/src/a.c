@@ -1,4 +1,7 @@
-#include <stdio.h>
+#include "trap.h"
+char str[] = "123456789adsgfbre";
 int main(){
-	5 == 6;
+	if (str[0] == '1')
+		HIT_GOOD_TRAP;
+	return 0;
 }
