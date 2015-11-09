@@ -5,6 +5,7 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+uint32_t find_var(char *s, int *suc);
 
 enum {
 	NOTYPE = 256, EQ, LL, RR, BEQ, SEQ, NEQ,
@@ -521,7 +522,7 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
             }
             else{
                 Log("Now can't calculate variable: %s\n", tokens[head].str);
-                *success = 0;
+                sprintf(tokens[head].str, "%x", find_var(tokens[head].str, success));
                 return tokens[head];
             }
         }
