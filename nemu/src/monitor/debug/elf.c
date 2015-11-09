@@ -118,7 +118,7 @@ void bt_print(int now, uint32_t ebp, uint32_t eip){
             break;
         }
     if ((now + 1) % 23 == 0){
-        printf("\n--Type <return> to continue, or q <return> to quit---");
+        printf("--Type <return> to continue, or q <return> to quit---");
         for (; ; ){
             int tch = getchar();
             if (tch == '\n') break;
