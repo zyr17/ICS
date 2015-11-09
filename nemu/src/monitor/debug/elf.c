@@ -122,7 +122,10 @@ void bt_print(int now, uint32_t ebp, uint32_t eip){
         for (; ; ){
             int tch = getchar();
             if (tch == '\n') break;
-            if (tch == 'q') return;
+            if (tch == 'q'){
+                getchar();
+                return;
+            }
         }
     }
     bt_print(now + 1, ebp, eip);
