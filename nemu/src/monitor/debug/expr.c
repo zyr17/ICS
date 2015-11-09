@@ -522,9 +522,9 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
             }
             else{
                 //Log("Now can't calculate variable: %s\n", tokens[head].str);
-                sprintf(tokens[head].str, "%x", find_var(tokens[head].str, success));
-                if (*success == FAIL)
-                    Log("Variable can't find: %s\n", tokens[head].str);
+                uint32_t tmp = find_var(tokens[head].str, success);
+                if (*success == FAIL) Log("Variable can't find: %s\n", tokens[head].str);
+                sprintf(tokens[head].str, "%x", tmp);
                 return tokens[head];
             }
         }
