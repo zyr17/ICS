@@ -119,13 +119,13 @@ static int cmd_x_str(char *args, const char *istr, int type) {
     for (; *cmd2; cmd2 ++ );
     for (cmd2 ++ ; *cmd2 == ' '; cmd2 ++ );
     if (*cmd2 == 0){
-        printf("x: Expression missed\n");
+        printf("%s: Expression missed\n", istr);
         return 0;
     }
     int times = - 1;
     sscanf(cmd, "%d", &times);
     if (times < 0){
-        printf("x: N input error\n");
+        printf("%s: N input error\n", istr);
         return 0;
     }
     #define MAXADD 134217727
@@ -134,28 +134,28 @@ static int cmd_x_str(char *args, const char *istr, int type) {
     memaddr = expr(cmd2, &suc);
     C_COLOR
     if (suc == - 1){
-        printf("x: expr input error\n");
+        printf("%s: expr input error\n", istr);
         return 0;
     }
     else if (suc == 0){
-        printf("x: Calc error.\n");
+        printf("%s: Calc error.\n", istr);
         return 0;
     }
     else if (suc == SFLO){
-        printf("x: expr get a float.\n");
+        printf("%s: expr get a float.\n", istr);
         return 0;
     }
     uint32_t i = 0;
     for (; i < times; i ++ ){
         uint32_t now = i + memaddr;
         if (now >> 27){
-            printf("\x1b[31;1m\nOut of memory!\n");
+            printf("\x1b[31;1m\n%s: Out of memory!\n", istr);
             return 0;
         }
         int number = swaddr_read(now, 1);
         if (i % 4){
-            if (type) printf("\t%02x", number);
-            else printf("\t\'%c\'", number);
+            if (number > 31 && type) printf("\t\'%c\'", number);
+            else printf("\t%02x", number);
         }
         else{
             if (i && i % 92 == 0){
@@ -167,18 +167,18 @@ static int cmd_x_str(char *args, const char *istr, int type) {
                 }
             }
             if (i) printf("\n");
-            if (type) printf("0x%x:\t%02x", now, number);
-            else printf("0x%x:\t\'%c\'", now, number);
+            if (type && number > 31) printf("0x%x:\t\'%c\'", now, number);
+            else printf("0x%x:\t%02x", now, number);
         }
     }printf("\n");
     return 0;
 }
 
 static int cmd_x(char *args) {
-    return cmd_x_str(args, "x", 1);
+    return cmd_x_str(args, "x", 0);
 }
 static int cmd_str(char *args) {
-    return cmd_x_str(args, "str", 0);
+    return cmd_x_str(args, "str", 1);
 }
 
 static int cmd_p(char *args) {
