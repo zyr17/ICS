@@ -86,13 +86,13 @@ void load_elf_tables(int argc, char *argv[]) {
 uint32_t find_var(char *s, int *suc){
     *suc = 0;
     int i = 0;
-    printf("nr_symtab_entry:%d\n", nr_symtab_entry);
+    //printf("nr_symtab_entry:%d\n", nr_symtab_entry);
     for (; i < nr_symtab_entry; i ++ )
         if (strcmp(s, strtab + symtab[i].st_name) == 0){
             *suc = 3;
             return symtab[i].st_value;
         }
-    for (i = 0; i < nr_symtab_entry; i ++ )
-        printf("%s\n", strtab + symtab[i].st_name);
+    //for (i = 0; i < nr_symtab_entry; i ++ )
+    //    printf("%s\n", strtab + symtab[i].st_name);
     return 0;
 }
