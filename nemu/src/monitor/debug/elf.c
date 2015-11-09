@@ -92,7 +92,8 @@ uint32_t find_var(char *s, int *suc){
             *suc = 3;
             return symtab[i].st_value;
         }
-    //for (i = 0; i < nr_symtab_entry; i ++ )
-    //    printf("%s\n", strtab + symtab[i].st_name);
+    for (i = 0; i < nr_symtab_entry; i ++ )
+        printf("%s %c\n", strtab + symtab[i].st_name, symtab[i].st_info);
+    printf("STT_OBJECT:%c\nSTT_FUNC:%c\n",STT_OBJECT, STT_FUNC);
     return 0;
 }
