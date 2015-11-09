@@ -88,12 +88,14 @@ uint32_t find_var(char *s, int *suc){
     int i = 0;
     //printf("nr_symtab_entry:%d\n", nr_symtab_entry);
     for (; i < nr_symtab_entry; i ++ )
-        if (symtab[i].st_info == STT_OBJECT && strcmp(s, strtab + symtab[i].st_name) == 0){
+        if (strcmp(s, strtab + symtab[i].st_name) == 0){
             *suc = 3;
             return symtab[i].st_value;
         }
-    for (i = 0; i < nr_symtab_entry; i ++ )
-        printf("%s %c\n", strtab + symtab[i].st_name, symtab[i].st_info);
-    printf("STT_OBJECT:%c\nSTT_FUNC:%c\n",STT_OBJECT, STT_FUNC);
+    //for (i = 0; i < nr_symtab_entry; i ++ )
+    //    printf("%s %c\n", strtab + symtab[i].st_name, symtab[i].st_info);
+    //printf("STT_OBJECT:%c\nSTT_FUNC:%c\n",STT_OBJECT, STT_FUNC);
     return 0;
 }
+
+
