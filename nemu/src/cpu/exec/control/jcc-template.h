@@ -12,7 +12,7 @@ static void do_execute () {
     else if (init == 0x7) flag = cpu.CF == 0 && cpu.ZF == 0,      strcpy(nowins, "ja");
     else if (init == 0x3) flag = cpu.CF == 0,                     strcpy(nowins, "jae");
     else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jb");
-    else if (init == 0x6) flag = cpu.CF == 1 && cpu.ZF == 1,      strcpy(nowins, "jbe");
+    else if (init == 0x6) flag = cpu.CF == 1 || cpu.ZF == 1,      strcpy(nowins, "jbe");
     else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jc");
     else if (init == 0x4) flag = cpu.ZF == 1,                     strcpy(nowins, "je");
     else if (init == 0x4) flag = cpu.ZF == 1,                     strcpy(nowins, "jz");
@@ -20,7 +20,7 @@ static void do_execute () {
     else if (init == 0xD) flag = cpu.SF == cpu.OF,                strcpy(nowins, "jge");
     else if (init == 0xC) flag = cpu.SF != cpu.OF,                strcpy(nowins, "jl");
     else if (init == 0xE) flag = cpu.ZF == 1 || cpu.SF != cpu.OF, strcpy(nowins, "jle");
-    else if (init == 0x6) flag = cpu.CF == 1 && cpu.ZF == 1,      strcpy(nowins, "jna");
+    else if (init == 0x6) flag = cpu.CF == 1 || cpu.ZF == 1,      strcpy(nowins, "jna");
     else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jnae");
     else if (init == 0x3) flag = cpu.CF == 0,                     strcpy(nowins, "jnb");
     else if (init == 0x7) flag = cpu.CF == 0 && cpu.ZF == 0,      strcpy(nowins, "jnbe");
