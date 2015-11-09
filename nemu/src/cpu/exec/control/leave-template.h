@@ -5,6 +5,7 @@
 make_helper(concat(leave_0_, SUFFIX)) {
     cpu.esp = cpu.ebp;
     pop_pop(DATA_BYTE, cpu.ebp);
+    print_asm("leave");
     return 1;
 }
 
