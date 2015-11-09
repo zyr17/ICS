@@ -149,7 +149,7 @@ static int cmd_x(char *args) {
     for (; i < times; i ++ ){
         uint32_t now = i + memaddr;
         if (now >> 27){
-            printf("\n");
+            printf("\x1b[31;1m\nOut of memory!\n");
             return 0;
         }
         int number = swaddr_read(now, 1);
