@@ -107,7 +107,7 @@ void bt_print(int now, uint32_t ebp, uint32_t eip){
         //for (; i < nr_symtab_entry; i ++ )
         //    if (symtab[i].st_value <= eip && symtab[i].st_value + symtab[i].st_size >= eip)
         //        printf("#%03d 0x%x in %s\n", now, eip, strtab + symtab[i].st_name);
-        Log("#%03d 0x%x in %s\n", now, eip, strtab + symtab[i].st_name);
+        //Log("#%03d 0x%x in %s\n", now, eip, strtab + symtab[i].st_name);
         return;
     }
     for (; i < nr_symtab_entry; i ++ )
