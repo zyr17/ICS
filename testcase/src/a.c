@@ -5,7 +5,7 @@ int func(int k){
 	return func(k - 1) + 1;
 }
 int main(){
-	if (func(100) == 99) HIT_GOOD_TRAP;
+	if (func(100) == 100) HIT_GOOD_TRAP;
 	HIT_BAD_TRAP;
 	return 0;
 }
