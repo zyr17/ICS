@@ -51,7 +51,7 @@ do {\
     y &= ((1 << (byte - 1)) << 1) - 1;\
     cpu.ZF = !res;\
     cpu.OF = (dest & (1 << (byte - 1))) == (y  & (1 << (byte - 1))) && (y  & (1 << (byte - 1))) != (res  & (1 << (byte - 1)));\
-    cpu.CF = sub ^ ((res - sub) < dest || (res - sub) < y || res < sub);\
+    cpu.CF = sub ^ ((res - (sub ^ needCF)) < dest || (res - (sub ^ needCF)) < y || res < (sub ^ needCF));\
     cpu.PF = 1;\
     uint32_t i = 1, j = res;\
     for (; i <= 8; i ++ , j /= 2)\
