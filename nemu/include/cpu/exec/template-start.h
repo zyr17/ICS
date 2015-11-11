@@ -41,10 +41,10 @@
 
 #define eflags_add_sub(_dest, _src, _sub, _byte)\
 do {\
-    uint32_t dest = (_dest), src = (_src), sub = (_sub), byte = (_byte);\
+    uint32_t dest = (_dest), src = (_src), sub = (_sub) & 1, byte = (_byte), needCF = (_sub) >> 1 ? cpu.CF : 0;\
     byte *= 8;\
     uint32_t y = sub ? ~ src : src;\
-    uint32_t res = dest + y + sub;\
+    uint32_t res = dest + y + (sub ^ needCF);\
     res &= ((1 << (byte - 1)) << 1) - 1;\
     dest &= ((1 << (byte - 1)) << 1) - 1;\
     src &= ((1 << (byte - 1)) << 1) - 1;\
