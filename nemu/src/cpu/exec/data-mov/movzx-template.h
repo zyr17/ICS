@@ -6,7 +6,7 @@ static void do_execute() {
     DATA_TYPE tv = (uint8_t)op_src -> val;
 
 	OPERAND_W(op_dest, tv);
-	print_asm("moxzx" str(SUFFIX) " %s,%s", op_src->str, op_dest->str);
+	print_asm("movzx" str(SUFFIX) " %s,%s", op_src->str, op_dest->str);
 }
 
 make_instr_helper(rm2r)
@@ -17,7 +17,7 @@ make_helper(movzx_w_rm2r_l) {
     DATA_TYPE tv = (uint16_t)op_src -> val;
 
 	OPERAND_W(op_dest, tv);
-	print_asm("moxzx" str(SUFFIX) " %s,%s", op_src->str, op_dest->str);
+	print_asm("movzx" str(SUFFIX) " %s,%s", op_src->str, op_dest->str);
 	return len + 1;
 }
 #endif
