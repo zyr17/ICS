@@ -5,7 +5,8 @@
 static void do_execute () {
 
     DATA_TYPE_S tmp =  op_src -> val;
-    cpu.eip += (int32_t) tmp;
+    if (swaddr_read(cpu.eip, 1) == 0xff) cpu.eip = tmp;
+    else cpu.eip += (int32_t) tmp;
     //if (DATA_BYTE == 2) cpu.eip &= 0xffff;
     if (DATA_BYTE == 2) panic("jmp rel16/rm16!!");
 
