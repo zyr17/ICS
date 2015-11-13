@@ -18,6 +18,7 @@
 #include "arith/mul.h"
 #include "arith/idiv.h"
 #include "arith/div.h"
+#include "arith/sbb.h"
 #include "arith/sub.h"
 
 #include "control/call.h"
