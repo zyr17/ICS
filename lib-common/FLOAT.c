@@ -13,7 +13,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT f2F(float a) {
-	return (int)(f * 0x10000);
+	return (int)(a * 0x10000);
 }
 
 FLOAT Fabs(FLOAT a) {
