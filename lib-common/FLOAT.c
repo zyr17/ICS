@@ -1,7 +1,7 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-    int tmp = (int)a * b;
+    long long tmp = (long long)a * b;
 	return (int)(tmp / 0x10000);
 }
 
