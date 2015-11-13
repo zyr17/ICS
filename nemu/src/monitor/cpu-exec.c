@@ -59,9 +59,9 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* Execute one instruction, including instruction fetch,
 		 * instruction decode, and the actual execution. */
+        cpu.EIP_CHANGEABLE = 1;
 		int instr_len = exec(cpu.eip);
-
-		cpu.eip += instr_len;
+		cpu.eip += instr_len * cpu.EIP_CHANGEABLE;
 
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
