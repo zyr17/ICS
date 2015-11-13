@@ -4,8 +4,9 @@
 #define instr jcc
 
 static void do_execute () {
-    int flag, init = swaddr_read(cpu.eip, 1) & 0xf;
-    if (init == 0x0f) init = swaddr_read(cpu.eip + 1, 1) & 0xf;
+    int flag, init = swaddr_read(cpu.eip, 1);
+    if (init == 0x0f) init = swaddr_read(cpu.eip + 1, 1);
+    init &= 0xf;
     char nowins[10] = {0};
     if (swaddr_read(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,     strcpy(nowins, "jcxz");
     else if (swaddr_read(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,strcpy(nowins, "jecxz");
