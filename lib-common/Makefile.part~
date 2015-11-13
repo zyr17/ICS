@@ -1,5 +1,5 @@
 # This file will be included by the Makefile under the project directory.
-makefloat:
+./obj/$(LIB_COMMON_DIR)/FLOAT.o : FLOAT.h FLOAT.c
 	gcc -c -m32 -fno-builtin -o ./obj/$(LIB_COMMON_DIR)/FLOAT.o ./$(LIB_COMMON_DIR)/FLOAT.c
 
 FLOAT_OBJ := $(FLOAT:.a=.o)
