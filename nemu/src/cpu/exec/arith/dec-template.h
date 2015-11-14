@@ -7,7 +7,9 @@ static void do_execute () {
 	OPERAND_W(op_src, result);
 
 	/* TODO: Update EFLAGS. */
-	panic("please implement me");
+    int precf = cpu.CF;
+    eflags_add_sub(op_src -> val, 1, 1, DATA_BYTE);
+    cpu.CF = precf;
 
 	print_asm_template1();
 }
