@@ -59,7 +59,7 @@ string_test:
   cmpsb
   je bad
   rep cmpsb
-  cmp $4, %ecx
+  cmp $2, %ecx
   jne bad
   ret
 
