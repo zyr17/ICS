@@ -12,12 +12,13 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
     if (b < 0) b *= - 1;
     int ans = a / b, i = 16;
     a %= b;
+    unsigned aa = a;
     for (; i -- ; ){
         ans *= 2;
-        a *= 2;
-        if (a >= b){
+        aa *= 2;
+        if (aa >= b){
             ans ++ ;
-            a -= b;
+            aa -= b;
         }
     }
 	return ans * fh;
