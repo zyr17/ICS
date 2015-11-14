@@ -7,6 +7,7 @@ make_helper(concat(movs_0_, SUFFIX)) {
     int change = cpu.DF ? - DATA_BYTE : DATA_BYTE;
     cpu.edi += change;
     cpu.esi += change;
+    print_asm("movs %%es:(%%edi),%%ds:(%%esi)");
     return 1;
 }
 
