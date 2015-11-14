@@ -247,7 +247,7 @@ arith_test:
   mov $0xffffffff, %eax
   sub $0xffffffff, %eax
   call test_zf
-  mov $1, %edx
+  mov $0, %edx
   sub $0xffffffff, %edx
   call test_pf
   // adc
@@ -344,7 +344,7 @@ test_pf:
   push %eax
   setp %al
   test %al, %al
-  jz bad
+  jnz bad
   pop %eax
   ret
 
