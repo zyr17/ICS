@@ -27,6 +27,18 @@ make_helper(rep) {
 
 			/* TODO: Jump out of the while loop if necessary. */
 
+			if (ops_decoded.opcode == 0xa6 ||
+                ops_decoded.opcode == 0xa7 ||
+                ops_decoded.opcode == 0xae ||
+                ops_decoded.opcode == 0xaf){
+                if (swaddr_read(eip, 1) == 0xf3){
+                    if (cpu.ZF == 1) break;
+                }
+                else{
+                    if (cpu.ZF == 0) break;
+                }
+            }
+
 		}
 		len = 1;
 	}
@@ -36,6 +48,6 @@ make_helper(rep) {
 	sprintf(temp, "rep %s", assembly);
 	sprintf(assembly, "%s[cnt = %d]", temp, count);
 #endif
-	
+
 	return len + 1;
 }
