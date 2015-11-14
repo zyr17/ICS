@@ -14,7 +14,6 @@ static inline FLOAT int2F(int a) {
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
-    nemu_assert((1.0 * a / 0x10000 * b) < 0x8000 && (1.0 * a / 0x10000 * b) > - 0x8000);
 	return a * b;
 }
 
