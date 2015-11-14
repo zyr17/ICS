@@ -20,7 +20,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
             a -= b;
         }
     }
-	return ans;
+	return ans * fh;
 }
 
 FLOAT f2F(float a) {
@@ -30,16 +30,17 @@ FLOAT f2F(float a) {
         unsigned y;
     }pp;
     pp.x = a;
-    mul = (pp.y >> 24) & 0x7f;
+    mul = (pp.y >> 23) & 0x7f;
     mul -= 127;
-    ans = pp.y & 0xffffff + 0x1000000;
-    ans <<= mul;
-    ans >>= 8;
+    ans = (pp.y & 0x7fffff) + 0x800000;
+    if (mul > 0) ans <<= mul;
+    else ans >>= mul * - 1;
+    ans >>= 7;
 	return ans * (pp.y >> 31 ? - 1 : 1);
 }
 
 FLOAT Fabs(FLOAT a) {
-	return a & 0x7fffffff;
+    return a > 0 ? a : - a;
 }
 
 FLOAT sqrt(FLOAT x) {
