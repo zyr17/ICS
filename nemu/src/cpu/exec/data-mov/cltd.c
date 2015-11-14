@@ -1,7 +1,7 @@
 #include "cpu/exec/helper.h"
 
-#include "cxtx-template.h"
+#include "cltd-template.h"
 
 /* for instruction encoding overloading */
 
-make_helper_v(cxtx_0)
+make_helper_v(cltd_0)
