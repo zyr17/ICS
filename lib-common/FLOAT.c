@@ -2,18 +2,38 @@
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
     long long tmp = (long long)a * b;
-	return (int)(tmp / 0x10000);
+	return (int)(tmp >> 16);
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-    int tmp = a;
-    tmp *= 0x10000;
-    tmp /= b;
-	return (int)tmp;
+    int fh = (a < 0 ? - 1 : 1) * (b < 0 ? - 1 : 1);
+    if (a < 0) a *= - 1;
+    if (b < 0) b *= - 1;
+    int ans = a / b, i = 16;
+    a %= b;
+    for (; i -- ; ){
+        ans *= 2;
+        a *= 2;
+        if (a >= b){
+            ans ++ ;
+            a -= b;
+        }
+    }
+	return ans;
 }
 
 FLOAT f2F(float a) {
-	return (int)(a * 0x10000);
+    int ans = 0, mul = 0;
+    union{
+        float x;
+        unsigned y;
+    }pp;
+    pp.x = a;
+    mul = (pp.y >> 24) & 0x7f;
+    mul -= 127;
+    ans = pp.y & 0xffffff;
+    ans <<= mul;
+	return ans * (pp.y >> 31 ? - 1 : 1);
 }
 
 FLOAT Fabs(FLOAT a) {
