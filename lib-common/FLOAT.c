@@ -32,7 +32,7 @@ FLOAT f2F(float a) {
     pp.x = a;
     mul = (pp.y >> 24) & 0x7f;
     mul -= 127;
-    ans = pp.y & 0xffffff;
+    ans = pp.y & 0xffffff + 0x1000000;
     ans <<= mul;
 	return ans * (pp.y >> 31 ? - 1 : 1);
 }
