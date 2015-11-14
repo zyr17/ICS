@@ -13,9 +13,9 @@ make_helper(inv) {
 			eip, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
 
 	extern char logo [];
-	printf("There are two cases which will trigger this unexpected exception:\n\
+	/*printf("There are two cases which will trigger this unexpected exception:\n\
 1. The instruction at eip = 0x%08x is not implemented.\n\
-2. Something is implemented incorrectly.\n", eip);
+2. Something is implemented incorrectly.\n", eip);*/
 	printf("Find this eip value(0x%08x) in the disassembling result to distinguish which case it is.\n\n", eip);
 	printf("If it is the first case, \33[1;31mgo to SLEEP\n%s\nfor more details.\n\n\33[1;32mIf it is the second case, remember:\n\
 * The machine is always right!\n\
