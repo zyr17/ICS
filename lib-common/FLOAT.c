@@ -34,6 +34,7 @@ FLOAT f2F(float a) {
     mul -= 127;
     ans = pp.y & 0xffffff + 0x1000000;
     ans <<= mul;
+    ans >>= 8;
 	return ans * (pp.y >> 31 ? - 1 : 1);
 }
 
