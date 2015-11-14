@@ -6,6 +6,7 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
+    if (!(b & 0x7fffffff)) for (;;);
     int fh = (a < 0 ? - 1 : 1) * (b < 0 ? - 1 : 1);
     if (a < 0) a *= - 1;
     if (b < 0) b *= - 1;
