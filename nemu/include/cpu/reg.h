@@ -31,6 +31,7 @@ typedef struct {
 
 	swaddr_t eip;
 	bool EIP_CHANGEABLE;
+	int opcode_length;
     union{
         uint32_t eflags;
         struct{

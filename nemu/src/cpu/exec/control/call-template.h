@@ -3,7 +3,8 @@
 #define instr call
 
 static void do_execute () {
-    push_push(DATA_BYTE, cpu.eip + DATA_BYTE + 1);
+    Assert(swaddr_read(cpu.eip, 1) != 0x66, "call baozha");
+    push_push(DATA_BYTE, cpu.eip + cpu.opcode_length);
 
     if (swaddr_read(cpu.eip, 1) == 0xe8) cpu.eip += op_src -> val;
     else{
