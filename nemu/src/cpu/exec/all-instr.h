@@ -38,6 +38,7 @@
 #include "logic/shrd.h"
 #include "logic/test.h"
 
+#include "string/cmps.h"
 #include "string/rep.h"
 #include "string/stos.h"
 
