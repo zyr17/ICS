@@ -63,8 +63,8 @@ uint32_t loader() {
 #endif
 		}
 		ph += sizeof(Elf32_Phdr);
-		total += sizeof(Elf32_Phdr);
-		if (total >= 4096) break;
+		total ++ ;
+		if (total >= elf -> e_shnum) break;
 	}
 
 	volatile uint32_t entry = elf->e_entry;
