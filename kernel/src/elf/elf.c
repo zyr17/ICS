@@ -37,7 +37,7 @@ uint32_t loader() {
 
 	/* Load each program segment */
 	//panic("please implement me");
-	ph = (void*)(buf + elf -> e_shoff);
+	ph = (void*)(elf -> e_shoff);
 	volatile int total = 0;
 	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
