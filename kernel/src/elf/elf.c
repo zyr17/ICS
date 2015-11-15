@@ -62,7 +62,7 @@ uint32_t loader() {
 			if(brk < new_brk) { brk = new_brk; }
 #endif
 		}
-		ph += sizeof(Elf32_Phdr);
+		ph += 0x20;//sizeof(Elf32_Phdr);
 		total ++ ;
 		if (total >= elf -> e_phnum) break;
 	}
