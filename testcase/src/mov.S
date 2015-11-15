@@ -21,7 +21,6 @@ loop_main:
 loop_test:
   mov %eax, 0x10000
   test %eax, %eax
-  HIT_GOOD_TRAP
   jnz loop_main
   HIT_GOOD_TRAP
 
