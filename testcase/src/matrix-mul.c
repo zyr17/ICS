@@ -308,6 +308,9 @@ int ans[N][N] = {{27825, 6208, 14855, -76487, -23589, 13948, 60449, 9292, 5604, 
 int c[N][N];
 
 int main() {
+
+	HIT_GOOD_TRAP;
+
 	int i, j, k;
 	for(i = 0; i < N; i ++) {
 		for(j = 0; j < N; j ++) {
