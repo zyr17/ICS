@@ -5,6 +5,9 @@
 static void do_execute() {
 	DATA_TYPE result = -op_src->val;
 	OPERAND_W(op_src, result);
+	
+	eflags_add_sub(0, op_src -> val, 1, DATA_BYTE);
+	cpu.CF = !!op_src -> val;
 
 	/* There is no need to update EFLAGS, since no other instructions 
 	 * in PA will test the flags updated by this instruction.
