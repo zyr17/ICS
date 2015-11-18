@@ -344,7 +344,7 @@ int naive_memcmp(void *p1, void *p2, int n)
 int main()
 {
     //0x0, 0x7ffffffffffffffe, /* 0x7ffffffffffffffe div 0xffffffffffffffce */
-	long long a = 0x7ffffffffffffffe, b = 0x7fffffffffffffce, c = 0, d = 0, e = 0, f = 0x7ffffffffffffffe;
+	long long a = 0x7ffffffffffffffe, b = 0xffffffffffffffce, c = 0, d = 0, e = 0, f = 0x7ffffffffffffffe;
 	LLdivLL(a, b, &c, &d);
 	nemu_assert(c == e);
 	nemu_assert(d == f);
