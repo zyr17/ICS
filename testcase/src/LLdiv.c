@@ -313,7 +313,6 @@ void test_ ## TYPE() \
         /*printf("0x%llx, 0x%llx, /" "* 0x%llx div 0x%llx *" "/\n", q, r, a, b);*/ \
         nemu_assert(sample_q == q); \
         nemu_assert(sample_r == r); \
-        if (i == 31) HIT_GOOD_TRAP; \
     } \
     for (i = 0; i < data_size; i++) \
         for (j = 0; j < data_size; j++) { \
@@ -344,11 +343,12 @@ int naive_memcmp(void *p1, void *p2, int n)
 
 int main()
 {
-	//0x1, 0x3, /* 0x7ffffffffffffffd div 0x7ffffffffffffffa */
-	long long a = 0x7ffffffffffffffd, b = 0x7ffffffffffffffa, c = 0, d = 0, e = 1, f = 3;
+    //0x0, 0x7ffffffffffffffe, /* 0x7ffffffffffffffe div 0xffffffffffffffce */
+	long long a = 0x7ffffffffffffffe, b = 0x7fffffffffffffce, c = 0, d = 0, e = 0, f = 0x7ffffffffffffffe;
 	LLdivLL(a, b, &c, &d);
 	nemu_assert(c == e);
 	nemu_assert(d == f);
+	HIT_GOOD_TRAP;
     test_LL();
     test_ULL();
     /*int i;
