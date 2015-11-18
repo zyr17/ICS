@@ -313,8 +313,8 @@ void test_ ## TYPE() \
         /*printf("0x%llx, 0x%llx, /" "* 0x%llx div 0x%llx *" "/\n", q, r, a, b);*/ \
         nemu_assert(sample_q == q); \
         nemu_assert(sample_r == r); \
+        if (i == 0) HIT_GOOD_TRAP; \
     } \
-    HIT_GOOD_TRAP; \
     for (i = 0; i < data_size; i++) \
         for (j = 0; j < data_size; j++) { \
             a = data[i]; \
