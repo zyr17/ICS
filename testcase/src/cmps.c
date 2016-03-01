@@ -170,11 +170,11 @@ int main()
     for (i = 0; i < size; i++)
         for (j = 0; j < size; j++) {
             //test_cmpsb(data[i], data[j], len, 0);
-            test_cmpsw(data[i], data[j], len / 2, 0);
-            //test_cmpsl(data[i], data[j], len / 2, 0);
+            //test_cmpsw(data[i], data[j], len / 2, 0);
+            test_cmpsl(data[i], data[j], len / 2, 0);
             //test_cmpsb(data[i] + len - 1, data[j] + len - 1, len, 1);
-            test_cmpsw(data[i] + len - 2, data[j] + len - 2, len / 2, 1);
-            //test_cmpsl(data[i] + len - 4, data[j] + len - 4, len / 4, 1);
+            //test_cmpsw(data[i] + len - 2, data[j] + len - 2, len / 2, 1);
+            test_cmpsl(data[i] + len - 4, data[j] + len - 4, len / 4, 1);
         }
     
     HIT_GOOD_TRAP;
