@@ -308,19 +308,20 @@ int ans[N][N] = {{27825, 6208, 14855, -76487, -23589, 13948, 60449, 9292, 5604, 
 int c[N][N];
 
 int main() {
-
-	HIT_GOOD_TRAP;
-
 	int i, j, k;
+	int loop = 0;
 	for(i = 0; i < N; i ++) {
 		for(j = 0; j < N; j ++) {
 			c[i][j] = 0;
 			for(k = 0; k < N; k ++) {
 				c[i][j] += a[i][k] * b[k][j];
+				loop ++;
 			}
 			nemu_assert(c[i][j] == ans[i][j]);
 		}
 	}
+
+	nemu_assert(loop == N * N * N);
 
 	HIT_GOOD_TRAP;
 
