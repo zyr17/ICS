@@ -39,6 +39,7 @@ uint32_t L1_cache_read(hwaddr_t addr, size_t len){
         uint32_t t1 = L1_cache_single(addr + (len - tmp), tmp);
         if (addr == 1049669) printf("|%d|",t1);
         t1 <<= (tmp * 8);
+        if (addr == 1049669) printf("|%d|",t1);
         t1 += L1_cache_single(addr, len - tmp);
         if (addr == 1049669) printf("|%d|",t1);
         return t1;
