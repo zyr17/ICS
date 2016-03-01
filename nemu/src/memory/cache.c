@@ -26,7 +26,7 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
             l1_cache_block[group][pos].data[i + start] = dram_read(addr + i, 1);
     }
     uint32_t ans = 0;
-    for (j = 0; j < len; j ++ )
+    for (j = len - 1; j >= 0; j -- )
         ans = (ans << 8) + l1_cache_block[group][pos].data[j + start];
     return ans;
 }
