@@ -41,3 +41,10 @@ make_helper(clc) {
     print_asm("clc");
     return 1;
 }
+
+make_helper(stc) {
+    cpu.CF = 1;
+    print_asm("stc");
+    return 1;
+}
+
