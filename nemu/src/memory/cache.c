@@ -24,8 +24,8 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
         pos = rand() % L1_LENGTH;
         l1_cache_block[group][pos].valid_bit = 1;
         l1_cache_block[group][pos].tag = tag;
-        for (i = 0; i < len; i ++ )
-            l1_cache_block[group][pos].data[i + start] = dram_read(addr + i, 1);
+        for (i = 0; i < BLOCK_SIZE / 8; i ++ )
+            l1_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
     }
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
