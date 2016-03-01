@@ -13,7 +13,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
         printf("\n%d %d: ", (int)addr, (int)len);
         printf("%d %d\n", (int)read, (int)re2);
     }
-    return re2;
+    return read;
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {

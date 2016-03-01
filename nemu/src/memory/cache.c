@@ -22,7 +22,7 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
             pos = i;
     if (!~pos){
         pos = rand() % L1_LENGTH;
-        l1_cache_block[group][pos].valid_bit = 1;
+        //l1_cache_block[group][pos].valid_bit = 1;
         l1_cache_block[group][pos].tag = tag;
         for (i = 0; i < BLOCK_SIZE / 8; i ++ )
             l1_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
