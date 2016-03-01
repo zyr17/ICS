@@ -34,9 +34,9 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
 uint32_t L1_cache_read(hwaddr_t addr,size_t len){
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;
-        uint32_t t1 = L1_cache_single(addr, len - tmp);
+        uint32_t t1 = L1_cache_single(addr + (len - tmp), tmp);
         t1 <<= (tmp * 8);
-        t1 += L1_cache_single(addr + (len - tmp), tmp);
+        t1 += L1_cache_single(addr, len - tmp);
         return t1;
     }
     else return L1_cache_single(addr, len);
