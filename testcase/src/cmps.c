@@ -169,7 +169,7 @@ int main()
 
     for (i = 0; i < size; i++)
         for (j = 0; j < size; j++) {
-            //test_cmpsb(data[i], data[j], len, 0);
+            test_cmpsb(data[i], data[j], len, 0);
             //test_cmpsw(data[i], data[j], len / 2, 0);
             //test_cmpsl(data[i], data[j], len / 2, 0);
             //test_cmpsb(data[i] + len - 1, data[j] + len - 1, len, 1);
