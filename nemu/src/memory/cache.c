@@ -12,9 +12,9 @@ struct{
 }l2_cache_block[L2_SET][L2_LENGTH];
 
 uint32_t L1_cache_single(hwaddr_t addr, size_t len){
-    int group = addr / BLOCK_SIZE % L1_SET;
-    int tag = addr / BLOCK_SIZE / L1_SET;
-    int start = addr % BLOCK_SIZE / 8;
+    int group = addr / (BLOCK_SIZE / 8) % L1_SET;
+    int tag = addr / (BLOCK_SIZE / 8) / L1_SET;
+    int start = addr % (BLOCK_SIZE / 8);
     int pos = - 1;
     int i, j;
     for (i = 0; i < L1_LENGTH; i ++ )
