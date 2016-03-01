@@ -18,10 +18,12 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
     int pos = - 1;
     int i, j;
     for (i = 0; i < L1_LENGTH; i ++ )
-        if (tag == l1_cache_block[group][i].tag)
+        if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag)
             pos = i;
     if (!~pos){
         pos = rand() % L1_LENGTH;
+        l1_cache_block[group][pos].valid_bit = 1;
+        l1_cache_block[group][pos].tag = tag;
         for (i = 0; i < len; i ++ )
             l1_cache_block[group][pos].data[i + start] = dram_read(addr + i, 1);
     }
