@@ -47,15 +47,15 @@ uint32_t L1_cache_read(hwaddr_t addr, size_t len){
 void L1_cache_update(hwaddr_t addr, size_t len){
     int group = addr / (BLOCK_SIZE / 8) % L1_SET;
     int tag = addr / (BLOCK_SIZE / 8) / L1_SET;
-    int start = addr % (BLOCK_SIZE / 8);
+    //int start = addr % (BLOCK_SIZE / 8);
     int pos = - 1;
     int i;
     for (i = 0; i < L1_LENGTH; i ++ )
         if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag)
             pos = i;
     if (~pos){
-        for (i = 0; i < len; i ++ )
-            l1_cache_block[group][pos].data[i + start] = dram_read(addr + i, 1);
+        for (i = 0; i < BLOCK_SIZE / 8; i ++ )
+            l1_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
     }
 }
 
