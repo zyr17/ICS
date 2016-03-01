@@ -53,7 +53,7 @@ void L1_cache_update(hwaddr_t addr, size_t len){
     for (i = 0; i < L1_LENGTH; i ++ )
         if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag)
             pos = i;
-    if (pos){
+    if (~pos){
         for (i = 0; i < len; i ++ )
             l1_cache_block[group][pos].data[i + start] = dram_read(addr + i, 1);
     }
