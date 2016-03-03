@@ -130,7 +130,7 @@ void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
             l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
     }
     l2_cache_block[group][pos].dirty_bit = 1;
-    for (ii = len - 1; ii >= 0; ii -- ){
+    for (ii = 0; ii < len; ii ++ ){
         l2_cache_block[group][pos].data[ii + start] = data & 0xff;
         data >>= 8;
     }
