@@ -45,11 +45,11 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
             unsigned long long lltmp = 0;
             int ii;
-            for (ii = BLOCK_SIZE / 8 - 1; i >= 0; i -- )
+            for (ii = BLOCK_SIZE / 8 - 1; ii >= 0; ii -- )
                 lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
             dram_write(addr_old, 4, lltmp & 0xffffffff);
             dram_write(addr_old + 4, 4, lltmp >> 32LL);
-            printf("%08llX %08X\n", lltmp & 0xffffffff, l2_cache_block[group][pos].data_32_low);
+            //printf("%08llX %08X\n", lltmp & 0xffffffff, l2_cache_block[group][pos].data_32_low);
             //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
             //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
             //int tlow = dram_read(addr_old, 4);
