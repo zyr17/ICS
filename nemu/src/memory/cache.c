@@ -67,8 +67,11 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
         }
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
-        for (i = 0; i < BLOCK_SIZE / 8; i ++ )
-            l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
+        /*for (i = 0; i < BLOCK_SIZE / 8; i ++ )
+            l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);*/
+        hwaddr_t addr_old = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
+        l2_cache_block[group][pos].data_32_low = dram_read(addr_old, 4);
+        l2_cache_block[group][pos].data_32_high = dram_read(addr_old + 4, 4);
     }
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
