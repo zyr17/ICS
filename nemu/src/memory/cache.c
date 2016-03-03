@@ -126,7 +126,7 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l1_cache_block[group][pos].data[i] = lltmp & 0xff;
             lltmp >>= 8;
-        //    l1_cache_block[group][pos].data[i] = L2_cache_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
+            //l1_cache_block[group][pos].data[i] = L2_cache_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
         }
     }
     uint32_t ans = 0;
@@ -154,8 +154,12 @@ void L1_cache_update(hwaddr_t addr, size_t len){
     int i, ii;
     for (i = 0; i < L1_LENGTH; i ++ )
         if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag){
-            for (ii = 0; ii < len; ii ++ )
-                l1_cache_block[group][i].data[ii + start] = L2_cache_read(addr + ii, 1);
+            uint32_t ltmp = L2_cache_read(addr, len);
+            for (ii = 0; ii < len; ii ++ ){
+                l1_cache_block[group][i].data[ii + start] = ltmp & 0xff;
+                ltmp >>= 8;
+                //l1_cache_block[group][i].data[ii + start] = L2_cache_read(addr + ii, 1);
+            }
             L1_bubble(group, i);
         }
 }
