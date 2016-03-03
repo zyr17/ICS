@@ -77,7 +77,7 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             pos = i;
     if (!~pos){
         pos = rand() % L2_LENGTH;
-        if (l2_cache_block[group][pos].dirty_bit){
+        if (l2_cache_block[group][pos].valid_bit && l2_cache_block[group][pos].dirty_bit){
             l2_cache_block[group][pos].dirty_bit = 0;
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
             int ii;
