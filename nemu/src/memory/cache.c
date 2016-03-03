@@ -4,7 +4,7 @@ struct{
     uint32_t tag;
     union{
         uint8_t data[BLOCK_SIZE / 8];
-        uint32_t data_32_low, data_32_high;
+        volatile uint32_t data_32_low, data_32_high;
     };
 }l1_cache_block[L1_SET][L1_LENGTH], l1_cache_temp;
 
@@ -13,7 +13,7 @@ struct{
     uint32_t tag;
     union{
         uint8_t data[BLOCK_SIZE / 8];
-        uint32_t data_32_low, data_32_high;
+        volatile uint32_t data_32_low, data_32_high;
     };
 }l2_cache_block[L2_SET][L2_LENGTH], l2_cache_temp;
 
@@ -45,8 +45,8 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             //unsigned long long lltmp = 0;
             //for (ii = BLOCK_SIZE / 8 - 1; i >= 0; i -- )
             //    lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
-            //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
-            //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
+            dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
         }
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
