@@ -3,6 +3,8 @@
 #define instr movsx_b
 
 static void do_execute() {
+    if (op_src -> type == OP_TYPE_REG)
+        op_src -> val = reg_b(op_src -> reg);
     DATA_TYPE_S tv = (int8_t)op_src -> val;
 
 	OPERAND_W(op_dest, tv);
