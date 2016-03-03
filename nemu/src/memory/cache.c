@@ -34,8 +34,13 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             l2_cache_block[group][pos].dirty_bit = 0;
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
             int ii;
-            for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ )
-                dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);
+            unsigned long long lltmp = 0;
+            for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ ){
+                lltmp = (lltmp << 8) + l2_cache_block[group][pos].data[ii];
+                //dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);
+            }
+            dram_write(addr_old, 4, lltmp & 0xffffffff);
+            dram_write(addr_old + 4, 4, lltmp >> 32);
         }
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
