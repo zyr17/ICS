@@ -3,13 +3,21 @@ struct{
     bool valid_bit;
     uint32_t tag;
     uint8_t data[BLOCK_SIZE / 8];
-}l1_cache_block[L1_SET][L1_LENGTH];
+}l1_cache_block[L1_SET][L1_LENGTH], l1_cache_temp;
 
 struct{
     bool valid_bit, dirty_bit;
     uint32_t tag;
     uint8_t data[BLOCK_SIZE / 8];
-}l2_cache_block[L2_SET][L2_LENGTH];
+}l2_cache_block[L2_SET][L2_LENGTH], l2_cache_temp;
+
+void L2_bubble(int k1, int k2){
+    l2_cache_temp = l2_cache_block[k1][k2];
+    int i;
+    for (i = k2; i; i -- )
+        l2_cache_block[k1][i] = l2_cache_block[k1][i - 1];
+    l2_cache_block[k1][0] = l2_cache_temp;
+}
 
 uint32_t L2_cache_single(hwaddr_t addr, size_t len){
     int group = addr / (BLOCK_SIZE / 8) % L2_SET;
@@ -37,6 +45,7 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
         ans = (ans << 8) + l2_cache_block[group][pos].data[j + start];
+    L2_bubble(group, pos);
     return ans;
 }
 
@@ -79,6 +88,7 @@ void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
         l2_cache_block[group][pos].data[ii + start] = data & 0xff;
         data >>= 8;
     }
+    L2_bubble(group, pos);
 }
 
 void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
@@ -88,6 +98,14 @@ void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
         L2_cache_update(addr, len - tmp, data >> (tmp * 8));
     }
     else L2_cache_update(addr, len, data);
+}
+
+void L1_bubble(int k1, int k2){
+    l1_cache_temp = l1_cache_block[k1][k2];
+    int i;
+    for (i = k2; i; i -- )
+        l1_cache_block[k1][i] = l1_cache_block[k1][i - 1];
+    l1_cache_block[k1][0] = l1_cache_temp;
 }
 
 uint32_t L1_cache_single(hwaddr_t addr, size_t len){
@@ -109,6 +127,7 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
         ans = (ans << 8) + l1_cache_block[group][pos].data[j + start];
+    L1_bubble(group, pos);
     return ans;
 }
 
@@ -132,6 +151,7 @@ void L1_cache_update(hwaddr_t addr, size_t len){
         if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag){
             for (ii = 0; ii < len; ii ++ )
                 l1_cache_block[group][i].data[ii + start] = L2_cache_read(addr + ii, 1);
+            L1_bubble(group, i);
         }
 }
 
