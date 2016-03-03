@@ -111,14 +111,29 @@ void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
     int tag = addr / (BLOCK_SIZE / 8) / L2_SET;
     int start = addr % (BLOCK_SIZE / 8);
     int i, ii;
+    int pos = - 1;
     for (i = 0; i < L2_LENGTH; i ++ )
-        if (l2_cache_block[group][i].valid_bit == 1 && tag == l2_cache_block[group][i].tag){
-            l2_cache_block[group][i].dirty_bit = 1;
-            for (ii = len - 1; ii >= 0; ii -- ){
-                l2_cache_block[group][i].data[ii + start] = data & 0xff;
-                data >>= 8;
-            }
+        if (l2_cache_block[group][i].valid_bit == 1 && tag == l2_cache_block[group][i].tag)
+            pos = i;
+    if (!~pos){
+        pos = rand() % L2_LENGTH;
+        if (l2_cache_block[group][pos].dirty_bit){
+            l2_cache_block[group][pos].dirty_bit = 0;
+            hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
+            int ii;
+            for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ )
+                dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);
         }
+        l2_cache_block[group][pos].valid_bit = 1;
+        l2_cache_block[group][pos].tag = tag;
+        for (i = 0; i < BLOCK_SIZE / 8; i ++ )
+            l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
+    }
+    l2_cache_block[group][pos].dirty_bit = 1;
+    for (ii = len - 1; ii >= 0; ii -- ){
+        l2_cache_block[group][pos].data[ii + start] = data & 0xff;
+        data >>= 8;
+    }
 }
 
 void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
