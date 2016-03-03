@@ -49,6 +49,7 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
                 lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
             dram_write(addr_old, 4, lltmp & 0xffffffff);
             dram_write(addr_old + 4, 4, lltmp >> 32LL);
+            printf("%08llX %08X\n", lltmp & 0xffffffff, l2_cache_block[group][pos].data_32_low);
             //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
             //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
             //int tlow = dram_read(addr_old, 4);
