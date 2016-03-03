@@ -7,7 +7,7 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 /* Memory accessing interfaces */
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	uint32_t read = L1_cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+	uint32_t read = L2_cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 	/*uint32_t re2 = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 	if (read != re2){
         printf("\n%d %d: ", (int)addr, (int)len);
@@ -17,7 +17,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
-	L1_cache_write(addr, len, data);
+	L2_cache_write(addr, len, data);
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
