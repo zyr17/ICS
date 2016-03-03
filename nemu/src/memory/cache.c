@@ -43,11 +43,14 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
         if (l2_cache_block[group][pos].valid_bit && l2_cache_block[group][pos].dirty_bit){
             l2_cache_block[group][pos].dirty_bit = 0;
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
-            //unsigned long long lltmp = 0;
-            //for (ii = BLOCK_SIZE / 8 - 1; i >= 0; i -- )
-            //    lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
-            dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
-            dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            unsigned long long lltmp = 0;
+            int ii;
+            for (ii = BLOCK_SIZE / 8 - 1; i >= 0; i -- )
+                lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
+            dram_write(addr_old, 4, lltmp & 0xffffffff);
+            dram_write(addr_old + 4, 4, lltmp >> 32LL);
+            //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
+            //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
             //int tlow = dram_read(addr_old, 4);
             //int thigh = dram_read(addr_old + 4, 4);
             //if (tlow != l2_cache_block[group][pos].data_32_low) printf("%x %x\n", tlow, l2_cache_block[group][pos].data_32_low);
