@@ -39,14 +39,14 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
         if (l2_cache_block[group][pos].valid_bit && l2_cache_block[group][pos].dirty_bit){
             l2_cache_block[group][pos].dirty_bit = 0;
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
-            //int ii;
-            //for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ )
-            //    dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);
+            int ii;
+            for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ )
+                dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);
             //unsigned long long lltmp = 0;
             //for (ii = BLOCK_SIZE / 8 - 1; i >= 0; i -- )
             //    lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
-            dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
-            dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
+            //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
         }
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
