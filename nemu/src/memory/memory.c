@@ -8,11 +8,11 @@ void dram_write(hwaddr_t, size_t, uint32_t);
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t read = L2_cache_read(addr, len) & (~0u >> ((4 - len) << 3));
-	/*uint32_t re2 = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+	uint32_t re2 = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 	if (read != re2){
         printf("\n%d %d: ", (int)addr, (int)len);
         printf("%d %d\n", (int)read, (int)re2);
-    }*/
+    }
     return read;
 }
 
