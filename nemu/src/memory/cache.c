@@ -109,12 +109,14 @@ void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32LL) + dram_read(old_addr, 4);
+        l2_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
+        l2_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+        /*unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32LL) + dram_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l2_cache_block[group][pos].data[i] = lltmp & 0xff;
             lltmp >>= 8;
             //l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
-        }
+        }*/
     }
     l2_cache_block[group][pos].dirty_bit = 1;
     for (ii = 0; ii < len; ii ++ ){
