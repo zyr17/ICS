@@ -162,12 +162,14 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
         l1_cache_block[group][pos].valid_bit = 1;
         l1_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        unsigned long long lltmp = ((unsigned long long)L2_cache_read(old_addr + 4, 4) << 32) + L2_cache_read(old_addr, 4);
+        l1_cache_block[group][pos].data_32_low = L2_cache_read(old_addr, 4);
+        l1_cache_block[group][pos].data_32_high = L2_cache_read(old_addr + 4, 4);
+        /*unsigned long long lltmp = ((unsigned long long)L2_cache_read(old_addr + 4, 4) << 32) + L2_cache_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l1_cache_block[group][pos].data[i] = lltmp & 0xff;
             lltmp >>= 8;
             //l1_cache_block[group][pos].data[i] = L2_cache_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);
-        }
+        }*/
     }
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
