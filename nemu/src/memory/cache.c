@@ -36,7 +36,7 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             int ii;
             unsigned long long lltmp = 0;
             for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ ){
-                lltmp = (lltmp << 8) + l2_cache_block[group][pos].data[ii];
+                lltmp = (lltmp << 8LL) + l2_cache_block[group][pos].data[ii];
                 //dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);
             }
             dram_write(addr_old, 4, lltmp & 0xffffffff);
@@ -86,7 +86,7 @@ void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32) + dram_read(old_addr, 4);
+        unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32LL) + dram_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l2_cache_block[group][pos].data[i] = lltmp & 0xff;
             lltmp >>= 8;
