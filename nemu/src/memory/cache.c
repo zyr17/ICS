@@ -131,7 +131,7 @@ void L1_cache_update(hwaddr_t addr, size_t len){
     for (i = 0; i < L1_LENGTH; i ++ )
         if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag){
             for (ii = 0; ii < len; ii ++ )
-                l1_cache_block[group][i].data[ii + start] = dram_read(addr + ii, 1);
+                l1_cache_block[group][i].data[ii + start] = L2_cache_read(addr + ii, 1);
         }
 }
 
