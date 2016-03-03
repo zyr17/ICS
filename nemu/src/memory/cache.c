@@ -51,7 +51,7 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             printf("%x %x, ", tlow, thigh);
             int q;
             for (q = 0; q < 8; q ++ )
-                printf("%x", l2_cache_block[group][pos].data[q]);
+                printf("%2x ", l2_cache_block[group][pos].data[q]);
             printf("\n");
             int ii;
             for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ )
