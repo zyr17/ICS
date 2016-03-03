@@ -24,15 +24,14 @@ SOFTWARE.
 */
 
 char input_buffer[] = 
-"\x33\x0A\x42\x41\x50\x43\x0A\x42\x41\x50"
-"\x43\x0A\x41\x5A\x41\x0A\x41\x5A\x41\x5A"
-"\x41\x5A\x41\x0A\x56\x45\x52\x44\x49\x0A"
-"\x41\x56\x45\x52\x44\x58\x49\x56\x59\x45"
-"\x52\x44\x49\x41\x4E\x0A"
+"\x35\x0A\x30\x0A\x34\x20\x35\x20\x31\x20"
+"\x30\x0A\x31\x20\x30\x0A\x35\x20\x33\x20"
+"\x30\x0A\x33\x20\x30\x0A"
 ;
 
 char answer_buffer[] = 
-"\x31\x0A\x33\x0A\x30\x0A"
+"\x32\x20\x34\x20\x35\x20\x33\x20\x31\x20"
+"\x0A"
 ;
 
 #include "trap.h"
@@ -366,48 +365,31 @@ int main()
 /* REAL USER PROGRAM */
 
 
-#include <string.h>
-
-#define MAXP 10000
-#define MAXS 1000000
-
-static int next[MAXP + 1];
-void KMP_NEXT(char *p, int lp)
-{
-    int i, j;
-    next[0] = next[lp] = 0;
-    for (i = 1; i < lp; i++) {
-        for (j = next[i - 1]; j > 0 && p[j] != p[i]; j = next[j - 1]);
-        next[i] = j + (p[j] == p[i]);
-    }
-}
-int KMP(char *p, char *s)
-{
-    int lp = strlen(p);
-    int ls = strlen(s);
-    int i, j;
-    int ans = 0;
-    KMP_NEXT(p, lp);
-    /*for (i = 0; i < lp; i++)*/
-        /*printf("next[%d]=%d\n", i, next[i]);*/
-    for (i = j = 0; i <= ls; i++) {
-        while (j > 0 && s[i] != p[j]) j = next[j - 1];
-        if (s[i] == p[j]) j++;
-        if (j == lp) {
-            /*printf("FOUND: %d\n", i);*/
-            ans++;
-        }
-    }
-    return ans;
-}
+#define MAXN 100
+int g[MAXN + 1][MAXN + 1];
+int d[MAXN + 1];
+int b[MAXN + 1];
 int main()
 {
-    static char s1[MAXP + 1], s2[MAXS + 1];
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        scanf("%s%s", s1, s2);
-        printf("%d\n", KMP(s1, s2));
+    int u, v;
+    int N;
+    scanf("%d", &N);
+    for (u = 1; u <= N; u++)
+        while (scanf("%d", &v) == 1 && v) {
+            g[u][v] = 1;
+            d[v]++;
+        }
+    while (1) {
+        for (u = 1; u <= N; u++)
+            if (!b[u] && d[u] == 0)
+                break;
+        if (u > N) break;
+        printf("%d ", u);
+        b[u] = 1;
+        for (v = 1; v <= N; v++)
+            if (g[u][v])
+                d[v]--;
     }
+    printf("\n");
     return 0;
 }

@@ -24,15 +24,16 @@ SOFTWARE.
 */
 
 char input_buffer[] = 
-"\x33\x0A\x42\x41\x50\x43\x0A\x42\x41\x50"
-"\x43\x0A\x41\x5A\x41\x0A\x41\x5A\x41\x5A"
-"\x41\x5A\x41\x0A\x56\x45\x52\x44\x49\x0A"
-"\x41\x56\x45\x52\x44\x58\x49\x56\x59\x45"
-"\x52\x44\x49\x41\x4E\x0A"
+"\x35\x20\x36\x20\x33\x0A\x31\x20\x32\x20"
+"\x31\x32\x0A\x33\x20\x32\x20\x38\x0A\x31"
+"\x20\x33\x20\x35\x0A\x32\x20\x35\x20\x33"
+"\x0A\x33\x20\x34\x20\x34\x0A\x32\x20\x34"
+"\x20\x38\x0A\x33\x20\x34\x0A\x31\x20\x32"
+"\x0A\x35\x20\x31\x0A"
 ;
 
 char answer_buffer[] = 
-"\x31\x0A\x33\x0A\x30\x0A"
+"\x34\x0A\x38\x0A\x2D\x31\x0A"
 ;
 
 #include "trap.h"
@@ -367,47 +368,32 @@ int main()
 
 
 #include <string.h>
-
-#define MAXP 10000
-#define MAXS 1000000
-
-static int next[MAXP + 1];
-void KMP_NEXT(char *p, int lp)
-{
-    int i, j;
-    next[0] = next[lp] = 0;
-    for (i = 1; i < lp; i++) {
-        for (j = next[i - 1]; j > 0 && p[j] != p[i]; j = next[j - 1]);
-        next[i] = j + (p[j] == p[i]);
-    }
-}
-int KMP(char *p, char *s)
-{
-    int lp = strlen(p);
-    int ls = strlen(s);
-    int i, j;
-    int ans = 0;
-    KMP_NEXT(p, lp);
-    /*for (i = 0; i < lp; i++)*/
-        /*printf("next[%d]=%d\n", i, next[i]);*/
-    for (i = j = 0; i <= ls; i++) {
-        while (j > 0 && s[i] != p[j]) j = next[j - 1];
-        if (s[i] == p[j]) j++;
-        if (j == lp) {
-            /*printf("FOUND: %d\n", i);*/
-            ans++;
-        }
-    }
-    return ans;
-}
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define MAXN 300
+int f[MAXN + 1][MAXN + 1];
 int main()
 {
-    static char s1[MAXP + 1], s2[MAXS + 1];
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        scanf("%s%s", s1, s2);
-        printf("%d\n", KMP(s1, s2));
+    int i, j, r;
+    int N, M, T;
+    memset(f, -1, sizeof(f));
+    scanf("%d%d%d", &N, &M, &T);
+    for (i = 1; i <= M; i++) {
+        int u, v, w;
+        scanf("%d%d%d", &u, &v, &w);
+        f[u][v] = w;
+    }
+    for (r = 1; r <= N; r++)
+        for (i = 1; i <= N; i++)
+            for (j = 1; j <= N; j++) {
+                if (f[i][r] < 0 || f[r][j] < 0) continue;
+                int t = max(f[i][r], f[r][j]);
+                if (f[i][j] < 0 || t < f[i][j])
+                    f[i][j] = t;
+            }
+    for (i = 1; i <= T; i++) {
+        int u, v;
+        scanf("%d%d", &u, &v);
+        printf("%d\n", f[u][v]);
     }
     return 0;
 }

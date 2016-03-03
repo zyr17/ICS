@@ -7,6 +7,7 @@
 //#define HAS_DEVICE
 
 #define DEBUG
+#define USE_CACHE
 //#define LOG_FILE
 
 #include "debug.h"
