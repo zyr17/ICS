@@ -4,7 +4,7 @@
 #define instr cmovcc
 
 static void do_execute () {
-    int flag, init = swaddr_read(cpu.eip + 1, 1);
+    int flag, init = instr_fetch(cpu.eip + 1, 1);
     init &= 0xf;
     char nowins[10] = {0};
     if (init == 0x7) flag = cpu.CF == 0 && cpu.ZF == 0,           strcpy(nowins, "cmova");

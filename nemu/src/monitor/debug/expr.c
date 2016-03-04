@@ -1082,7 +1082,7 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
                     *success = 0;
                     return tokens[0];
                 }
-                uint32_t temp = swaddr_read(t.y, 4);
+                uint32_t temp = swaddr_read(t.y, 4, 3);
                 sprintf(step.str, "0x%x", temp);
                 *success = SHEX;
                 return step;

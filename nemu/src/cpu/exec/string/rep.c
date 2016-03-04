@@ -31,7 +31,7 @@ make_helper(rep) {
                 ops_decoded.opcode == 0xa7 ||
                 ops_decoded.opcode == 0xae ||
                 ops_decoded.opcode == 0xaf){
-                if (swaddr_read(eip, 1) == 0xf3){
+                if (instr_fetch(eip, 1) == 0xf3){
                     if (cpu.ZF == 0) break;
                 }
                 else{

@@ -5,7 +5,7 @@
 static void do_execute () {
 
     DATA_TYPE_S tmp =  op_src -> val;
-    if (swaddr_read(cpu.eip, 1) == 0xff){
+    if (instr_fetch(cpu.eip, 1) == 0xff){
         cpu.eip = tmp;
         cpu.EIP_CHANGEABLE = 0;
     }

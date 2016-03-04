@@ -4,12 +4,12 @@
 #define instr jcc
 
 static void do_execute () {
-    int flag, init = swaddr_read(cpu.eip, 1);
-    if (init == 0x0f) init = swaddr_read(cpu.eip + 1, 1);
+    int flag, init = instr_fetch(cpu.eip, 1);
+    if (init == 0x0f) init = instr_fetch(cpu.eip + 1, 1);
     init &= 0xf;
     char nowins[10] = {0};
-    if (swaddr_read(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,     strcpy(nowins, "jcxz");
-    else if (swaddr_read(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,strcpy(nowins, "jecxz");
+    if (instr_fetch(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,     strcpy(nowins, "jcxz");
+    else if (instr_fetch(cpu.eip, 1) == 0xE3) flag = cpu.ecx == 0,strcpy(nowins, "jecxz");
     else if (init == 0x7) flag = cpu.CF == 0 && cpu.ZF == 0,      strcpy(nowins, "ja");
     else if (init == 0x3) flag = cpu.CF == 0,                     strcpy(nowins, "jae");
     else if (init == 0x2) flag = cpu.CF == 1,                     strcpy(nowins, "jb");

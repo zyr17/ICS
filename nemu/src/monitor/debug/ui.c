@@ -162,7 +162,7 @@ static int cmd_x_str(char *args, const char *istr, int type) {
             printf("\x1b[31;1m\n%s: Out of memory!\n", istr);
             return 0;
         }
-        int number = swaddr_read(now, 1);
+        int number = swaddr_read(now, 1, 3);
         if (i % 4){
             if (number > 31 && type) printf("\t\'%c\'", number);
             else printf("\t%02x", number);

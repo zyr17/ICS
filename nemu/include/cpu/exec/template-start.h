@@ -28,8 +28,8 @@
 #define REG_NAME(index) concat(regs, SUFFIX) [index]
 #define SREG_NAME(index) sreg[index]
 
-#define MEM_R(addr) swaddr_read(addr, DATA_BYTE)
-#define MEM_W(addr, data) swaddr_write(addr, DATA_BYTE, data)
+#define MEM_R(addr, sreg) swaddr_read(addr, DATA_BYTE, sreg)
+#define MEM_W(addr, data, sreg) swaddr_write(addr, DATA_BYTE, data, sreg)
 
 #define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
@@ -60,11 +60,11 @@ do {\
     cpu.SF = res  >> (byte - 1);\
 }while (0)
 
-#define push_push(_byte, _data) MEM_W(cpu.esp -= (_byte), (_data))
+#define push_push(_byte, _data) MEM_W(cpu.esp -= (_byte), (_data), 2)
 
 #define pop_pop(_byte, _data)\
 do{\
-    _data = MEM_R(cpu.esp);\
+    _data = MEM_R(cpu.esp, 2);\
     cpu.esp += _byte;\
 }while (0)
 
