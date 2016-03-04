@@ -30,7 +30,7 @@ make_helper(ljmp){
     sreg_update(1);
     cpu.eip = t32;
     cpu.EIP_CHANGEABLE = 0;
-    print_asm("mov" str(SUFFIX) " $0x%x,$0x%x", t16, t32);
+    print_asm("ljmp $0x%x,$0x%x", t16, t32);
     return 7;
 }
 #endif
