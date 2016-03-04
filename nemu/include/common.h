@@ -5,7 +5,6 @@
 
 /* You will define this macro in PA4 */
 //#define HAS_DEVICE
-#define IA32_SEG
 
 #define DEBUG
 //#define USE_CACHE
