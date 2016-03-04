@@ -2,12 +2,11 @@
 
 #define instr lgdt
 
-static void do_execute() {
-	cpu.gdtr = op_src -> val;
-	Log("0x%x 0x%x", cpu.gdtr, op_src -> val);
-	print_asm_template1();
+make_helper(concat(lgdt_, SUFFIX)){
+    uint32_t tmp = instr_fetch(eip + 1, 4);
+    cpu.gdtr = tmp;
+    print_asm("lgdtl 0x%x", tmp);
+    return 6;
 }
-
-make_instr_helper(i)
 
 #include "cpu/exec/template-end.h"
