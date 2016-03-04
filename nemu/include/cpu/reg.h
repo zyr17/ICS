@@ -67,7 +67,8 @@ typedef struct {
 
         };
     };
-
+    uint32_t gdtr;
+    uint16_t CS, DS, ES, SS;
 
 } CPU_state;
 
