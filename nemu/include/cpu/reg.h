@@ -74,6 +74,7 @@ typedef struct {
         };
     };
     uint32_t gdtr;
+    uint16_t gdtr_limit;
     union{
         struct{ uint16_t ES, CS, SS, DS; };
         uint16_t sreg[4];
