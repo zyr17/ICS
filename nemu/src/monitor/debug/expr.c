@@ -367,7 +367,7 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
         else if (tokens[head].type == REG){
             int tlen = strlen(tokens[head].str), i;
             char *s = tokens[head].str;
-            if (tlen != 3 && tlen != 4){
+            if (tlen != 3 && tlen != 4 && tlen != 5){
                 REGERR:;
                 Log("REG error: %s\n", tokens[head].str);
                 *success = FAIL;
@@ -505,7 +505,7 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
                     *success = SHEX;
                     return tokens[head];
                 }
-                else if (tlen == 4 && s[1] == 'g' && s[2] == 'd' && s[3] == 't' && s[4] == 'r'){
+                else if (tlen == 5 && s[1] == 'g' && s[2] == 'd' && s[3] == 't' && s[4] == 'r'){
                     sprintf(s, "0x%x", cpu.gdtr);
                     *success = SHEX;
                     return tokens[head];
