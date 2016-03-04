@@ -9,7 +9,7 @@
 #define L2_LENGTH L2_SIZE / L2_SET / BLOCK_SIZE
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
-uint32_t L1_cache_read(hwaddr_t addr,size_t len);
-void L1_cache_write(hwaddr_t addr, size_t len, uint32_t data);
-uint32_t L2_cache_read(hwaddr_t addr,size_t len);
-void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data);
+inline uint32_t L1_cache_read(hwaddr_t addr,size_t len);
+inline void L1_cache_write(hwaddr_t addr, size_t len, uint32_t data);
+inline uint32_t L2_cache_read(hwaddr_t addr,size_t len);
+inline void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data);

@@ -21,7 +21,12 @@ struct{
     };
 }l2_cache_block[L2_SET][L2_LENGTH], l2_cache_temp;
 
-void L2_bubble(int k1, int k2){
+void init_cache(){
+    memset(l1_cache_block, 0, sizeof l1_cache_block);
+    memset(l2_cache_block, 0, sizeof l2_cache_block);
+}
+
+inline void L2_bubble(int k1, int k2){
     l2_cache_temp = l2_cache_block[k1][k2];
     int i;
     for (i = k2; i; i -- )
@@ -29,7 +34,7 @@ void L2_bubble(int k1, int k2){
     l2_cache_block[k1][0] = l2_cache_temp;
 }
 
-uint32_t L2_cache_single(hwaddr_t addr, size_t len){
+inline uint32_t L2_cache_single(hwaddr_t addr, size_t len){
     int group = addr / (BLOCK_SIZE / 8) % L2_SET;
     int tag = addr / (BLOCK_SIZE / 8) / L2_SET;
     int start = addr % (BLOCK_SIZE / 8);
@@ -80,7 +85,7 @@ uint32_t L2_cache_single(hwaddr_t addr, size_t len){
     return ans;
 }
 
-uint32_t L2_cache_read(hwaddr_t addr, size_t len){
+inline uint32_t L2_cache_read(hwaddr_t addr, size_t len){
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;
         uint32_t t1 = L2_cache_single(addr + (len - tmp), tmp);
@@ -91,7 +96,7 @@ uint32_t L2_cache_read(hwaddr_t addr, size_t len){
     else return L2_cache_single(addr, len);
 }
 
-void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
+inline void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
     int group = addr / (BLOCK_SIZE / 8) % L2_SET;
     int tag = addr / (BLOCK_SIZE / 8) / L2_SET;
     int start = addr % (BLOCK_SIZE / 8);
@@ -131,7 +136,7 @@ void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
     L2_bubble(group, pos);
 }
 
-void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
+inline void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;
         L2_cache_update(addr + (len - tmp), tmp, data & ((1 << (tmp * 8)) - 1));
@@ -140,7 +145,7 @@ void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
     else L2_cache_update(addr, len, data);
 }
 
-void L1_bubble(int k1, int k2){
+inline void L1_bubble(int k1, int k2){
     l1_cache_temp = l1_cache_block[k1][k2];
     int i;
     for (i = k2; i; i -- )
@@ -148,7 +153,7 @@ void L1_bubble(int k1, int k2){
     l1_cache_block[k1][0] = l1_cache_temp;
 }
 
-uint32_t L1_cache_single(hwaddr_t addr, size_t len){
+inline uint32_t L1_cache_single(hwaddr_t addr, size_t len){
     int group = addr / (BLOCK_SIZE / 8) % L1_SET;
     int tag = addr / (BLOCK_SIZE / 8) / L1_SET;
     int start = addr % (BLOCK_SIZE / 8);
@@ -178,7 +183,7 @@ uint32_t L1_cache_single(hwaddr_t addr, size_t len){
     return ans;
 }
 
-uint32_t L1_cache_read(hwaddr_t addr, size_t len){
+inline uint32_t L1_cache_read(hwaddr_t addr, size_t len){
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;
         uint32_t t1 = L1_cache_single(addr + (len - tmp), tmp);
@@ -189,7 +194,7 @@ uint32_t L1_cache_read(hwaddr_t addr, size_t len){
     else return L1_cache_single(addr, len);
 }
 
-void L1_cache_update(hwaddr_t addr, size_t len){
+inline void L1_cache_update(hwaddr_t addr, size_t len){
     int group = addr / (BLOCK_SIZE / 8) % L1_SET;
     int tag = addr / (BLOCK_SIZE / 8) / L1_SET;
     int start = addr % (BLOCK_SIZE / 8);
@@ -206,7 +211,7 @@ void L1_cache_update(hwaddr_t addr, size_t len){
         }
 }
 
-void L1_cache_write(hwaddr_t addr, size_t len, uint32_t data){
+inline void L1_cache_write(hwaddr_t addr, size_t len, uint32_t data){
     L2_cache_write(addr, len, data);
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;

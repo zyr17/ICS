@@ -54,6 +54,19 @@ typedef struct {
             unsigned VM:1;
         };
     };
+    union{
+        uint32_t cr0;
+        struct{
+            unsigned PE:1;
+            unsigned MP:1;
+            unsigned EM:1;
+            unsigned TS:1;
+            unsigned ET:1;
+            unsigned :26;
+            unsigned PG:1;
+
+        };
+    };
 
 
 } CPU_state;
