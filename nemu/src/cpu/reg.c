@@ -60,6 +60,7 @@ void sreg_update(int sreg_num){
     bool G = tmp & 1;
     tmp >>= 1;
     tbase += tmp << 24;
+    Log("%x %x %d", tbase, tlimit, G);
     cpu.sreg_base[sreg_num] = cpu.sreg_limit[sreg_num] = tbase;
     cpu.sreg_limit[sreg_num] += ((tlimit + 1) << (G * 12)) - 1;
 }
