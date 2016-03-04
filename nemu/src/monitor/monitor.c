@@ -97,4 +97,8 @@ void restart() {
 
     /* Initialize CR0 */
     cpu.cr0 = 0;
+
+    /* Initialize CS_base, CS_limit */
+    cpu.sreg_base[1] = 0;
+    cpu.sreg_limit[1] = 0xffffffff;
 }

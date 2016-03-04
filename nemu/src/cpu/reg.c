@@ -7,6 +7,7 @@ CPU_state cpu;
 const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
 const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
 const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
+const char *sreg[] = {"es", "cs", "ss", "ds"};
 
 void reg_test() {
 	srand(time(0));
@@ -42,3 +43,21 @@ void reg_test() {
 	assert(eip_sample == cpu.eip);
 }
 
+uint32_t lnaddr_read(lnaddr_t, size_t);
+void sreg_update(int sreg_num){
+    unsigned long long tmp = (((unsigned long long)lnaddr_read(cpu.gdtr + cpu.sreg[sreg_num] * 4 + 4, 4)) << 32LL) + lnaddr_read(cpu.gdtr + cpu.sreg[sreg_num] * 4, 4);
+    uint32_t tbase = 0;
+    uint32_t tlimit = tmp & 0xffff;
+    tmp >>= 16;
+    tbase = tmp & 0xffffff;
+    tmp >>= 24;
+    tmp >>= 8;
+    tlimit += (tmp & 0xf) << 16;
+    tmp >>= 4;
+    tmp >>= 3;
+    bool G = tmp & 1;
+    tmp >>= 1;
+    tbase += tmp << 24;
+    cpu.sreg_base[sreg_num] = cpu.sreg_limit[sreg_num] = tbase;
+    cpu.sreg_limit[sreg_num] += (tlimit << (G * 12)) - 1;
+}

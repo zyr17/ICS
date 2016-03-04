@@ -24,6 +24,9 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 		disp_offset = 1;
 	}
 
+	if (base_reg == 4 || base_reg == 5) rm -> sreg = 2;
+	else rm -> sreg = 3;
+
 	if(m->mod == 0) {
 		if(base_reg == R_EBP) { base_reg = -1; }
 		else { disp_size = 0; }
@@ -60,13 +63,13 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 	else { disp_buf[0] = '\0'; }
 
 	if(base_reg == -1) { base_buf[0] = '\0'; }
-	else { 
-		sprintf(base_buf, "%%%s", regsl[base_reg]); 
+	else {
+		sprintf(base_buf, "%%%s", regsl[base_reg]);
 	}
 
 	if(index_reg == -1) { index_buf[0] = '\0'; }
-	else { 
-		sprintf(index_buf, ",%%%s,%d", regsl[index_reg], 1 << scale); 
+	else {
+		sprintf(index_buf, ",%%%s,%d", regsl[index_reg], 1 << scale);
 	}
 
 	if(base_reg == -1 && index_reg == -1) {

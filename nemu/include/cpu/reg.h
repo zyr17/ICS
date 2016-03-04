@@ -74,7 +74,12 @@ typedef struct {
         };
     };
     uint32_t gdtr;
-    uint16_t CS, DS, ES, SS;
+    union{
+        struct{ uint16_t ES, CS, SS, DS; };
+        uint16_t sreg[4];
+    };
+    uint32_t sreg_limit[4];
+    uint32_t sreg_base[4];
 
 } CPU_state;
 
@@ -92,5 +97,6 @@ static inline int check_reg_index(int index) {
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
+extern const char* sreg[];
 
 #endif

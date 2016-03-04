@@ -21,4 +21,17 @@ make_instr_helper(i)
 make_instr_helper(rm)
 #endif
 
+#if DATA_BYTE == 1
+void sreg_update(int);
+make_helper(ljmp){
+    uint32_t t32 = instr_fetch(eip + 1, 4);
+    uint16_t t16 = instr_fetch(eip + 5, 2);
+    cpu.CS = t16;
+    sreg_update(1);
+    cpu.eip = t32;
+    cpu.EIP_CHANGEABLE = 0;
+    return 7;
+}
+#endif
+
 #include "cpu/exec/template-end.h"

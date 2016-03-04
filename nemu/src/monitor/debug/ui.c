@@ -78,6 +78,10 @@ static int cmd_info(char *args) {
         printf("cr1\t\t0x%08x\n", cpu.cr1);
         printf("cr2\t\t0x%08x\n", cpu.cr2);
         printf("cr3\t\t0x%08x\n", cpu.cr3);
+        printf("es\t\t0x%04x\tbase:\t0x%08x\tlimit:\t0x%08x\n", cpu.ES, cpu.sreg_base[0], cpu.sreg_limit[0]);
+        printf("cs\t\t0x%04x\tbase:\t0x%08x\tlimit:\t0x%08x\n", cpu.CS, cpu.sreg_base[1], cpu.sreg_limit[1]);
+        printf("ss\t\t0x%04x\tbase:\t0x%08x\tlimit:\t0x%08x\n", cpu.SS, cpu.sreg_base[2], cpu.sreg_limit[2]);
+        printf("ds\t\t0x%04x\tbase:\t0x%08x\tlimit:\t0x%08x\n", cpu.DS, cpu.sreg_base[3], cpu.sreg_limit[3]);
         printf("eflags\t\t0x%08x\nDetails for eflags:\n ... VM RF  . NT IOPL OF DF IF TF SF ZF  . AF  . PF  . CF\n", cpu.eflags);
         printf(" ..0  %d  %d  0  %d   %d%d  %d  %d  %d  %d  %d  %d  0  %d  0  %d  1  %d\n",
                cpu.VM, cpu.RF, cpu.NT, cpu.IOPL / 2, cpu.IOPL & 1, cpu.OF, cpu.DF, cpu.IF, cpu.TF, cpu.SF, cpu.ZF, cpu.AF, cpu.PF, cpu.CF);

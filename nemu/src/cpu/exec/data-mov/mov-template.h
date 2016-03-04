@@ -28,13 +28,34 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	return 5;
 }
 
+#if DATA_BYTE == 2
+
+void sreg_update(int);
+make_helper(mov_sreg){
+    uint8_t modrm = instr_fetch(eip + 1, 1);
+    int reg_num = modrm & 0x7;
+    int sreg_num = (modrm >> 3) & 0x7;
+    if (instr_fetch(eip, 1) == 0x8c){
+        reg_w(reg_num) = cpu.sreg[sreg_num];
+        print_asm("mov" str(SUFFIX) " %%%s,%%%s", SREG_NAME(sreg_num), REG_NAME(R_EAX));
+    }
+    else{
+        cpu.sreg[sreg_num] = reg_w(reg_num);
+        sreg_update(sreg_num);
+        print_asm("mov" str(SUFFIX) " %%%s,%%%s", REG_NAME(R_EAX), SREG_NAME(sreg_num));
+    }
+    return 2;
+}
+
+#endif
+
 #if DATA_BYTE == 4
 
 make_helper(mov_crx){
-    uint8_t modrm = swaddr_read(eip + 1, 1);
+    uint8_t modrm = instr_fetch(eip + 1, 1);
     int reg_num = modrm & 0x7;
     int cr_num = (modrm >> 3) & 0x7;
-    if (swaddr_read(eip, 1) == 0x20){
+    if (instr_fetch(eip, 1) == 0x20){
         reg_l(reg_num) = cpu.cr[cr_num];
         print_asm("mov" str(SUFFIX) " %%cr%d,%%%s", cr_num, REG_NAME(R_EAX));
     }
