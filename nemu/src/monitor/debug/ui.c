@@ -64,16 +64,17 @@ static int cmd_info(char *args) {
     if(cmd == NULL) goto NOCMD_i;
     if (strcmp(cmd, "r") == 0){
         //eax, ecx, edx, ebx, esp, ebp, esi, edi
-        printf("eax\t\t0x%x\n", cpu.eax);
-        printf("ecx\t\t0x%x\n", cpu.ecx);
-        printf("edx\t\t0x%x\n", cpu.edx);
-        printf("ebx\t\t0x%x\n", cpu.ebx);
-        printf("esp\t\t0x%x\n", cpu.esp);
-        printf("ebp\t\t0x%x\n", cpu.ebp);
-        printf("esi\t\t0x%x\n", cpu.esi);
-        printf("edi\t\t0x%x\n", cpu.edi);
-        printf("eip\t\t0x%x\n", cpu.eip);
-        printf("eflags\t\t0x%x\nDetails for eflags:\n ... VM RF  . NT IOPL OF DF IF TF SF ZF  . AF  . PF  . CF\n", cpu.eflags);
+        printf("eax\t\t0x%08x\n", cpu.eax);
+        printf("ecx\t\t0x%08x\n", cpu.ecx);
+        printf("edx\t\t0x%08x\n", cpu.edx);
+        printf("ebx\t\t0x%08x\n", cpu.ebx);
+        printf("esp\t\t0x%08x\n", cpu.esp);
+        printf("ebp\t\t0x%08x\n", cpu.ebp);
+        printf("esi\t\t0x%08x\n", cpu.esi);
+        printf("edi\t\t0x%08x\n", cpu.edi);
+        printf("eip\t\t0x%08x\n", cpu.eip);
+        printf("gdtr\t\t0x%08x\n", cpu.gdtr);
+        printf("eflags\t\t0x%08x\nDetails for eflags:\n ... VM RF  . NT IOPL OF DF IF TF SF ZF  . AF  . PF  . CF\n", cpu.eflags);
         printf(" ..0  %d  %d  0  %d   %d%d  %d  %d  %d  %d  %d  %d  0  %d  0  %d  1  %d\n",
                cpu.VM, cpu.RF, cpu.NT, cpu.IOPL / 2, cpu.IOPL & 1, cpu.OF, cpu.DF, cpu.IF, cpu.TF, cpu.SF, cpu.ZF, cpu.AF, cpu.PF, cpu.CF);
         return 0;
