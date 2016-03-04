@@ -45,6 +45,7 @@ void reg_test() {
 
 uint32_t lnaddr_read(lnaddr_t, size_t);
 void sreg_update(int sreg_num){
+    assert(cpu.gdtr + sreg_num * 8 + 7 <= cpu.gdtr_limit);
     unsigned long long tmp = (((unsigned long long)lnaddr_read(cpu.gdtr + cpu.sreg[sreg_num] * 8 + 4, 4)) << 32LL) + lnaddr_read(cpu.gdtr + cpu.sreg[sreg_num] * 4, 4);
     Log("%llx", tmp);
     uint32_t tbase = 0;
