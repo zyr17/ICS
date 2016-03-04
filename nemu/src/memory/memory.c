@@ -1,12 +1,13 @@
 #include "common.h"
 #include "cache.h"
+#include "cpu/reg.h"
 
-uint32_t dram_read(hwaddr_t, size_t);
-void dram_write(hwaddr_t, size_t, uint32_t);
+inline uint32_t dram_read(hwaddr_t, size_t);
+inline void dram_write(hwaddr_t, size_t, uint32_t);
 
 /* Memory accessing interfaces */
 
-uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
+inline uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t read;
 	#ifdef USE_CACHE
 	read = L1_cache_read(addr, len) & (~0u >> ((4 - len) << 3));
@@ -21,7 +22,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
     return read;
 }
 
-void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
+inline void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     #ifdef USE_CACHE
 	L1_cache_write(addr, len, data);
 	#else
@@ -29,25 +30,28 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	#endif
 }
 
-uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
+inline uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	return hwaddr_read(addr, len);
 }
 
-void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
+inline void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	hwaddr_write(addr, len, data);
 }
 
-uint32_t swaddr_read(swaddr_t addr, size_t len) {
-#ifdef DEBUG
-	assert(len == 1 || len == 2 || len == 4);
-#endif
-	return lnaddr_read(addr, len);
+inline lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg_num){
+    assert(cpu.sreg_limit[sreg_num] >= cpu.sreg_base[sreg_num] + addr + len - 1);
+    return addr + cpu.sreg[sreg_num];
 }
 
-void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
-#ifdef DEBUG
+inline uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
 	assert(len == 1 || len == 2 || len == 4);
-#endif
-	lnaddr_write(addr, len, data);
+    lnaddr_t lnaddr = seg_translate(addr, len, sreg);
+	return lnaddr_read(lnaddr, len);
+}
+
+inline void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
+	assert(len == 1 || len == 2 || len == 4);
+    lnaddr_t lnaddr = seg_translate(addr, len, sreg);
+	lnaddr_write(lnaddr, len, data);
 }
 
