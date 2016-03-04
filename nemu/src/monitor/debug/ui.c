@@ -74,6 +74,10 @@ static int cmd_info(char *args) {
         printf("edi\t\t0x%08x\n", cpu.edi);
         printf("eip\t\t0x%08x\n", cpu.eip);
         printf("gdtr\t\t0x%08x\n", cpu.gdtr);
+        printf("cr0\t\t0x%08x\n", cpu.cr0);
+        printf("cr1\t\t0x%08x\n", cpu.cr1);
+        printf("cr2\t\t0x%08x\n", cpu.cr2);
+        printf("cr3\t\t0x%08x\n", cpu.cr3);
         printf("eflags\t\t0x%08x\nDetails for eflags:\n ... VM RF  . NT IOPL OF DF IF TF SF ZF  . AF  . PF  . CF\n", cpu.eflags);
         printf(" ..0  %d  %d  0  %d   %d%d  %d  %d  %d  %d  %d  %d  0  %d  0  %d  1  %d\n",
                cpu.VM, cpu.RF, cpu.NT, cpu.IOPL / 2, cpu.IOPL & 1, cpu.OF, cpu.DF, cpu.IF, cpu.TF, cpu.SF, cpu.ZF, cpu.AF, cpu.PF, cpu.CF);
