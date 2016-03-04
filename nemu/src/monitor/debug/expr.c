@@ -505,6 +505,11 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
                     *success = SHEX;
                     return tokens[head];
                 }
+                else if (tlen == 4 && s[1] == 'g' && s[2] == 'd' && s[3] == 't' && s[4] == 'r'){
+                    sprintf(s, "0x%x", cpu.gdtr);
+                    *success = SHEX;
+                    return tokens[head];
+                }
                 else goto REGERR;
             }
             *success = SHEX;
