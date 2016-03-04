@@ -55,16 +55,22 @@ typedef struct {
         };
     };
     union{
-        uint32_t cr0;
+        uint32_t cr[4];
         struct{
-            unsigned PE:1;
-            unsigned MP:1;
-            unsigned EM:1;
-            unsigned TS:1;
-            unsigned ET:1;
-            unsigned :26;
-            unsigned PG:1;
+            union{
+                uint32_t cr0;
+                struct{
+                    unsigned PE:1;
+                    unsigned MP:1;
+                    unsigned EM:1;
+                    unsigned TS:1;
+                    unsigned ET:1;
+                    unsigned :26;
+                    unsigned PG:1;
 
+                };
+            };
+            uint32_t cr1, cr2, cr3;
         };
     };
     uint32_t gdtr;
