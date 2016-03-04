@@ -47,7 +47,7 @@ uint32_t lnaddr_read(lnaddr_t, size_t);
 void sreg_update(int sreg_num){
     assert(cpu.sreg[sreg_num] + 7 <= cpu.gdtr_limit);
     unsigned long long tmp = (((unsigned long long)lnaddr_read(cpu.gdtr + cpu.sreg[sreg_num] + 4, 4)) << 32LL) + lnaddr_read(cpu.gdtr + cpu.sreg[sreg_num], 4);
-    Log("%llx", tmp);
+    //Log("%llx", tmp);
     uint32_t tbase = 0;
     uint32_t tlimit = tmp & 0xffff;
     tmp >>= 16;
@@ -60,7 +60,7 @@ void sreg_update(int sreg_num){
     bool G = tmp & 1;
     tmp >>= 1;
     tbase += tmp << 24;
-    Log("%x %x %d", tbase, tlimit, G);
+    //Log("%x %x %d", tbase, tlimit, G);
     cpu.sreg_base[sreg_num] = cpu.sreg_limit[sreg_num] = tbase;
     cpu.sreg_limit[sreg_num] += ((tlimit + 1) << (G * 12)) - 1;
 }
