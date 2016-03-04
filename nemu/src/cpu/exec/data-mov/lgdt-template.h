@@ -4,6 +4,7 @@
 
 static void do_execute() {
 	cpu.gdtr = op_src -> val;
+	Log("%d %d", cpu.gdtr, op_src -> val);
 	print_asm_template1();
 }
 
