@@ -60,5 +60,5 @@ void sreg_update(int sreg_num){
     tmp >>= 1;
     tbase += tmp << 24;
     cpu.sreg_base[sreg_num] = cpu.sreg_limit[sreg_num] = tbase;
-    cpu.sreg_limit[sreg_num] += (tlimit << (G * 12)) - 1;
+    cpu.sreg_limit[sreg_num] += ((tlimit + 1) << (G * 12)) - 1;
 }
