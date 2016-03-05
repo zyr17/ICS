@@ -62,7 +62,7 @@ make_helper(mov_crx){
     else{
         cpu.cr[cr_num] = reg_l(reg_num);
         print_asm("mov" str(SUFFIX) " %%%s,%%cr%d", REG_NAME(R_EAX), cr_num);
-    }Log("mov_crx");
+    }
     return 2;
 }
 
