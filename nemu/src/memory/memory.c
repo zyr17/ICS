@@ -39,6 +39,7 @@ inline void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 }
 
 inline lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg_num){
+    if (!cpu.PE) return addr;
     assert(cpu.sreg_limit[sreg_num] >= cpu.sreg_base[sreg_num] + addr + len - 1);
     return addr + cpu.sreg_base[sreg_num];
 }
