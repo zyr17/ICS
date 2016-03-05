@@ -11,7 +11,7 @@ hwaddr_t page_translate(lnaddr_t addr){
     return res;
 }
 
-uint32_t page_read(lnaddr_t addr, size_t len){
+uint32_t page_read(lnaddr_t addr, size_t len){Log("%x",addr);
     if (!cpu.PG) return hwaddr_read(addr, len);
     if (addr / PAGE_SIZE != (addr + len - 1) / PAGE_SIZE){
         int tmp = (addr + len - 1) % PAGE_SIZE + 1;
