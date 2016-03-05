@@ -51,7 +51,7 @@ void init_page(void) {
 			ptable->val = make_pte(pframe_addr);
 			ptable --;
 		}
-	*/set_bp();
+	*/
 
 
 	/* make CR3 to be the entry of page directory */
