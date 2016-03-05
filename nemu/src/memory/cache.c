@@ -1,4 +1,4 @@
-#include "cache.h"
+#include "memory/cache.h"
 
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);

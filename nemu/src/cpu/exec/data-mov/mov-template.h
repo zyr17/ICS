@@ -51,6 +51,8 @@ make_helper(mov_sreg){
 
 #if DATA_BYTE == 4
 
+#include "memory/page.h"
+
 make_helper(mov_crx){
     uint8_t modrm = instr_fetch(eip + 1, 1);
     int reg_num = modrm & 0x7;
@@ -61,6 +63,11 @@ make_helper(mov_crx){
     }
     else{
         cpu.cr[cr_num] = reg_l(reg_num);
+        if (cr_num == 3){
+            int i;
+            for (i = 0; i < TLB_SIZE; i ++ )
+                TLB_cache[i].valid_bit = 0;
+        }
         print_asm("mov" str(SUFFIX) " %%%s,%%cr%d", REG_NAME(R_EAX), cr_num);
     }
     return 2;

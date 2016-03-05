@@ -1,4 +1,4 @@
-#include "page.h"
+#include "memory/page.h"
 
 hwaddr_t page_translate_real(lnaddr_t addr){
     hwaddr_t res = 0, tmp;

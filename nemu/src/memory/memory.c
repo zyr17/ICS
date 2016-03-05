@@ -1,6 +1,6 @@
 #include "common.h"
-#include "cache.h"
-#include "page.h"
+#include "memory/cache.h"
+#include "memory/page.h"
 #include "cpu/reg.h"
 
 inline uint32_t dram_read(hwaddr_t, size_t);
