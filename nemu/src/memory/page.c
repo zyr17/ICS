@@ -1,6 +1,6 @@
 #include "page.h"
 
-hwaddr_t page_translate(lnaddr_t addr){
+hwaddr_t page_translate_real(lnaddr_t addr){
     hwaddr_t res = 0, tmp;
     tmp = cpu.cr3 + (addr >> 22) * 4;
     uint32_t tval = hwaddr_read(tmp, 4);
@@ -9,6 +9,25 @@ hwaddr_t page_translate(lnaddr_t addr){
     assert(tval & 1);
     res = (tval & 0xfffff000) + (addr & 0xfff);
     return res;
+}
+
+hwaddr_t page_translate(lnaddr_t addr){
+    int i;
+    for (i = 0; i < TLB_SIZE; i ++ )
+        if (TLB_cache[i].valid_bit && addr >> 12 == TLB_cache[i].tag){
+            tmp_TLB_cache = TLB_cache[i];
+            int j;
+            for (j = i; j; j -- )
+                TLB_cache[j] = TLB_cache[j - 1];
+            TLB_cache[0] = tmp_TLB_cache;
+            return (TLB_cache[0].data << 12) + (addr & 0xfff);
+        }
+    hwaddr_t res = page_translate_real(addr);
+    int pos = rand() % TLB_SIZE;
+    TLB_cache[pos].valid_bit = 1;
+    TLB_cache[pos].tag = addr >> 12;
+    TLB_cache[pos].data = res >> 12;
+    return (res << 12) + (addr & 0xfff);
 }
 
 uint32_t page_read(lnaddr_t addr, size_t len){

@@ -12,6 +12,28 @@
 #define L2_SET 16
 #define L2_LENGTH L2_SIZE / L2_SET / BLOCK_SIZE
 
+struct{
+    bool valid_bit;
+    uint32_t tag;
+    union{
+        uint8_t data[BLOCK_SIZE / 8];
+        struct{
+            uint32_t data_32_low, data_32_high;
+        };
+    };
+}l1_cache_block[L1_SET][L1_LENGTH], l1_cache_temp;
+
+struct{
+    bool valid_bit, dirty_bit;
+    uint32_t tag;
+    union{
+        uint8_t data[BLOCK_SIZE / 8];
+        struct{
+            uint32_t data_32_low, data_32_high;
+        };
+    };
+}l2_cache_block[L2_SET][L2_LENGTH], l2_cache_temp;
+
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
 inline uint32_t L1_cache_read(hwaddr_t addr,size_t len);

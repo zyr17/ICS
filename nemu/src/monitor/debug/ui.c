@@ -158,10 +158,10 @@ static int cmd_x_str(char *args, const char *istr, int type) {
     uint32_t i = 0;
     for (; i < times; i ++ ){
         uint32_t now = i + memaddr;
-        if (now >> 27){
+        /*if (now >> 27){
             printf("\x1b[31;1m\n%s: Out of memory!\n", istr);
             return 0;
-        }
+        }*/
         int number = swaddr_read(now, 1, 3);
         if (i % 4){
             if (number > 31 && type) printf("\t\'%c\'", number);

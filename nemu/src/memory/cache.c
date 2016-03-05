@@ -1,25 +1,4 @@
 #include "cache.h"
-struct{
-    bool valid_bit;
-    uint32_t tag;
-    union{
-        uint8_t data[BLOCK_SIZE / 8];
-        struct{
-            uint32_t data_32_low, data_32_high;
-        };
-    };
-}l1_cache_block[L1_SET][L1_LENGTH], l1_cache_temp;
-
-struct{
-    bool valid_bit, dirty_bit;
-    uint32_t tag;
-    union{
-        uint8_t data[BLOCK_SIZE / 8];
-        struct{
-            uint32_t data_32_low, data_32_high;
-        };
-    };
-}l2_cache_block[L2_SET][L2_LENGTH], l2_cache_temp;
 
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);
