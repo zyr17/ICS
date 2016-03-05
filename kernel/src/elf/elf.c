@@ -55,17 +55,16 @@ uint32_t loader() {
 			 */
 			memset((void*)pa_to_va(ph -> p_vaddr + ph -> p_filesz), 0, ph -> p_memsz - ph -> p_filesz);
 
-set_bp();
+
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
 			extern uint32_t brk;
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(brk < new_brk) { brk = new_brk; }
 #endif
-set_bp();
 		}
 		ph ++ ;//sizeof(Elf32_Phdr);
-		total ++ ;
+		total ++ ;set_bp();
 		if (total >= elf -> e_phnum) break;
 	}
 
