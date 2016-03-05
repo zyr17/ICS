@@ -1,5 +1,6 @@
 #include "common.h"
 #include "cache.h"
+#include "page.h"
 #include "cpu/reg.h"
 
 inline uint32_t dram_read(hwaddr_t, size_t);
@@ -31,11 +32,17 @@ inline void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 }
 
 inline uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	return hwaddr_read(addr, len);
+    #ifdef DEBUG
+    assert(len == 1 || len == 2 || len == 4);
+    #endif
+	return page_read(addr, len);
 }
 
 inline void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	hwaddr_write(addr, len, data);
+    #ifdef DEBUG
+    assert(len == 1 || len == 2 || len == 4);
+    #endif
+	page_write(addr, len, data);
 }
 
 inline lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg_num){
@@ -45,13 +52,17 @@ inline lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg_num){
 }
 
 inline uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
+    #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
+	#endif
     lnaddr_t lnaddr = seg_translate(addr, len, sreg);
 	return lnaddr_read(lnaddr, len);
 }
 
 inline void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
+    #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
+	#endif
     lnaddr_t lnaddr = seg_translate(addr, len, sreg);
 	lnaddr_write(lnaddr, len, data);
 }
