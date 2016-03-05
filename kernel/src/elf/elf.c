@@ -41,13 +41,13 @@ uint32_t loader() {
 	volatile int total = 0;
 	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
-		if(ph->p_type == PT_LOAD) {set_bp();
+		if(ph->p_type == PT_LOAD) {
             uint32_t nowaddr = mm_malloc(ph -> p_vaddr, ph -> p_filesz);set_bp();
 
 			/* TODO: read the content of the segment from the ELF file
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-			ramdisk_read((void*)pa_to_va(nowaddr), (uint32_t)(ph -> p_offset), ph -> p_filesz);
+			ramdisk_read((void*)pa_to_va(nowaddr), (uint32_t)(ph -> p_offset), ph -> p_filesz);set_bp();
 
 
 			/* TODO: zero the memory region
