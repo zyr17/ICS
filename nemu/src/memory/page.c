@@ -7,7 +7,7 @@ hwaddr_t page_translate(lnaddr_t addr){
     assert(tval & 1);
     tval = hwaddr_read((tval & 0xfffff000) + ((addr >> 12) & 0x3ff) * 4, 4);
     assert(tval & 1);
-    res = (tval >> 12) + (addr & 0xfff);Log("%x", res);
+    res = (tval & 0xfffff000) + (addr & 0xfff);Log("%x", res);
     return res;
 }
 
