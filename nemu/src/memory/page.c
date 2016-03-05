@@ -14,7 +14,7 @@ hwaddr_t page_translate_real(lnaddr_t addr){
 hwaddr_t page_translate(lnaddr_t addr){
     int i;
     for (i = 0; i < TLB_SIZE; i ++ )
-        if (TLB_cache[i].valid_bit && addr >> 12 == TLB_cache[i].tag){break;
+        if (TLB_cache[i].valid_bit && addr >> 12 == TLB_cache[i].tag){
             tmp_TLB_cache = TLB_cache[i];
             int j;
             for (j = i; j; j -- )
@@ -27,7 +27,7 @@ hwaddr_t page_translate(lnaddr_t addr){
     TLB_cache[pos].valid_bit = 1;
     TLB_cache[pos].tag = addr >> 12;
     TLB_cache[pos].data = res >> 12;
-    return (res << 12) + (addr & 0xfff);
+    return res;
 }
 
 uint32_t page_read(lnaddr_t addr, size_t len){
