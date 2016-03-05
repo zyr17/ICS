@@ -24,7 +24,10 @@ uint32_t page_read(lnaddr_t addr, size_t len){
 }
 
 void page_write(lnaddr_t addr, size_t len, uint32_t data){
-    if (!cpu.PG) hwaddr_write(addr, len, data);
+    if (!cpu.PG){
+        hwaddr_write(addr, len, data);
+        return;
+    }
     if (addr / PAGE_SIZE != (addr + len - 1) / PAGE_SIZE){
         int tmp = (addr + len - 1) % PAGE_SIZE + 1;
         hwaddr_write(page_translate(addr + (len - tmp)), tmp, data & ((1 << (tmp * 8)) - 1));
