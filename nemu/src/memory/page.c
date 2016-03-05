@@ -5,7 +5,7 @@ hwaddr_t page_translate(lnaddr_t addr){
     tmp = cpu.cr3 + (addr >> 22) * 4;
     uint32_t tval = hwaddr_read(tmp, 4);
     assert(tval & 1);
-    tval = hwaddr_read((tval >> 12) + ((addr >> 12) & 0x3ff) * 4, 4);
+    tval = hwaddr_read((tval & 0xfffff000) + ((addr >> 12) & 0x3ff) * 4, 4);
     assert(tval & 1);
     res = (tval >> 12) + (addr & 0xfff);
     return res;
