@@ -41,8 +41,8 @@ uint32_t loader() {
 	volatile int total = 0;
 	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
-		if(ph->p_type == PT_LOAD) {
-            uint32_t nowaddr = mm_malloc(ph -> p_vaddr, ph -> p_filesz);
+		if(ph->p_type == PT_LOAD) {set_bp();
+            uint32_t nowaddr = mm_malloc(ph -> p_vaddr, ph -> p_filesz);set_bp();
 
 			/* TODO: read the content of the segment from the ELF file
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
@@ -66,7 +66,7 @@ uint32_t loader() {
 		ph ++ ;//sizeof(Elf32_Phdr);
 		total ++ ;
 		if (total >= elf -> e_phnum) break;
-	}set_bp();
+	}
 
 	volatile uint32_t entry = elf->e_entry;
 
