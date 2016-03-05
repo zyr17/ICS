@@ -38,7 +38,7 @@ uint32_t loader() {
 	/* Load each program segment */
 	//panic("please implement me");
 	ph = (void*)(elf -> e_phoff);
-	volatile int total = 0;set_bp();
+	volatile int total = 0;
 	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
@@ -66,7 +66,7 @@ uint32_t loader() {
 		ph ++ ;//sizeof(Elf32_Phdr);
 		total ++ ;
 		if (total >= elf -> e_phnum) break;
-	}
+	}set_bp();
 
 	volatile uint32_t entry = elf->e_entry;
 
