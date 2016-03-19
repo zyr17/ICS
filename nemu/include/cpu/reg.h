@@ -73,8 +73,8 @@ typedef struct {
             uint32_t cr1, cr2, cr3;
         };
     };
-    uint32_t gdtr;
-    uint16_t gdtr_limit;
+    uint32_t gdtr, idtr;
+    uint16_t gdtr_limit, idtr_limit;
     union{
         struct{ uint16_t ES, CS, SS, DS; };
         uint16_t sreg[4];

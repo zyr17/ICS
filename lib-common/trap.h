@@ -1,8 +1,16 @@
+/* LICENSE NOTES:
+    THIS FILE IS NOT CREATED BY ZBY, BUT MODIFIED BY ZBY FROM nju-ics/ics2015
+       https://github.com/nju-ics/ics2015/blob/master/lib-common/trap.h
+    SO THIS FILE IS NOT COVERED BY THE MIT LICENSE!
+*/
+
 #ifndef __TRAP_H__
 #define __TRAP_H__
 
 #define concat_temp(x, y) x ## y
 #define concat(x, y) concat_temp(x, y)
+
+#ifndef REALMACHINE
 
 #ifndef __ASSEMBLER__
 
@@ -22,6 +30,9 @@ set_bp(void) {
 	asm volatile ("int3");
 }
 
+#define REALMACHINE_NOTSUITABLE do { } while (0)
+
+
 #else
 
 #define HIT_GOOD_TRAP \
@@ -36,6 +47,30 @@ set_bp(void) {
 	cmp $val, %reg; \
 	je concat(label,__LINE__); HIT_BAD_TRAP; concat(label,__LINE__):
 
+#define REALMACHINE_NOTSUITABLE nop
+
+#endif
+
+#else // run test on real machine
+
+#ifndef __ASSEMBLER__
+
+void zby_hit_good_trap();
+void zby_hit_bad_trap();
+void zby_realmachine_notsuitable();
+void zby_assert(const char *file, const char *func, int line, int val);
+#define HIT_GOOD_TRAP zby_hit_good_trap()
+#define HIT_BAD_TRAP zby_hit_bad_trap()
+#define REALMACHINE_NOTSUITABLE zby_realmachine_notsuitable()
+#define nemu_assert(cond) zby_assert(__FILE__, __FUNCTION__, __LINE__, !!(cond))
+
+#else
+
+#define HIT_GOOD_TRAP call zby_hit_good_trap
+#define HIT_BAD_TRAP call zby_hit_bad_trap
+#define REALMACHINE_NOTSUITABLE call zby_realmachine_notsuitable
+
+#endif
 #endif
 
 #endif

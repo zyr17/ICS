@@ -4,6 +4,7 @@
 #include "data-mov/cmovcc.h"
 #include "data-mov/cwtl.h"
 #include "data-mov/lgdt.h"
+#include "data-mov/lidt.h"
 #include "data-mov/mov.h"
 #include "data-mov/movsx.h"
 #include "data-mov/movzx.h"
@@ -48,5 +49,6 @@
 #include "string/stos.h"
 
 #include "misc/misc.h"
+#include "misc/int.h"
 
 #include "special/special.h"
