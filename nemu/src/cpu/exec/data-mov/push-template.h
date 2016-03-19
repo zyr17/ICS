@@ -3,7 +3,8 @@
 #define instr push
 
 static void do_execute () {
-    push_push(DATA_BYTE == 1 ? 4 : DATA_BYTE, op_src -> val);
+    if (DATA_BYTE == 1) push_push(4, (int32_t)(op_src -> val));
+    else push_push(DATA_BYTE, op_src -> val);
 
 	print_asm_template1();
 }

@@ -3,9 +3,9 @@
 #define instr pop
 
 static void do_execute () {
-    DATA_TYPE result;
+    DATA_TYPE_S result;
     pop_pop(DATA_BYTE == 1 ? 4 : DATA_BYTE, result);
-    OPERAND_W(op_src, result);
+    OPERAND_W(op_src, (int32_t)result);
 
 	print_asm_template1();
 }
