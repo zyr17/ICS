@@ -10,7 +10,7 @@ void raise_intr(uint8_t NO) {
 	 */
 
 	swaddr_write(cpu.esp -= 4, 4, cpu.eflags, 2);
-	swaddr_write(cpu.esp -= 2, 2, cpu.CS, 2);
+	swaddr_write(cpu.esp -= 4, 4, cpu.CS, 2);
 	swaddr_write(cpu.esp -= 4, 4, cpu.eip + 2, 2);
 
     lnaddr_t nowk = cpu.idtr + (NO & 0xf8);
