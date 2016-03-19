@@ -9,6 +9,8 @@ void raise_intr(uint8_t NO) {
 	 * That is, use ``NO'' to index the IDT.
 	 */
 
+    printf("%#x", NO);
+
 	swaddr_write(cpu.esp -= 4, 4, cpu.eflags, 2);
 	swaddr_write(cpu.esp -= 2, 2, cpu.CS, 2);
 	swaddr_write(cpu.esp -= 4, 4, cpu.eip + 2, 2);
