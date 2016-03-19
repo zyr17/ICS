@@ -17,7 +17,7 @@ void raise_intr(uint8_t NO) {
     unsigned long long tmp = ((long long)lnaddr_read(nowk + 4, 4) << 32LL) + lnaddr_read(nowk, 4);printf("|%#llx|\n", tmp);
     cpu.CS = (tmp >> 16) & 0xffff;
     sreg_update(1);
-    swaddr_t addr = ((tmp >> 16) & 0xffff0000) + (tmp & 0xffff) + cpu.sreg_base[1];
+    swaddr_t addr = ((tmp >> 32) & 0xffff0000) + (tmp & 0xffff) + cpu.sreg_base[1];
     assert(addr <= cpu.sreg_limit[1]);
     cpu.eip = addr;
 
