@@ -58,7 +58,8 @@ int load_addr(swaddr_t eip, ModR_M *m, Operand *rm) {
 
 	if(disp_size != 0) {
 		/* has disp */
-		sprintf(disp_buf, "%s%#x", (disp < 0 ? "-" : ""), (disp < 0 ? -disp : disp));
+		if (disp > (int32_t)0xf0000000) sprintf(disp_buf, "%s%#x", (disp < 0 ? "-" : ""), (disp < 0 ? -disp : disp));
+        else sprintf(disp_buf, "%#x", disp);
 	}
 	else { disp_buf[0] = '\0'; }
 
