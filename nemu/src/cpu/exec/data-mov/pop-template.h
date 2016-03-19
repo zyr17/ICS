@@ -5,7 +5,7 @@
 static void do_execute () {
     DATA_TYPE_S result;
     pop_pop(DATA_BYTE == 1 ? 4 : DATA_BYTE, result);
-    OPERAND_W(op_src, (int32_t)result);
+    OPERAND_W(op_src, DATA_BYTE == 1 ? (int8_t)result : result);
 
 	print_asm_template1();
 }
