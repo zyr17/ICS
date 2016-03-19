@@ -60,11 +60,11 @@ do {\
     cpu.SF = res  >> (byte - 1);\
 }while (0)
 
-#define push_push(_byte, _data) MEM_W(cpu.esp -= (_byte), (_data), 2)
+#define push_push(_byte, _data) swaddr_write(cpu.esp -= (_byte), _byte, _data, 2)
 
 #define pop_pop(_byte, _data)\
 do{\
-    _data = MEM_R(cpu.esp, 2);\
+    _data = swaddr_read(cpu.esp, _byte, 2);\
     cpu.esp += _byte;\
 }while (0)
 

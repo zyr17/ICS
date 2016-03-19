@@ -14,7 +14,7 @@ void raise_intr(uint8_t NO) {
 	swaddr_write(cpu.esp -= 4, 4, cpu.eip + 2, 2);
 
     lnaddr_t nowk = cpu.idtr + (NO & 0xf8);
-    unsigned long long tmp = ((long long)lnaddr_read(nowk + 4, 4) << 32LL) + lnaddr_read(nowk, 4);printf("|%#llx|\n", tmp);
+    unsigned long long tmp = ((long long)lnaddr_read(nowk + 4, 4) << 32LL) + lnaddr_read(nowk, 4);
     cpu.CS = (tmp >> 16) & 0xffff;
     sreg_update(1);
     swaddr_t addr = ((tmp >> 32) & 0xffff0000) + (tmp & 0xffff) + cpu.sreg_base[1];
