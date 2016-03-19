@@ -10,4 +10,4 @@
 
 /* for instruction encoding overloading */
 
-make_helper_v(lgdt)
+make_helper_v(lgdt_rm)
