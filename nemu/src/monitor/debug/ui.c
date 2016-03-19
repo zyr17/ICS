@@ -73,7 +73,8 @@ static int cmd_info(char *args) {
         printf("esi\t\t0x%08x\n", cpu.esi);
         printf("edi\t\t0x%08x\n", cpu.edi);
         printf("eip\t\t0x%08x\n", cpu.eip);
-        printf("gdtr\t\t0x%08x\n", cpu.gdtr);
+        printf("gdtr\t\t0x%08x\t0x%08x\n", cpu.gdtr, cpu.gdtr_limit);
+        printf("idtr\t\t0x%08x\t0x%08x\n", cpu.idtr, cpu.idtr_limit);
         printf("cr0\t\t0x%08x\n", cpu.cr0);
         printf("cr1\t\t0x%08x\n", cpu.cr1);
         printf("cr2\t\t0x%08x\n", cpu.cr2);

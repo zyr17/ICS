@@ -4,7 +4,7 @@
 
 static void do_execute() {
     assert(DATA_BYTE != 2);
-    lnaddr_t taddr = op_src -> val;
+    lnaddr_t taddr = op_src -> addr;
     uint16_t t16 = lnaddr_read(taddr, 2);
     uint32_t t32 = lnaddr_read(taddr + 2, 4);
     cpu.idtr = t32;
