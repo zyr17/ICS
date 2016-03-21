@@ -13,6 +13,7 @@ make_helper(concat(iret_, SUFFIX)){
     cpu.eflags = swaddr_read(cpu.esp, 4, 2);
 	cpu.esp += 4;
     print_asm("iret");
+    cpu.EIP_CHANGEABLE = 0;
     return 1;
 }
 
