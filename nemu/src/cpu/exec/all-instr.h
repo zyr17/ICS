@@ -52,5 +52,6 @@
 
 #include "misc/misc.h"
 #include "misc/int.h"
+#include "misc/iret.h"
 
 #include "special/special.h"
