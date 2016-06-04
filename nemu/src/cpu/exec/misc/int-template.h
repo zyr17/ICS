@@ -9,6 +9,7 @@ make_helper(concat(int_i_, SUFFIX)){
     assert(DATA_BYTE == 4);
     uint8_t tmp = instr_fetch(eip + 1, 1);
     print_asm("int %#x", tmp);
+    cpu.eip += 2;
     raise_intr(tmp);
     return 2;
 }
