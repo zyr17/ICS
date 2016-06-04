@@ -1,6 +1,7 @@
 #include "irq.h"
 
 #include <sys/syscall.h>
+void serial_printc(char);
 
 void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
@@ -29,7 +30,10 @@ void do_syscall(TrapFrame *tf) {
 
 		case 4: // SYS_write
             if (tf->ebx == 1 || tf->ebx == 2){
-                asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
+                //asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
+		int i;
+		for (i = 0; i < tf->edx; i ++ )
+			serial_printc(*(char*)(tf->ecx + i));
                 tf->eax = tf->edx;
             }
             break;
