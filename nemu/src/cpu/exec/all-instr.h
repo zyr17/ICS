@@ -3,6 +3,7 @@
 #include "data-mov/cltd.h"
 #include "data-mov/cmovcc.h"
 #include "data-mov/cwtl.h"
+#include "data-mov/in.h"
 #include "data-mov/lgdt.h"
 #include "data-mov/lidt.h"
 #include "data-mov/mov.h"

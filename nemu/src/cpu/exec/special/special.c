@@ -18,8 +18,8 @@ make_helper(inv) {
 2. Something is implemented incorrectly.\n", eip);*/
 	printf("Find this eip value(0x%08x) in the disassembling result to distinguish which case it is.\n\n", eip);
 	printf("If it is the first case, \33[1;31mgo to SLEEP\n%s\nfor more details.\n\n\33[1;32mIf it is the second case, remember:\n\
-* The machine is always right!\n\
-* Every line of untested code is always wrong!\33[0m\n\n", logo);
+* You are not sleeping!\n\
+* You should go to sleep!\33[0m\n\n", logo);
 
 	assert(0);
 }
