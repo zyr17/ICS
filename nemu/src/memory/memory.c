@@ -2,6 +2,7 @@
 #include "memory/cache.h"
 #include "memory/page.h"
 #include "cpu/reg.h"
+#include "device/mmio.h"
 
 inline uint32_t dram_read(hwaddr_t, size_t);
 inline void dram_write(hwaddr_t, size_t, uint32_t);
@@ -10,6 +11,8 @@ inline void dram_write(hwaddr_t, size_t, uint32_t);
 
 inline uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	uint32_t read;
+	uint32_t pid = is_mmio(addr);
+	if (pid != -1) return mmio_read(addr, len, pid);
 	#ifdef USE_CACHE
 	read = L1_cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 	#else
@@ -24,6 +27,11 @@ inline uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 }
 
 inline void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
+	uint32_t pid = is_mmio(addr);
+	if (pid != -1){
+        mmio_write(addr, len, data, pid);
+        return;
+    }
     #ifdef USE_CACHE
 	L1_cache_write(addr, len, data);
 	#else

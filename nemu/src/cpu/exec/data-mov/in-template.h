@@ -12,9 +12,9 @@ static void do_execute() {
 make_instr_helper(i2a)
 
 make_helper(concat(in_, SUFFIX)) {
-    cpu.eax = pio_read(cpu.gpr[2]._16, DATA_BYTE);
+    REG(0) = pio_read(cpu.gpr[2]._16, DATA_BYTE);
 
-	print_asm("in" str(SUFFIX) " %%%s,%%dx", REG_NAME(R_EAX));
+	print_asm("in" str(SUFFIX) " %%%s,[%%dx]", REG_NAME(R_EAX));
 	return 1;
 }
 

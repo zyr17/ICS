@@ -9,6 +9,7 @@
 #include "data-mov/mov.h"
 #include "data-mov/movsx.h"
 #include "data-mov/movzx.h"
+#include "data-mov/out.h"
 #include "data-mov/pop.h"
 #include "data-mov/popa.h"
 #include "data-mov/push.h"
