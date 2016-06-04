@@ -24,6 +24,11 @@ make_helper(inv) {
 	assert(0);
 }
 
+make_helper(hlt) {
+    for (;;);
+    return 1;
+}
+
 make_helper(nemu_trap) {
 	print_asm("nemu trap (eax = %d)", cpu.eax);
     int i;
