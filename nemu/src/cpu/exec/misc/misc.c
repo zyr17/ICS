@@ -48,3 +48,15 @@ make_helper(stc) {
     return 1;
 }
 
+make_helper(cli) {
+    cpu.IF = 0;
+    print_asm("cli");
+    return 1;
+}
+
+make_helper(sti) {
+    cpu.IF = 1;
+    print_asm("sti");
+    return 1;
+}
+

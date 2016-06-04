@@ -156,7 +156,7 @@ helper_fun opcode_table [256] = {
 /* 0xec */	in_b, in_v, out_b, out_v,
 /* 0xf0 */	inv, inv, inv, rep,
 /* 0xf4 */	hlt, inv, group3_b, group3_v,
-/* 0xf8 */	clc, stc, inv, inv,
+/* 0xf8 */	clc, stc, cli, sti,
 /* 0xfc */	cld, std, group4, group5
 };
 
