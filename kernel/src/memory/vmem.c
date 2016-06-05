@@ -23,9 +23,9 @@ void create_video_mapping() {
     u_pde->page_frame = ((int)Vmem - KOFFSET) >> 12;
     Log("0x%x, %x, %x", u_pde->page_frame, u_pde, VMEM_ADDR);
     int i;
-    for (i = 0xa0000 / 4096; i < (0xa0000 + SCR_SIZE - 1) / 4096 + 1; i ++ ){
-        Vmem[i].present = 1;
-        Vmem[i].page_frame = (0xa0000 + i * 4096) >> 12;
+    for (i = 0; i < (SCR_SIZE - 1) / 4096 + 1; i ++ ){
+        Vmem[i + VMEM_ADDR / 4096].present = 1;
+        Vmem[i + VMEM_ADDR / 4096].page_frame = (VMEM_ADDR + i * 4096) >> 12;
     }
 	//panic("please implement me");
 }
