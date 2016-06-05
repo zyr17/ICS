@@ -17,8 +17,8 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
     PDE* u_pde = get_updir();
-    Log("%d", u_pde->val);
-    assert(!(u_pde->present));
+    //Log("%d", u_pde->val);
+    //assert(!(u_pde->present));
     u_pde->present = 1;
     u_pde->page_frame = ((int)Vmem) >> 12;
     int i;
