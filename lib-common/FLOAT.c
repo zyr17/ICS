@@ -31,7 +31,7 @@ FLOAT f2F(float a) {
         unsigned y;
     }pp;
     pp.x = a;
-    mul = (pp.y >> 23) & 0x7f;
+    mul = (pp.y >> 23) & 0xff;
     mul -= 127;
     ans = (pp.y & 0x7fffff) + 0x800000;
     if (mul > 0) ans <<= mul;
