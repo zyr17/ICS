@@ -39,10 +39,12 @@ void init_monitor(int argc, char *argv[]) {
 	/* Initialize the watchpoint link list. */
 	init_wp_list();
 
+#ifdef HAS_DEVICE
 	void init_device();
     void init_sdl();
 	init_device();
     init_sdl();
+#endif
 
 	/* Display welcome message. */
 	welcome();
