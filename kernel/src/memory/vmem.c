@@ -18,9 +18,10 @@ void create_video_mapping() {
 	 */
     PDE* u_pde = get_updir();
     //Log("%d", u_pde->val);
-    //assert(!(u_pde->present));
+    assert(!(u_pde->present));
     u_pde->present = 1;
     u_pde->page_frame = ((int)Vmem) >> 12;
+    Log("%d", u_pde->page_frame);set_bp();
     int i;
     for (i = 0; i < SCR_SIZE / 4096; i ++ ){
         Vmem[i].present = 1;
