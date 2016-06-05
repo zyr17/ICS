@@ -1,14 +1,14 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#define USE_RAMDISK
+//#define USE_RAMDISK
 
 /* You will define this macro in PA4 */
 #define HAS_DEVICE
 
 #define DEBUG
 //#define USE_CACHE
-#define LOG_FILE
+//#define LOG_FILE
 
 #include "debug.h"
 #include "macro.h"
