@@ -53,6 +53,7 @@ uint32_t loader() {
             ide_read((void*)pa_to_va(nowaddr), (uint32_t)(ph -> p_offset), ph -> p_filesz);
 #else
 			ramdisk_read((void*)pa_to_va(nowaddr), (uint32_t)(ph -> p_offset), ph -> p_filesz);
+			Log("use ramdisk");
 #endif
 
 
