@@ -29,7 +29,7 @@ inline uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 inline void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	uint32_t pid = is_mmio(addr);
 	if (pid != -1){
-        Log("mmio_get, 0x%x : 0x%x", addr, is_mmio(0xa0000));
+        Log("mmio_get, 0x%x", addr);
         mmio_write(addr, len, data, pid);
         return;
     }
