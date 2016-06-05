@@ -25,11 +25,11 @@ ide_prepare(uint32_t sector) {
 	out_byte(IDE_PORT_BASE + 1, 0);
 #endif
 
-	Log("--%x--", sector);
+	/*Log("--%x--", sector);
 	Log("%x", sector & 0xFF);
 	Log("%x", (sector >> 8) & 0xFF);
 	Log("%x", (sector >> 16) & 0xFF);
-	Log("%x", 0xE0 | ((sector >> 24) & 0xFF));
+	Log("%x", 0xE0 | ((sector >> 24) & 0xFF));*/
 	out_byte(IDE_PORT_BASE + 2, 1);
 	out_byte(IDE_PORT_BASE + 3, sector & 0xFF);
 	out_byte(IDE_PORT_BASE + 4, (sector >> 8) & 0xFF);

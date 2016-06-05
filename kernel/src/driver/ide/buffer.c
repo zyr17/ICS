@@ -33,7 +33,7 @@ buf_writeback(void) {
 static struct SectorBuf *
 buf_fetch(uint32_t sector) {
 	struct SectorBuf *ptr = &buf[sector % NR_SEC_BUF];
-	
+
 	if (ptr->used == true && ptr->sector == sector) {
 		/* buf hit, do nothing */
 	} else {
@@ -55,6 +55,10 @@ uint8_t
 read_byte(uint32_t offset) {
 	uint32_t sector = offset >> 9;
 	struct SectorBuf *ptr = buf_fetch(sector);
+	if ((offset & 511) == 0){
+        Log("%x %x %x %x---", offset, sector, ptr, ptr->content);
+        set_bp();
+	}
 	return ptr->content[offset & 511];
 }
 
