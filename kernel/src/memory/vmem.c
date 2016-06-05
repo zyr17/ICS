@@ -26,7 +26,7 @@ void create_video_mapping() {
     for (i = 0; i < SCR_SIZE / 4096; i ++ ){
         Vmem[i].present = 1;
         Vmem[i].page_frame = (0xa0000 + i * 4096) >> 12;
-    }
+    }set_bp();
 	//panic("please implement me");
 }
 
