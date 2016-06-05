@@ -37,9 +37,9 @@ uint32_t loader() {
 
 	/* Load each program segment */
 	//panic("please implement me");
-	ph = (void*)(elf -> e_phoff);
+	ph = (void*)(elf -> e_phoff + KOFFSET);
 	volatile int total = 0;
-	for(; true; ) {Log("111");
+	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
             uint32_t nowaddr = mm_malloc(ph -> p_vaddr, ph -> p_memsz);
