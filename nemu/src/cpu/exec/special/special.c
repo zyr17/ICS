@@ -25,7 +25,7 @@ make_helper(inv) {
 }
 
 make_helper(hlt) {
-    for (;;);
+    for (;!cpu.INTR;);
     return 1;
 }
 
