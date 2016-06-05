@@ -39,7 +39,7 @@ uint32_t loader() {
 	//panic("please implement me");
 	ph = (void*)(elf -> e_phoff);
 	volatile int total = 0;
-	for(; true; ) {
+	for(; true; ) {Log("111");
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
             uint32_t nowaddr = mm_malloc(ph -> p_vaddr, ph -> p_memsz);
@@ -53,7 +53,6 @@ uint32_t loader() {
             ide_read((void*)pa_to_va(nowaddr), (uint32_t)(ph -> p_offset), ph -> p_filesz);
 #else
 			ramdisk_read((void*)pa_to_va(nowaddr), (uint32_t)(ph -> p_offset), ph -> p_filesz);
-			Log("use ramdisk");
 #endif
 
 
