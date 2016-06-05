@@ -1077,11 +1077,11 @@ Token doexpr(int head, int tail, int *success){//printf("doexpr%d %d\n",head,tai
                 }t;
                 if (suc == SDIG) sscanf(step.str, "%d", &t.x);
                 else sscanf(step.str, "%x", &t.y);
-                if (t.y >> 27){
+                /*if (t.y >> 27){
                     Log("memory address error: [%d, %d]\n", head, tail);
                     *success = 0;
                     return tokens[0];
-                }
+                }*/
                 uint32_t temp = swaddr_read(t.y, 4, 3);
                 sprintf(step.str, "0x%x", temp);
                 *success = SHEX;
