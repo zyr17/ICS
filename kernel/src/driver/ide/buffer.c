@@ -57,7 +57,6 @@ read_byte(uint32_t offset) {
 	struct SectorBuf *ptr = buf_fetch(sector);
 	if ((offset & 511) == 0){
         Log("%x %x %x %x---", offset, sector, ptr, ptr->content);
-        set_bp();
 	}
 	return ptr->content[offset & 511];
 }
