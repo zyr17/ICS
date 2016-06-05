@@ -20,7 +20,7 @@ void create_video_mapping() {
     //Log("%d", u_pde->val);
     assert(!(u_pde->present));
     u_pde->present = 1;
-    u_pde->page_frame = ((int)Vmem) >> 12;
+    u_pde->page_frame = (((int)Vmem) >> 12) - KOFFSET;
     Log("0x%x, %d", u_pde->page_frame, SCR_SIZE);set_bp();
     int i;
     for (i = 0; i < (SCR_SIZE - 1) / 4096 + 1; i ++ ){
