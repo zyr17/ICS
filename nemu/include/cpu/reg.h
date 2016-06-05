@@ -82,7 +82,7 @@ typedef struct {
     uint32_t sreg_limit[4];
     uint32_t sreg_base[4];
 
-    bool INTR;
+    volatile bool INTR;
 
 } CPU_state;
 
