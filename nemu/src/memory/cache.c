@@ -1,5 +1,7 @@
 #include "memory/cache.h"
 
+//#define USE_L2_CACHE
+
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);
     memset(l2_cache_block, 0, sizeof l2_cache_block);
@@ -146,8 +148,13 @@ inline uint32_t L1_cache_single(hwaddr_t addr, size_t len){
         l1_cache_block[group][pos].valid_bit = 1;
         l1_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
+		#ifdef USE_L2_CACHE
         l1_cache_block[group][pos].data_32_low = L2_cache_read(old_addr, 4);
         l1_cache_block[group][pos].data_32_high = L2_cache_read(old_addr + 4, 4);
+		#else
+        l1_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
+        l1_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+		#endif
         /*unsigned long long lltmp = ((unsigned long long)L2_cache_read(old_addr + 4, 4) << 32) + L2_cache_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l1_cache_block[group][pos].data[i] = lltmp & 0xff;
@@ -180,7 +187,11 @@ inline void L1_cache_update(hwaddr_t addr, size_t len){
     int i, ii;
     for (i = 0; i < L1_LENGTH; i ++ )
         if (l1_cache_block[group][i].valid_bit == 1 && tag == l1_cache_block[group][i].tag){
+			#ifdef USE_L2_CACHE
             uint32_t ltmp = L2_cache_read(addr, len);
+			#else
+            uint32_t ltmp = dram_read(addr, len);
+			#endif
             for (ii = 0; ii < len; ii ++ ){
                 l1_cache_block[group][i].data[ii + start] = ltmp & 0xff;
                 ltmp >>= 8;
@@ -191,7 +202,11 @@ inline void L1_cache_update(hwaddr_t addr, size_t len){
 }
 
 inline void L1_cache_write(hwaddr_t addr, size_t len, uint32_t data){
+	#ifdef USE_L2_CACHE
     L2_cache_write(addr, len, data);
+	#else
+    dram_write(addr, len, data);
+	#endif
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;
         L1_cache_update(addr + (len - tmp), tmp);
