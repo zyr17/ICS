@@ -1,6 +1,6 @@
 #include "memory/cache.h"
 
-//#define USE_L2_CACHE
+#define USE_L2_CACHE
 
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);
