@@ -120,8 +120,8 @@ inline void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
 inline void L2_cache_write(hwaddr_t addr, size_t len, uint32_t data){
     if (addr / (BLOCK_SIZE / 8) != (addr + len - 1) / (BLOCK_SIZE / 8)){
         int tmp = (addr + len - 1) % (BLOCK_SIZE / 8) + 1;
-        L2_cache_update(addr + (len - tmp), tmp, data & ((1 << (tmp * 8)) - 1));
-        L2_cache_update(addr, len - tmp, data >> (tmp * 8));
+        L2_cache_update(addr + (len - tmp), tmp, data >> ((len - tmp) * 8));
+        L2_cache_update(addr, len - tmp, data & ((1 << ((len - tmp) * 8)) - 1));
     }
     else L2_cache_update(addr, len, data);
 }
