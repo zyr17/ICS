@@ -41,14 +41,14 @@ main_loop(void) {
 
 	while (true) {
 		wait_intr();
-		//cli();
+		cli();
 		if (now == tick) {
-			//sti();
+			sti();
 			continue;
 		}
 		assert(now < tick);
 		target = tick; /* now总是小于tick，因此我们需要“追赶”当前的时间 */
-		//sti();
+		sti();
 
 		redraw = false;
 		while (update_keypress())
