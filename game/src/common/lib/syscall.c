@@ -15,6 +15,7 @@ void _exit(int status) {
 }
 
 int open(const char *pathname, int flags) {
+	Log("%s", pathname);
 	nemu_assert(0);
 	return 0; 
 }
