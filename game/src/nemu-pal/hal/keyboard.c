@@ -69,7 +69,7 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
     for (; i < NR_KEYS; i ++ )
         if (key_state[i] ^ key_pressed[i]){
             re = 1;
-            Log("key_changed: 0x%x", keycode_array[i]);
+            Log("key_changed: 0x%x %d", keycode_array[i], key_state[i]);
             if ((key_pressed[i] = key_state[i]))
                 key_press_callback(keycode_array[i]);
             else key_release_callback(keycode_array[i]);
