@@ -21,16 +21,15 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 	 */
 
 	SDL_Rect ss, dd;
-    if (srcrect != NULL) ss = *srcrect;
+    if (srcrect != NULL && dstrect != NULL){
+        ss = *srcrect;
+        dd = *dstrect;
+    }
     else{
-        ss.x = ss.y = 0;
+        ss.x = ss.y = dd.x = dd.y = 0;
         ss.w = ss.h = -1;
     }
-    if (dstrect != NULL) dd = *dstrect;
-    else{
-        dd.x = dd.y = 0;
-        dd.w = dd.h = -1;
-    }
+    dd.w = dd.h = -1;
     if (src->w - ss.x < ss.w) ss.w = src->w - ss.x;
     if (src->h - ss.y < ss.h) ss.h = src->h - ss.y;
     if (dst->w - dd.x < dd.w) dd.w = dst->w - dd.x;
