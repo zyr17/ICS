@@ -51,7 +51,7 @@ uint32_t fs_open(const char *pathname, int flags){
     int i = 0;
     for (; i < NR_FILES; i ++ )
         if (strcmp(pathname, file_table[i].name) == 0){
-            if (fstate[i].opened){
+            if (fstate[i + 3].opened){
                 Log("filename \'%s\' is opening!", pathname);
                 nemu_assert(0);
                 return -1;
