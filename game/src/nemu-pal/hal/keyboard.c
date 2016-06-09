@@ -13,6 +13,7 @@ static const int keycode_array[] = {
 };
 
 static int key_state[NR_KEYS];
+static int key_pressed[NR_KEYS];
 
 void
 keyboard_event(void) {
@@ -44,7 +45,7 @@ clear_key(int index) {
 	key_state[index] = KEY_STATE_EMPTY;
 }
 
-bool 
+bool
 process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int)) {
 	cli();
 	/* TODO: Traverse the key states. Find a key just pressed or released.
@@ -54,8 +55,16 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
 	 * If no such key is found, the function return false.
 	 * Remember to enable interrupts before returning from the function.
 	 */
+    int i = 0, re = 0;
+    for (; i < NR_KEYS; i ++ )
+        if (key_state[i] ^ key_pressed[i]){
+            re = 1;
+            if ((key_pressed[i] = key_state[i]))
+                key_press_callback(keycode_array[i]);
+            else key_release_callback(keycode_array[i]);
+        }
 
-	assert(0);
+	//assert(0);
 	sti();
-	return false;
+	return re;
 }
