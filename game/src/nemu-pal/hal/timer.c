@@ -32,7 +32,7 @@ uint32_t SDL_GetTicks() {
 void SDL_Delay(uint32_t ms) {
 	/* TODO: Return from this function after waiting for `ms' milliseconds. */
 	//assert(0);
-	return;
+	//return;
 	int end = jiffy + (ms - 5) / 10 + 1;
 	for (; jiffy < end; );
 }
