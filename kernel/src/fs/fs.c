@@ -32,3 +32,72 @@ void ide_write(uint8_t *, uint32_t, uint32_t);
 
 /* TODO: implement a simplified file system here. */
 
+typedef struct {
+	bool opened;
+	uint32_t offset;
+} Fstate;
+
+Fstate fstate[NR_FILES + 3];
+
+void init_fs(){
+    fstate[0].opened = fstate[1].opened = fstate[2].opened = 1;
+}
+
+int fs_open(const char *pathname, int flags){
+    int i = 0;
+    for (; i < NR_FILES; i ++ )
+        if (strcmp(pathname, file_table[i].name) == 0){
+            if (fstate[i].opened){
+                Log("filename \'%s\' is opening!", filename);
+                nemu_assert(0);
+                return -1;
+            }
+            fstate[i].opened = 1;
+            return i + 3;
+        }
+    Log("filename \'%s\' not found!", filename);
+    nemu_assert(0);
+    return -1;
+}
+
+int fs_read(int fd, void *buf, int len){
+    nemu_assert(fd >= 0 && fd < NR_FILES + 3);
+    nemu_assert(fstate[fd].opened);
+    nemu_assert(fd >= 0 && fd < 3); // read stdxxx
+    if (file_table[fd - 3].size - fstate[fd].offset < len) len = file_table[fd - 3].size - fstate[fd].offset;
+    ide_read((uint8_t*)buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
+    fstate[fd].offset += len;
+    return len;
+}
+
+int fs_write(int fd, void *buf, int len){
+    nemu_assert(fd >= 0 && fd < NR_FILES + 3);
+    nemu_assert(fstate[fd].opened);
+    nemu_assert(fd >= 0 && fd < 3); // write stdxxx
+    nemu_assert(file_table[fd - 3].size - fstate[fd].offset - len >= 0);
+    ide_write((uint8_t*)buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
+    fstate[fd].offset += len;
+    return len;
+}
+
+int fs_lseek(int fd, int offset, int whence){
+    nemu_assert(fd >= 0 && fd < NR_FILES + 3);
+    nemu_assert(fstate[fd].opened);
+    nemu_assert(fd >= 0 && fd < 3); // write stdxxx
+    if (whence == SEEK_SET) fstate[fd].offset = offset;
+    else if (whence == SEEK_CUR) fstate[fd].offset += offset;
+    else if (whence == SEEK_END) fstate[fd].offset = offset + file_table[fd - 3].size;
+    else nemu_assert(0);
+    return fstate[fd].offset;
+}
+
+int fs_close(int fd){
+    if (fd >= 3 && fd < NR_FILES + 3){
+        fstate[fd].offset = 0;
+        fstate[fd].opened = 0;
+        return 0;
+    }
+    return -1;
+}
+
+

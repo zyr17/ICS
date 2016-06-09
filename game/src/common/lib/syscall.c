@@ -15,23 +15,19 @@ void _exit(int status) {
 }
 
 int open(const char *pathname, int flags) {
-	Log("%s", pathname);
-	nemu_assert(0);
-	return 0; 
+	return syscall(SYS_open, pathname, flags);
 }
 
 int read(int fd, char *buf, int len) {
-	nemu_assert(0);
-	return 0; 
+	return syscall(SYS_read, fd, buf, len);
 }
 
 int write(int fd, char *buf, int len) {
-	return syscall(SYS_write, fd, buf, len); 
+	return syscall(SYS_write, fd, buf, len);
 }
 
 off_t lseek(int fd, off_t offset, int whence) {
-	nemu_assert(0);
-	return 0; 
+    return syscall(SYS_lseek, fd, offset, whence);
 }
 
 void *sbrk(int incr) {
@@ -50,8 +46,7 @@ void *sbrk(int incr) {
 }
 
 int close(int fd) {
-	nemu_assert(0);
-	return 0; 
+    return syscall(SYS_close, fd);
 }
 
 int fstat(int fd, struct stat *buf) {

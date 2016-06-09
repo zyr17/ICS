@@ -1,4 +1,5 @@
 #include "irq.h"
+#include "fs.h"
 
 #include <sys/syscall.h>
 void serial_printc(char);
@@ -31,11 +32,35 @@ void do_syscall(TrapFrame *tf) {
 		case 4: // SYS_write
             if (tf->ebx == 1 || tf->ebx == 2){
                 //asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
-		int i;
-		for (i = 0; i < tf->edx; i ++ )
-			serial_printc(*(char*)(tf->ecx + i));
-                tf->eax = tf->edx;
+                int i;
+                for (i = 0; i < tf->edx; i ++ )
+                    serial_printc(*(char*)(tf->ecx + i));
+                        tf->eax = tf->edx;
             }
+            else{
+                tf->eax = fs_write(tf->ebx, tf->ecx, tf->edx);
+            }
+            break;
+
+        case SYS_read:
+            if (tf->ebx >= 0 && tf->ebx < 3){
+                panic("read stdxxx");
+            }
+            else{
+                tf->eax = fs_read(tf->ebx, tf->ecx, tf->edx);
+            }
+            break;
+
+        case SYS_open:
+            tf->eax = fs_open(tf->ebx, tf->ecx);
+            break;
+
+        case SYS_close:
+            tf->eax = fs_close(tf->ebx);
+            break;
+
+        case SYS_lseek:
+            tf->eax = fs_lseek(tf->ebx, tf->ecx, tf->edx);
             break;
 
 		/* TODO: Add more system calls. */

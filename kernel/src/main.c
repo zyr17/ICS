@@ -58,6 +58,9 @@ void init_cond() {
 	/* Initialize the IDE driver. */
 	init_ide();
 
+	void init_fs();
+	init_fs();
+
 	/* Enable interrupts. */
 	sti();
 #endif
