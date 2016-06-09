@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <elf.h>
 
-uint32_t swaddr_read(swaddr_t, size_t);
+uint32_t swaddr_read(swaddr_t, size_t, uint8_t);
 
 char *exec_file = NULL;
 
@@ -111,9 +111,9 @@ void bt_print(int now, uint32_t ebp, uint32_t eip){
     for (; i < nr_symtab_entry; i ++ )
         if (symtab[i].st_value <= eip && symtab[i].st_value + symtab[i].st_size >= eip){
             printf("#%03d 0x%x in %s\t(0x%x 0x%x 0x%x 0x%x)\n", now, eip, strtab + symtab[i].st_name,
-                   swaddr_read(ebp + 8, 4), swaddr_read(ebp + 12, 4), swaddr_read(ebp + 16, 4), swaddr_read(ebp + 20, 4));
-            eip = swaddr_read(ebp + 4, 4);
-            ebp = swaddr_read(ebp, 4);
+                   swaddr_read(ebp + 8, 4, 2), swaddr_read(ebp + 12, 4, 2), swaddr_read(ebp + 16, 4, 2), swaddr_read(ebp + 20, 4, 2));
+            eip = swaddr_read(ebp + 4, 4, 2);
+            ebp = swaddr_read(ebp, 4, 2);
             break;
         }
     if ((now + 1) % 23 == 0){

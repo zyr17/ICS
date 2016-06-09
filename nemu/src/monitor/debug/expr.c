@@ -1118,13 +1118,13 @@ uint32_t expr(char *e, int *success) {
     printf("\x1b[34;1m");
 
     if (e != NULL && e[0] == ')'){
-        int len = strlen(e);
+        /*int len = strlen(e);
         uint32_t ans = 0;
         int i;
         for (i = 1; i < len; i ++ )
-            ans = (ans << 4) + (e[i]>= 'a' ? e[i] - 'a' + 10 : e[i] - '0');
+            ans = (ans << 4) + (e[i]>= 'a' ? e[i] - 'a' + 10 : e[i] - '0');*/
         *success = 1;
-        return ans == cpu.eip;
+        return 0x80648eb == cpu.eip;
     }
 
 	if(!make_token(e)) {
