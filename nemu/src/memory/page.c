@@ -20,7 +20,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 #ifdef USE_VERY_BIG_TLB
     if (!is_get[addr >> 12]){
         is_get[addr >> 12] = 1;
-        bbtlb[addr >> 12] = page_translate_real(addr) << 12;
+        bbtlb[addr >> 12] = page_translate_real(addr) & 0xfffff000;
     }
     return (addr & 0xfff) + bbtlb[addr >> 12];
 #else
