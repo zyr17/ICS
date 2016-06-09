@@ -12,7 +12,7 @@ hwaddr_t __attribute__((noinline)) page_translate_real(lnaddr_t addr){
     return res;
 }
 
-hwaddr_t page_translate(lnaddr_t addr){
+inline hwaddr_t page_translate(lnaddr_t addr){
 #ifdef USE_VERY_BIG_TLB
     if (bbtlb[addr >> 12] & 1){
         bbtlb[addr >> 12] = (page_translate_real(addr) & 0xfffff000);
