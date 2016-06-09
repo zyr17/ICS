@@ -52,8 +52,19 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	 * in surface ``dst'' with color ``color''. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
+    SDL_Rect dd;
+    if (dstrect != NULL) dd = *dstrect;
+    else{
+        dd.x = dd.y = 0;
+        dd.w = dd.h = -1;
+    }
+    if (dst->w - dd.x < dd.w) dd.w = dst->w - dd.x;
+    if (dst->h - dd.y < dd.h) dd.h = dst->h - dd.y;
+    int i = 0;
+    for (; i < dd.h; i ++ )
+        memset(dst->pixels + (dd.y + i) * dst->w + dd.x, (uint8_t)color, dd.w);
 
-	assert(0);
+	//assert(0);
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
