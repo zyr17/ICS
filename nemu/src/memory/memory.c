@@ -4,6 +4,8 @@
 #include "cpu/reg.h"
 #include "device/mmio.h"
 
+extern uint8_t *hw_mem;
+
 inline uint32_t dram_read(hwaddr_t, size_t);
 inline void dram_write(hwaddr_t, size_t, uint32_t);
 
@@ -16,7 +18,11 @@ inline uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	#ifdef USE_CACHE
 	read = L1_cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 	#else
+	#ifdef DIRECTLY_MEM
+    read = (*(uint32_t*)(hw_mem + addr)) & (~0u >> ((4 - len) << 3));
+	#else
 	read = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+	#endif
 	#endif
 	/*uint32_t re2 = dram_read(addr, len) & (~0u >> ((4 - len) << 3));
 	if (read != re2){
@@ -36,7 +42,15 @@ inline void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
     #ifdef USE_CACHE
 	L1_cache_write(addr, len, data);
 	#else
+	#ifdef DIRECTLY_MEM
+	assert(len == 1 || len == 2 || len == 4);
+    if (len == 1) *(uint8_t*)(hw_mem + addr) = data & (~0u >> ((4 - len) << 3));
+    else if (len == 2) *(uint16_t*)(hw_mem + addr) = data & (~0u >> ((4 - len) << 3));
+    else if (len == 4) *(uint32_t*)(hw_mem + addr) = data & (~0u >> ((4 - len) << 3));
+    else panic("len error");
+	#else
 	dram_write(addr, len, data);
+	#endif
 	#endif
 }
 
