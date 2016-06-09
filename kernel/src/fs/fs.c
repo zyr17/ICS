@@ -56,7 +56,8 @@ uint32_t fs_open(const char *pathname, int flags){
                 nemu_assert(0);
                 return -1;
             }
-            fstate[i].opened = 1;
+            Log("open file fd: %d", i + 3);
+            fstate[i + 3].opened = 1;
             return i + 3;
         }
     Log("filename \'%s\' not found!", pathname);

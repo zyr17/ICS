@@ -11,7 +11,7 @@ void raise_intr(uint8_t);
  */
 #define MAX_INSTR_TO_PRINT 10
 
-#ifdef DEBUG
+#ifdef LOG_FILE_LIMIT
 	int Log_times = 0;
 #endif
 
@@ -74,12 +74,14 @@ void cpu_exec(volatile uint32_t n) {
 		strcat(asm_buf, assembly);
 
 		Log_write("%s\n", asm_buf);
+#ifdef LOG_FILE_LIMIT
 		Log_times ++ ;
 		if (Log_times >= 65536){
 			Log_times = 0;
 			fclose(log_fp);
 			log_fp = fopen("log.txt", "w");
 		}
+#endif
 
 		if(n_temp < MAX_INSTR_TO_PRINT) {
 			printf("%s\n", asm_buf);
