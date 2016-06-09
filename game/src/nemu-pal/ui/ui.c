@@ -516,7 +516,7 @@ PAL_ReadMenu(
             PAL_DrawText(PAL_GetWord(rgMenuItem[wCurrentItem].wNumWord),
                rgMenuItem[wCurrentItem].pos, MENUITEM_COLOR_INACTIVE, FALSE, TRUE);
          }
-            set_bp();
+
          if (wCurrentItem > 0)
          {
             wCurrentItem--;
