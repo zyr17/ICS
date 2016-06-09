@@ -18,4 +18,8 @@ struct{
 uint32_t page_read(lnaddr_t, size_t);
 void page_write(lnaddr_t, size_t, uint32_t);
 
+#ifdef USE_VERY_BIG_TLB
+uint32_t bbtlb[1111111];
+#endif
+
 #endif

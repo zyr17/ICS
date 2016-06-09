@@ -67,6 +67,8 @@ make_helper(mov_crx){
             int i;
             for (i = 0; i < TLB_SIZE; i ++ )
                 TLB_cache[i].valid_bit = 0;
+            for (i = 0; i < 1111111; i ++ )
+                bbtlb[i] = 1;
         }
         print_asm("mov" str(SUFFIX) " %%%s,%%cr%d", REG_NAME(R_EAX), cr_num);
     }
