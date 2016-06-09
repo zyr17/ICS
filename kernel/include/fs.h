@@ -2,10 +2,10 @@
 #define __FS_H__
 
 void init_fs();
-int fs_open(const char *pathname, int flags);
-int fs_read(int fd, void *buf, int len);
-int fs_write(int fd, void *buf, int len);
-int fs_lseek(int fd, int offset, int whence);
-int fs_close(int fd);
+uint32_t fs_open(const char *pathname, int flags);
+uint32_t fs_read(int fd, void *buf, int len);
+uint32_t fs_write(int fd, void *buf, int len);
+uint32_t fs_lseek(int fd, int offset, int whence);
+uint32_t fs_close(int fd);
 
 #endif

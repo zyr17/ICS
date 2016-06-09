@@ -29,7 +29,7 @@ void do_syscall(TrapFrame *tf) {
 
 		case SYS_brk: sys_brk(tf); break;
 
-		case 4: // SYS_write
+		case SYS_write:
             if (tf->ebx == 1 || tf->ebx == 2){
                 //asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
                 int i;
@@ -38,7 +38,7 @@ void do_syscall(TrapFrame *tf) {
                         tf->eax = tf->edx;
             }
             else{
-                tf->eax = fs_write(tf->ebx, tf->ecx, tf->edx);
+                tf->eax = fs_write(tf->ebx, (void*)tf->ecx, tf->edx);
             }
             break;
 
@@ -47,12 +47,12 @@ void do_syscall(TrapFrame *tf) {
                 panic("read stdxxx");
             }
             else{
-                tf->eax = fs_read(tf->ebx, tf->ecx, tf->edx);
+                tf->eax = fs_read(tf->ebx, (void*)tf->ecx, tf->edx);
             }
             break;
 
         case SYS_open:
-            tf->eax = fs_open(tf->ebx, tf->ecx);
+            tf->eax = fs_open((char*)tf->ebx, tf->ecx);
             break;
 
         case SYS_close:

@@ -1,4 +1,7 @@
 #include "common.h"
+#include "fs.h"
+
+#include <string.h>
 
 typedef struct {
 	char *name;
@@ -43,24 +46,24 @@ void init_fs(){
     fstate[0].opened = fstate[1].opened = fstate[2].opened = 1;
 }
 
-int fs_open(const char *pathname, int flags){
+uint32_t fs_open(const char *pathname, int flags){
     int i = 0;
     for (; i < NR_FILES; i ++ )
         if (strcmp(pathname, file_table[i].name) == 0){
             if (fstate[i].opened){
-                Log("filename \'%s\' is opening!", filename);
+                Log("filename \'%s\' is opening!", pathname);
                 nemu_assert(0);
                 return -1;
             }
             fstate[i].opened = 1;
             return i + 3;
         }
-    Log("filename \'%s\' not found!", filename);
+    Log("filename \'%s\' not found!", pathname);
     nemu_assert(0);
     return -1;
 }
 
-int fs_read(int fd, void *buf, int len){
+uint32_t fs_read(int fd, void *buf, int len){
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
     nemu_assert(fstate[fd].opened);
     nemu_assert(fd >= 0 && fd < 3); // read stdxxx
@@ -70,7 +73,7 @@ int fs_read(int fd, void *buf, int len){
     return len;
 }
 
-int fs_write(int fd, void *buf, int len){
+uint32_t fs_write(int fd, void *buf, int len){
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
     nemu_assert(fstate[fd].opened);
     nemu_assert(fd >= 0 && fd < 3); // write stdxxx
@@ -80,7 +83,7 @@ int fs_write(int fd, void *buf, int len){
     return len;
 }
 
-int fs_lseek(int fd, int offset, int whence){
+uint32_t fs_lseek(int fd, int offset, int whence){
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
     nemu_assert(fstate[fd].opened);
     nemu_assert(fd >= 0 && fd < 3); // write stdxxx
@@ -91,7 +94,7 @@ int fs_lseek(int fd, int offset, int whence){
     return fstate[fd].offset;
 }
 
-int fs_close(int fd){
+uint32_t fs_close(int fd){
     if (fd >= 3 && fd < NR_FILES + 3){
         fstate[fd].offset = 0;
         fstate[fd].opened = 0;
