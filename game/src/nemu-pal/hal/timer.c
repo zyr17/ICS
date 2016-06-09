@@ -38,7 +38,7 @@ void SDL_Delay(uint32_t ms) {
 	//return;
 	int end = jiffy + (ms - 5) / 10 + 1;
 #ifdef DEBUG
-	Log("delay: %d, %d", jiffy, end);
+	Log("delay: %d, %d, %d", jiffy, end, ms);
 #endif
 	for (; jiffy < end; );
 }
