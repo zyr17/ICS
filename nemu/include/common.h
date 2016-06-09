@@ -8,7 +8,7 @@
 
 #define DEBUG
 //#define USE_CACHE
-#define LOG_FILE
+//#define LOG_FILE
 #define LOG_FILE_LIMIT
 
 #include "debug.h"
