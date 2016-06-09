@@ -1,6 +1,7 @@
 #include "memory/page.h"
+#define USE_VERY_BIG_TLB
 
-hwaddr_t page_translate_real(lnaddr_t addr){
+hwaddr_t __attribute__((noinline)) page_translate_real(lnaddr_t addr){
     hwaddr_t res = 0, tmp;
     tmp = cpu.cr3 + (addr >> 22) * 4;
     uint32_t tval = hwaddr_read(tmp, 4);
