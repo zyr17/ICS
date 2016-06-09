@@ -36,7 +36,8 @@ void SDL_Delay(uint32_t ms) {
 	/* TODO: Return from this function after waiting for `ms' milliseconds. */
 	//assert(0);
 	//return;
-	int end = jiffy + (ms - 5) / 10 + 1;
+	if (ms < 10) return;
+	uint32_t end = jiffy + (ms - 5) / 10 + 1;
 #ifdef DEBUG
 	Log("delay: %d, %d, %d", jiffy, end, ms);
 #endif
