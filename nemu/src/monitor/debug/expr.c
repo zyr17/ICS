@@ -1123,8 +1123,8 @@ uint32_t expr(char *e, int *success) {
         int i;
         for (i = 1; i < len; i ++ )
             ans = (ans << 4) + (e[i]>= 'a' ? e[i] - 'a' + 10 : e[i] - '0');
-        *success = 3;
-        return ans;
+        *success = 1;
+        return ans == cpu.eip;
     }
 
 	if(!make_token(e)) {
