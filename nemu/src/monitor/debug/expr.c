@@ -1122,7 +1122,7 @@ uint32_t expr(char *e, int *success) {
         uint32_t ans = 0;
         int i;
         for (i = 1; i < len; i ++ )
-            ans = ans + (e[i]>= 'a' ? e[i] - 'a' + 10 : e[i] - '0');
+            ans = (ans << 4) + (e[i]>= 'a' ? e[i] - 'a' + 10 : e[i] - '0');
         *success = 3;
         return ans;
     }
