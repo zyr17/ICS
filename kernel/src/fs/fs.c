@@ -47,6 +47,7 @@ void init_fs(){
 }
 
 uint32_t fs_open(const char *pathname, int flags){
+    Log("open filename: %s", pathname);
     int i = 0;
     for (; i < NR_FILES; i ++ )
         if (strcmp(pathname, file_table[i].name) == 0){
@@ -84,8 +85,11 @@ uint32_t fs_write(int fd, void *buf, int len){
 }
 
 uint32_t fs_lseek(int fd, int offset, int whence){
+    Log("lseek fd: %d, opened: %d, offset: %d", fd, fstate[fd].opened, fstate[fd].offset);
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
-    nemu_assert(fstate[fd].opened);
+    if (!fstate[fd].opened){
+        nemu_assert(0);
+    }
     nemu_assert(!(fd >= 0 && fd < 3)); // lseek stdxxx
     if (whence == SEEK_SET) fstate[fd].offset = offset;
     else if (whence == SEEK_CUR) fstate[fd].offset += offset;
@@ -95,6 +99,7 @@ uint32_t fs_lseek(int fd, int offset, int whence){
 }
 
 uint32_t fs_close(int fd){
+    Log("close fd: %d, opened: %d, offset: %d", fd, fstate[fd].opened, fstate[fd].offset);
     if (fd >= 3 && fd < NR_FILES + 3){
         fstate[fd].offset = 0;
         fstate[fd].opened = 0;
