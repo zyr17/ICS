@@ -7,20 +7,41 @@
 
 int get_fps();
 
-void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect, 
+void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 		SDL_Surface *dst, SDL_Rect *dstrect) {
 	assert(dst && src);
 
-	/* TODO: Performs a fast blit from the source surface to the 
+	/* TODO: Performs a fast blit from the source surface to the
 	 * destination surface. Only the position is used in the
 	 * ``dstrect'' (the width and height are ignored). If either
-	 * ``srcrect'' or ``dstrect'' are NULL, the entire surface 
-	 * (``src'' or ``dst'') is copied. The final blit rectangle 
+	 * ``srcrect'' or ``dstrect'' are NULL, the entire surface
+	 * (``src'' or ``dst'') is copied. The final blit rectangle
 	 * is saved in ``dstrect'' after all clipping is performed
 	 * (``srcrect'' is not modified).
 	 */
 
-	assert(0);
+	SDL_Rect ss, dd;
+    if (srcrect != NULL) ss = *srcrect;
+    else{
+        ss.x = ss.y = 0;
+        ss.w = ss.h = -1;
+    }
+    if (dstrect != NULL) dd = *dstrect;
+    else{
+        dd.x = dd.y = 0;
+        dd.w = dd.h = -1;
+    }
+    if (src->w - ss.x < ss.w) ss.w = src->w - ss.x;
+    if (src->h - ss.y < ss.h) ss.h = src->h - ss.y;
+    if (dst->w - dd.x < dd.w) dd.w = dst->w - dd.x;
+    if (dst->h - dd.y < dd.h) dd.h = dst->h - dd.y;
+    if (dd.w < ss.w) ss.w = dd.w;
+    if (dd.h < ss.h) ss.h = dd.h;
+    int i = 0;
+    for (; i < ss.h; i ++ )
+        memcpy(dst->pixels + (dd.y + i) * dst->w + dd.x, src->pixels + (ss.y + i) * src->w + ss.x, ss.w);
+
+	//assert(0);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
@@ -54,7 +75,7 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 	assert(0);
 }
 
-void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
+void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 		int firstcolor, int ncolors) {
 	assert(s);
 	assert(s->format);
@@ -63,7 +84,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 
 	if(s->format->palette->colors == NULL || s->format->palette->ncolors != ncolors) {
 		if(s->format->palette->ncolors != ncolors && s->format->palette->colors != NULL) {
-			/* If the size of the new palette is different 
+			/* If the size of the new palette is different
 			 * from the old one, free the old one.
 			 */
 			free(s->format->palette->colors);
@@ -87,7 +108,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 
 /* ======== The following functions are already implemented. ======== */
 
-void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, 
+void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect,
 		SDL_Surface *dst, SDL_Rect *dstrect) {
 	assert(src && dst);
 	int x = (scrrect == NULL ? 0 : scrrect->x);
@@ -152,7 +173,7 @@ void SDL_FreeSurface(SDL_Surface *s) {
 
 			free(s->format);
 		}
-		
+
 		if(s->pixels != NULL) {
 			free(s->pixels);
 		}
