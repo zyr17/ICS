@@ -77,7 +77,8 @@ void cpu_exec(volatile uint32_t n) {
 		Log_times ++ ;
 		if (Log_times >= 65536){
 			Log_times = 0;
-			fseek(log_fp, 0, SEEK_SET);
+			fclose(log_fp);
+			log_fp = fopen("log.txt", "w");
 		}
 
 		if(n_temp < MAX_INSTR_TO_PRINT) {
