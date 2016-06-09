@@ -23,7 +23,7 @@ keyboard_event(void) {
     int i;
     for (i = 0; i < NR_KEYS; i ++ )
         if (kc == keycode_array[i]){
-            key_state[i] = key_code >> 7;
+            key_state[i] = !(key_code >> 7);
             Log("Known key: 0x%x", key_code);
             return;
         }
