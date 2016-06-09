@@ -66,7 +66,7 @@ uint32_t fs_open(const char *pathname, int flags){
 uint32_t fs_read(int fd, void *buf, int len){
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
     nemu_assert(fstate[fd].opened);
-    nemu_assert(fd >= 0 && fd < 3); // read stdxxx
+    nemu_assert(!(fd >= 0 && fd < 3)); // read stdxxx
     if (file_table[fd - 3].size - fstate[fd].offset < len) len = file_table[fd - 3].size - fstate[fd].offset;
     ide_read((uint8_t*)buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
     fstate[fd].offset += len;
@@ -76,7 +76,7 @@ uint32_t fs_read(int fd, void *buf, int len){
 uint32_t fs_write(int fd, void *buf, int len){
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
     nemu_assert(fstate[fd].opened);
-    nemu_assert(fd >= 0 && fd < 3); // write stdxxx
+    nemu_assert(!(fd >= 0 && fd < 3)); // write stdxxx
     nemu_assert(file_table[fd - 3].size - fstate[fd].offset - len >= 0);
     ide_write((uint8_t*)buf, file_table[fd - 3].disk_offset + fstate[fd].offset, len);
     fstate[fd].offset += len;
@@ -86,7 +86,7 @@ uint32_t fs_write(int fd, void *buf, int len){
 uint32_t fs_lseek(int fd, int offset, int whence){
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
     nemu_assert(fstate[fd].opened);
-    nemu_assert(fd >= 0 && fd < 3); // write stdxxx
+    nemu_assert(!(fd >= 0 && fd < 3)); // lseek stdxxx
     if (whence == SEEK_SET) fstate[fd].offset = offset;
     else if (whence == SEEK_CUR) fstate[fd].offset += offset;
     else if (whence == SEEK_END) fstate[fd].offset = offset + file_table[fd - 3].size;

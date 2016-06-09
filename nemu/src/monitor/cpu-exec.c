@@ -46,6 +46,7 @@ void cpu_exec(volatile uint32_t n) {
 
 #ifdef DEBUG
 	volatile uint32_t n_temp = n;
+	int Log_times = 0;
 #endif
 
 	setjmp(jbuf);
@@ -68,7 +69,15 @@ void cpu_exec(volatile uint32_t n) {
 #ifdef DEBUG
 		print_bin_instr(eip_temp, instr_len);
 		strcat(asm_buf, assembly);
+
 		Log_write("%s\n", asm_buf);
+		Log_times ++ ;
+		if (Log_times == 65536){
+			Log_times = 0;
+			fclose(log_fp);
+			log_fp = fopen("log.txt", "w");
+		}
+
 		if(n_temp < MAX_INSTR_TO_PRINT) {
 			printf("%s\n", asm_buf);
 		}
