@@ -47,7 +47,7 @@ void init_fs(){
 }
 
 uint32_t fs_open(const char *pathname, int flags){
-#ifdef DEBUG
+#ifdef DEBUG_FS
     Log("open filename: %s", pathname);
 #endif
     int i = 0;
@@ -58,7 +58,7 @@ uint32_t fs_open(const char *pathname, int flags){
                 nemu_assert(0);
                 return -1;
             }
-#ifdef DEBUG
+#ifdef DEBUG_FS
             Log("open file fd: %d", i + 3);
 #endif
             fstate[i + 3].opened = 1;
@@ -90,7 +90,7 @@ uint32_t fs_write(int fd, void *buf, int len){
 }
 
 uint32_t fs_lseek(int fd, int offset, int whence){
-#ifdef DEBUG
+#ifdef DEBUG_FS
     Log("lseek fd: %d, opened: %d, offset: %d", fd, fstate[fd].opened, fstate[fd].offset);
 #endif
     nemu_assert(fd >= 0 && fd < NR_FILES + 3);
@@ -106,7 +106,7 @@ uint32_t fs_lseek(int fd, int offset, int whence){
 }
 
 uint32_t fs_close(int fd){
-#ifdef DEBUG
+#ifdef DEBUG_FS
     Log("close fd: %d, opened: %d, offset: %d", fd, fstate[fd].opened, fstate[fd].offset);
 #endif
     if (fd >= 3 && fd < NR_FILES + 3){

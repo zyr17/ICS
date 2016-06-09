@@ -7,6 +7,8 @@
 #include "trap.h"
 #include "debug.h"
 
+#define DEBUG
+
 typedef uint8_t bool;
 
 #define true         1

@@ -3,6 +3,12 @@
 
 #define DEBUG
 
+#ifdef DEBUG
+
+//#define DEBUG_FS
+
+#endif
+
 /* Uncomment these macros to enable corresponding functionality. */
 #define IA32_SEG
 #define IA32_PAGE

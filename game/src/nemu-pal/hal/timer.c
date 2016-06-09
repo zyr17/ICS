@@ -26,6 +26,9 @@ timer_event(void) {
 uint32_t SDL_GetTicks() {
 	/* TODO: Return the time in millisecond. */
 	//assert(0);
+#ifdef DEBUG
+	Log("gettime: %d", jiffy * 10);
+#endif
 	return jiffy * 10;
 }
 
@@ -34,5 +37,8 @@ void SDL_Delay(uint32_t ms) {
 	//assert(0);
 	//return;
 	int end = jiffy + (ms - 5) / 10 + 1;
+#ifdef DEBUG
+	Log("delay: %d, %d", jiffy, end);
+#endif
 	for (; jiffy < end; );
 }
