@@ -8,6 +8,7 @@
 
 //#define DEBUG
 //#define USE_CACHE
+#define USE_VERY_BIG_TLB
 //#define LOG_FILE
 #define LOG_FILE_LIMIT
 

@@ -1,5 +1,10 @@
 #include "memory/page.h"
 
+#ifdef USE_VERY_BIG_TLB
+uint32_t bbtlb[1111111];
+bool is_get[1111111];
+#endif
+
 hwaddr_t page_translate_real(lnaddr_t addr){
     hwaddr_t res = 0, tmp;
     tmp = cpu.cr3 + (addr >> 22) * 4;
@@ -12,6 +17,13 @@ hwaddr_t page_translate_real(lnaddr_t addr){
 }
 
 hwaddr_t page_translate(lnaddr_t addr){
+#ifdef USE_VERY_BIG_TLB
+    if (!is_get[addr >> 12]){
+        is_get[addr >> 12] = 1;
+        bbtlb[addr >> 12] = page_translate_real(addr) << 12;
+    }
+    return (addr & 0xfff) + bbtlb[addr >> 12];
+#else
     int i;
     for (i = 0; i < TLB_SIZE; i ++ )
         if (TLB_cache[i].valid_bit && addr >> 12 == TLB_cache[i].tag){
@@ -28,6 +40,7 @@ hwaddr_t page_translate(lnaddr_t addr){
     TLB_cache[pos].tag = addr >> 12;
     TLB_cache[pos].data = res >> 12;
     return res;
+#endif
 }
 
 uint32_t page_read(lnaddr_t addr, size_t len){
