@@ -11,6 +11,10 @@ void raise_intr(uint8_t);
  */
 #define MAX_INSTR_TO_PRINT 10
 
+#ifdef DEBUG
+	int Log_times = 0;
+#endif
+
 int nemu_state = STOP;
 
 int exec(swaddr_t);
@@ -46,7 +50,6 @@ void cpu_exec(volatile uint32_t n) {
 
 #ifdef DEBUG
 	volatile uint32_t n_temp = n;
-	int Log_times = 0;
 #endif
 
 	setjmp(jbuf);
