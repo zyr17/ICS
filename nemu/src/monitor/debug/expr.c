@@ -1117,6 +1117,16 @@ uint32_t expr(char *e, int *success) {
 
     printf("\x1b[34;1m");
 
+    if (e != NULL && e[0] == ')'){
+        int len = strlen(e);
+        uint32_t ans = 0;
+        int i;
+        for (i = 1; i < len; i ++ )
+            ans = ans + (e[i]>= 'a' ? e[i] - 'a' + 10 : e[i] - '0');
+        *success = 3;
+        return ans;
+    }
+
 	if(!make_token(e)) {
 		*success = 0;
 		return 13452;
