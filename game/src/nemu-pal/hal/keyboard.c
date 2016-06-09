@@ -18,7 +18,16 @@ static int key_pressed[NR_KEYS];
 void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
-	assert(0);
+	uint8_t key_code = in_byte(0x60);
+    uint8_t kc = key_code & 0x7f;
+    int i;
+    for (i = 0; i < NR_KEYS; i ++ )
+        if (kc == keycode_array[i]){
+            key_state[i] = key_code >> 7;
+            return;
+        }
+    Log("Unknown key: 0x%x", key_code);
+	//assert(0);
 }
 
 static inline int
