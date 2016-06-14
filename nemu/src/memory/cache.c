@@ -214,3 +214,49 @@ inline void L1_cache_write(hwaddr_t addr, size_t len, uint32_t data){
     }
     else L1_cache_update(addr, len);
 }
+
+inline void L2_cache_check(hwaddr_t addr){
+    int group = addr / (BLOCK_SIZE / 8) % L2_SET;
+    int tag = addr / (BLOCK_SIZE / 8) / L2_SET;
+    int i;
+    for (i = 0; i < L2_LENGTH; i ++ )
+        if (l2_cache_block[group][i].valid_bit && l2_cache_block[group][i].tag == tag){
+            printf("L2 cache: find addr: 0x%x, group: 0x%x, tag: 0x%x, position: %d\n, dirty bit: %dblock content:\n", addr, group, tag, i, l2_cache_block[group][i].dirty_bit);
+            int j;
+            for (j = 0; j < BLOCK_SIZE / 8; j ++ ){
+                printf("%x ", l2_cache_block[group][i].data[j]);
+                if (j != BLOCK_SIZE / 8 - 1 && (j + 1) % 8 == 0) printf("\n");
+            }
+            return;
+        }
+    printf("L2 cache: not find addr: 0x%x", addr);
+}
+
+inline void L1_cache_check(hwaddr_t addr){
+    int group = addr / (BLOCK_SIZE / 8) % L1_SET;
+    int tag = addr / (BLOCK_SIZE / 8) / L1_SET;
+    int i;
+    for (i = 0; i < L1_LENGTH; i ++ )
+        if (l1_cache_block[group][i].valid_bit && l1_cache_block[group][i].tag == tag){
+            printf("L1 cache: find addr: 0x%x, group: 0x%x, tag: 0x%x, position: %d\nblock content:\n", addr, group, tag, i);
+            int j;
+            for (j = 0; j < BLOCK_SIZE / 8; j ++ ){
+                printf("%x ", l1_cache_block[group][i].data[j]);
+                if (j != BLOCK_SIZE / 8 - 1 && (j + 1) % 8 == 0) printf("\n");
+            }
+            return;
+        }
+    printf("L1 cache: not find addr: 0x%x", addr);
+#ifdef USE_L2_CACHE
+    L2_cache_check(addr);
+#endif
+}
+
+inline void cache_check(hwaddr_t addr){
+    printf("Block ADDR: 0x%x\n", addr &= 0xffffffc0);
+#ifdef USE_CACHE
+    L1_cache_check(addr);
+#else
+    printf("cache not open!\n");
+#endif
+}

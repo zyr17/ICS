@@ -302,6 +302,29 @@ static int cmd_d(char *args) {
     return 0;
 }
 
+static int cmd_cache(char *args) {
+    int suc = 0;
+    C_COLOR
+    if (strlen(args) == 0){
+        NOTHING_CACHE:;
+        printf("cache: input nothing!\n");
+    }
+    uint32_t ans = expr(args, &suc);
+    if (suc == 0){
+        printf("cache: Calc error.\n");
+        return 0;
+    }
+    else if (suc == - 1)
+        goto NOTHING_CACHE;
+    void cache_check(hwaddr_t);
+    cache_check(ans);
+    return 0;
+}
+
+static int cmd_page(char *args) {
+    return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -320,6 +343,8 @@ static struct {
 	{ "w", "[w expr] Set a watchpoint, when expr changes, stop.", cmd_w},
 	{ "d", "[d N] Delete the Nth watchpoint.", cmd_d},
 	{ "bt", "Print backtrace of all stack frames.", cmd_bt},
+	{ "cache", "[cache N] Translate ADDR N by cache.", cmd_cache},
+	{ "page", "[page N] Translate ADDR N by page", cmd_page},
 
 	/* TODO: Add more commands */
 
