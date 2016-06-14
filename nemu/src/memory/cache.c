@@ -107,7 +107,7 @@ inline void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
         //l2_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
         //l2_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
         for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
-            l1_cache_block[group][pos].data_32[i] = dram_read(old_addr + i * 4, 4);
+            l2_cache_block[group][pos].data_32[i] = dram_read(old_addr + i * 4, 4);
         /*unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32LL) + dram_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l2_cache_block[group][pos].data[i] = lltmp & 0xff;
