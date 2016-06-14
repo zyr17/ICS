@@ -4,7 +4,7 @@
 #include "common.h"
 #include <stdlib.h>
 
-#define BLOCK_BITS 3
+#define BLOCK_BITS 6
 #define BLOCK_SIZE (8 << BLOCK_BITS)
 #define L1_SIZE 65536
 #define L1_SET 8
