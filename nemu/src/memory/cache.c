@@ -1,6 +1,6 @@
 #include "memory/cache.h"
 
-//#define USE_L2_CACHE
+#define USE_L2_CACHE
 
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);
@@ -36,8 +36,10 @@ inline uint32_t L2_cache_single(hwaddr_t addr, size_t len){
             //dram_write(addr_old, 4, lltmp & 0xffffffff);
             //dram_write(addr_old + 4, 4, lltmp >> 32LL);
             //printf("%08llX %08X\n", lltmp & 0xffffffff, l2_cache_block[group][pos].data_32_low);
-            dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
-            dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
+            //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+                l2_cache_block[group][pos].data_32[i] = dram_read(addr_old + i * 4, 4);
             //int tlow = dram_read(addr_old, 4);
             //int thigh = dram_read(addr_old + 4, 4);
             //if (tlow != l2_cache_block[group][pos].data_32_low) printf("%x %x\n", tlow, l2_cache_block[group][pos].data_32_low);
@@ -56,8 +58,10 @@ inline uint32_t L2_cache_single(hwaddr_t addr, size_t len){
         /*for (i = 0; i < BLOCK_SIZE / 8; i ++ )
             l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);*/
         hwaddr_t addr_old = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        l2_cache_block[group][pos].data_32_low = dram_read(addr_old, 4);
-        l2_cache_block[group][pos].data_32_high = dram_read(addr_old + 4, 4);
+        //l2_cache_block[group][pos].data_32_low = dram_read(addr_old, 4);
+        //l2_cache_block[group][pos].data_32_high = dram_read(addr_old + 4, 4);
+        for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+            l2_cache_block[group][pos].data_32[i] = dram_read(addr_old + i * 4, 4);
     }
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
@@ -91,17 +95,19 @@ inline void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
         if (l2_cache_block[group][pos].dirty_bit){
             l2_cache_block[group][pos].dirty_bit = 0;
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
-            /*int ii;
-            for (ii = 0; ii < BLOCK_SIZE / 8; ii ++ )
-                dram_write(addr_old + ii, 1, l2_cache_block[group][pos].data[ii]);*/
-            dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
-            dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            int ii;
+            for (ii = 0; ii < BLOCK_SIZE / 8 / 4; ii ++ )
+                dram_write(addr_old + ii * 4, 4, l2_cache_block[group][pos].data_32[ii]);
+            //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
+            //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
         }
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        l2_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
-        l2_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+        //l2_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
+        //l2_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+        for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+            l1_cache_block[group][pos].data_32[i] = dram_read(old_addr + i * 4, 4);
         /*unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32LL) + dram_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l2_cache_block[group][pos].data[i] = lltmp & 0xff;

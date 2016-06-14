@@ -27,9 +27,7 @@ struct{
     uint32_t tag;
     union{
         uint8_t data[BLOCK_SIZE / 8];
-        struct{
-            uint32_t data_32_low, data_32_high;
-        };
+        uint32_t data_32[BLOCK_SIZE / 8 / 4];
     };
 }l2_cache_block[L2_SET][L2_LENGTH], l2_cache_temp;
 
