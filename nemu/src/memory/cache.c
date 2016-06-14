@@ -1,6 +1,6 @@
 #include "memory/cache.h"
 
-//#define USE_L2_CACHE
+#define USE_L2_CACHE
 
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);
@@ -244,6 +244,11 @@ inline void L1_cache_check(hwaddr_t addr){
                 printf("%02x ", l1_cache_block[group][i].data[j]);
                 if ((j + 1) % 8 == 0) printf("\n");
             }
+#ifdef USE_L2_CACHE
+            L2_cache_check(addr);
+#else
+            printf("L2 cache not open!\n");
+#endif
             return;
         }
     printf("L1 cache: not find addr: 0x%x\n", addr);
