@@ -253,7 +253,7 @@ inline void L1_cache_check(hwaddr_t addr){
 }
 
 inline void cache_check(hwaddr_t addr){
-    printf("Block ADDR: 0x%x\n", addr &= 0xffffffc0);
+    printf("Block ADDR: 0x%x\n", addr &= ~((1 << BLOCK_BITS) - 1));
 #ifdef USE_CACHE
     L1_cache_check(addr);
 #else

@@ -4,13 +4,14 @@
 #include "common.h"
 #include <stdlib.h>
 
-#define BLOCK_SIZE 64
+#define BLOCK_BITS 3
+#define BLOCK_SIZE (8 << BLOCK_BITS)
 #define L1_SIZE 65536
 #define L1_SET 8
-#define L1_LENGTH L1_SIZE / L1_SET / BLOCK_SIZE
+#define L1_LENGTH (L1_SIZE / L1_SET / BLOCK_SIZE)
 #define L2_SIZE 4194304
 #define L2_SET 16
-#define L2_LENGTH L2_SIZE / L2_SET / BLOCK_SIZE
+#define L2_LENGTH (L2_SIZE / L2_SET / BLOCK_SIZE)
 
 struct{
     bool valid_bit;
