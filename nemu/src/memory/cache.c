@@ -221,10 +221,10 @@ inline void L2_cache_check(hwaddr_t addr){
     int i;
     for (i = 0; i < L2_LENGTH; i ++ )
         if (l2_cache_block[group][i].valid_bit && l2_cache_block[group][i].tag == tag){
-            printf("L2 cache: find addr: 0x%x, group: 0x%x, tag: 0x%x, position: %d\n, dirty bit: %dblock content:\n", addr, group, tag, i, l2_cache_block[group][i].dirty_bit);
+            printf("L2 cache: find addr: 0x%x, group: 0x%x, tag: 0x%x, position: %d\n, dirty bit: %d\nblock content:\n", addr, group, tag, i, l2_cache_block[group][i].dirty_bit);
             int j;
             for (j = 0; j < BLOCK_SIZE / 8; j ++ ){
-                printf("%02x ", l1_cache_block[group][i].data[j]);
+                printf("%02x ", l2_cache_block[group][i].data[j]);
                 if ((j + 1) % 8 == 0) printf("\n");
             }
             return;
