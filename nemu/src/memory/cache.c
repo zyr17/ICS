@@ -229,7 +229,7 @@ inline void L2_cache_check(hwaddr_t addr){
             }
             return;
         }
-    printf("L2 cache: not find addr: 0x%x", addr);
+    printf("L2 cache: not find addr: 0x%x\n", addr);
 }
 
 inline void L1_cache_check(hwaddr_t addr){
@@ -246,7 +246,7 @@ inline void L1_cache_check(hwaddr_t addr){
             }
             return;
         }
-    printf("L1 cache: not find addr: 0x%x", addr);
+    printf("L1 cache: not find addr: 0x%x\n", addr);
 #ifdef USE_L2_CACHE
     L2_cache_check(addr);
 #else
