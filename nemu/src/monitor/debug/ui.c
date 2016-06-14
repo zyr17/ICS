@@ -308,6 +308,7 @@ static int cmd_cache(char *args) {
     if (args == NULL || strlen(args) == 0){
         NOTHING_CACHE:;
         printf("cache: input nothing!\n");
+        return 0;
     }
     uint32_t ans = expr(args, &suc);
     if (suc == 0){
