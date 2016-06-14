@@ -58,10 +58,10 @@ inline uint32_t L2_cache_single(hwaddr_t addr, size_t len){
         /*for (i = 0; i < BLOCK_SIZE / 8; i ++ )
             l2_cache_block[group][pos].data[i] = dram_read(addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8) + i, 1);*/
         hwaddr_t addr_old = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        //l2_cache_block[group][pos].data_32_low = dram_read(addr_old, 4);
-        //l2_cache_block[group][pos].data_32_high = dram_read(addr_old + 4, 4);
-        for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
-            l2_cache_block[group][pos].data_32[i] = dram_read(addr_old + i * 4, 4);
+        l2_cache_block[group][pos].data_32_low = dram_read(addr_old, 4);
+        l2_cache_block[group][pos].data_32_high = dram_read(addr_old + 4, 4);
+        //for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+        //    l2_cache_block[group][pos].data_32[i] = dram_read(addr_old + i * 4, 4);
     }
     uint32_t ans = 0;
     for (j = len - 1; j >= 0; j -- )
