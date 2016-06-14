@@ -149,8 +149,10 @@ inline uint32_t L1_cache_single(hwaddr_t addr, size_t len){
         l1_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
 		#ifdef USE_L2_CACHE
-        l1_cache_block[group][pos].data_32_low = L2_cache_read(old_addr, 4);
-        l1_cache_block[group][pos].data_32_high = L2_cache_read(old_addr + 4, 4);
+        //l1_cache_block[group][pos].data_32_low = L2_cache_read(old_addr, 4);
+        //l1_cache_block[group][pos].data_32_high = L2_cache_read(old_addr + 4, 4);
+        for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+            l1_cache_block[group][pos].data_32[i] = L2_cache_read(old_addr + i * 4, 4);
 		#else
         l1_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
         l1_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
