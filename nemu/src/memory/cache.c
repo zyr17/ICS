@@ -1,6 +1,6 @@
 #include "memory/cache.h"
 
-#define USE_L2_CACHE
+//#define USE_L2_CACHE
 
 void init_cache(){
     memset(l1_cache_block, 0, sizeof l1_cache_block);
@@ -154,8 +154,10 @@ inline uint32_t L1_cache_single(hwaddr_t addr, size_t len){
         for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
             l1_cache_block[group][pos].data_32[i] = L2_cache_read(old_addr + i * 4, 4);
 		#else
-        l1_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
-        l1_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+        //l1_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
+        //l1_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+        for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+            l1_cache_block[group][pos].data_32[i] = dram_read(old_addr + i * 4, 4);
 		#endif
         /*unsigned long long lltmp = ((unsigned long long)L2_cache_read(old_addr + 4, 4) << 32) + L2_cache_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
