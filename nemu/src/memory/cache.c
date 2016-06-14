@@ -224,8 +224,8 @@ inline void L2_cache_check(hwaddr_t addr){
             printf("L2 cache: find addr: 0x%x, group: 0x%x, tag: 0x%x, position: %d\n, dirty bit: %dblock content:\n", addr, group, tag, i, l2_cache_block[group][i].dirty_bit);
             int j;
             for (j = 0; j < BLOCK_SIZE / 8; j ++ ){
-                printf("%x ", l2_cache_block[group][i].data[j]);
-                if (j != BLOCK_SIZE / 8 - 1 && (j + 1) % 8 == 0) printf("\n");
+                printf("%02x ", l1_cache_block[group][i].data[j]);
+                if ((j + 1) % 8 == 0) printf("\n");
             }
             return;
         }
@@ -241,8 +241,8 @@ inline void L1_cache_check(hwaddr_t addr){
             printf("L1 cache: find addr: 0x%x, group: 0x%x, tag: 0x%x, position: %d\nblock content:\n", addr, group, tag, i);
             int j;
             for (j = 0; j < BLOCK_SIZE / 8; j ++ ){
-                printf("%x ", l1_cache_block[group][i].data[j]);
-                if (j != BLOCK_SIZE / 8 - 1 && (j + 1) % 8 == 0) printf("\n");
+                printf("%02x ", l1_cache_block[group][i].data[j]);
+                if ((j + 1) % 8 == 0) printf("\n");
             }
             return;
         }
