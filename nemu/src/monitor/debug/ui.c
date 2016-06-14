@@ -322,6 +322,21 @@ static int cmd_cache(char *args) {
 }
 
 static int cmd_page(char *args) {
+    int suc = 0;
+    if (args == NULL || strlen(args) == 0){
+        NOTHING_PAGE:;
+        printf("page: input nothing!\n");
+        return 0;
+    }
+    uint32_t ans = expr(args, &suc);
+    if (suc == 0){
+        printf("page: Calc error.\n");
+        return 0;
+    }
+    else if (suc == - 1)
+        goto NOTHING_PAGE;
+    void page_check(lnaddr_t);
+    page_check(ans);
     return 0;
 }
 

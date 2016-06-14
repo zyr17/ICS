@@ -90,12 +90,20 @@ inline void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg)
 	lnaddr_write(lnaddr, len, data);
 }
 
+/*
+ *
+ *
+ * page.c is copied below for inline to boost
+ *
+ *
+ *
+ */
 
 
 
 
 
-
+#include "memory/page.h"
 
 hwaddr_t __attribute__((noinline)) page_translate_real(lnaddr_t addr){
     hwaddr_t res = 0, tmp;
@@ -159,3 +167,40 @@ void page_write(lnaddr_t addr, size_t len, uint32_t data){
     else hwaddr_write(page_translate(addr), len, data);
 }
 
+void page_find_real(lnaddr_t addr){
+    int i;
+    for (i = 0; i < TLB_SIZE; i ++ )
+        if (TLB_cache[i].valid_bit && addr >> 12 == TLB_cache[i].tag)
+            printf("find in TLB, translated addr: 0x%08x\n", (TLB_cache[0].data << 12) + (addr & 0xfff));
+
+    hwaddr_t tmp;
+    tmp = cpu.cr3 + (addr >> 22) * 4;
+    uint32_t tval = hwaddr_read(tmp, 4);
+
+    if (tval & 1){
+        printf("find page v1, input: 0x%03x, page table addr: 0x%08x\n", addr >> 22, tval);
+        tval = hwaddr_read((tval & 0xfffff000) + ((addr >> 12) & 0x3ff) * 4, 4);
+        if (tval & 1){
+            printf("find page v2, translated addr: 0x%08x\n", (tval & 0xfffff000) + (addr & 0xfff));
+        }
+        else{
+            printf("not find page v2\n");
+        }
+    }
+    else{
+        printf("not find page v1\n");
+    }
+}
+
+void page_check(lnaddr_t addr){
+#ifdef USE_VERY_BIG_TLB
+    printf("now using VERY BIG TLB to boost!\n");
+    if (!(bbtlb[addr >> 12] & 1)) printf("find in VERY BIG TLB, translated addr: 0x%08x\n", (addr & 0xfff) + bbtlb[addr >> 12]);
+    else{
+        printf("not find in VERY BIG TLB.\n");
+#endif
+    page_find_real(addr);
+#ifdef USE_VERY_BIG_TLB
+    }
+#endif
+}
