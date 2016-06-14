@@ -95,19 +95,19 @@ inline void L2_cache_update(hwaddr_t addr, size_t len, uint32_t data){
         if (l2_cache_block[group][pos].dirty_bit){
             l2_cache_block[group][pos].dirty_bit = 0;
             hwaddr_t addr_old = (l2_cache_block[group][pos].tag * L2_SET + group) * (BLOCK_SIZE / 8);
-            int ii;
-            for (ii = 0; ii < BLOCK_SIZE / 8 / 4; ii ++ )
-                dram_write(addr_old + ii * 4, 4, l2_cache_block[group][pos].data_32[ii]);
-            //dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
-            //dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
+            //int ii;
+            //for (ii = 0; ii < BLOCK_SIZE / 8 / 4; ii ++ )
+            //    dram_write(addr_old + ii * 4, 4, l2_cache_block[group][pos].data_32[ii]);
+            dram_write(addr_old, 4, l2_cache_block[group][pos].data_32_low);
+            dram_write(addr_old + 4, 4, l2_cache_block[group][pos].data_32_high);
         }
         l2_cache_block[group][pos].valid_bit = 1;
         l2_cache_block[group][pos].tag = tag;
         hwaddr_t old_addr = addr / (BLOCK_SIZE / 8) * (BLOCK_SIZE / 8);
-        //l2_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
-        //l2_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
-        for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
-            l2_cache_block[group][pos].data_32[i] = dram_read(old_addr + i * 4, 4);
+        l2_cache_block[group][pos].data_32_low = dram_read(old_addr, 4);
+        l2_cache_block[group][pos].data_32_high = dram_read(old_addr + 4, 4);
+        //for (i = 0; i < BLOCK_SIZE / 8 / 4; i ++ )
+        //    l2_cache_block[group][pos].data_32[i] = dram_read(old_addr + i * 4, 4);
         /*unsigned long long lltmp = ((unsigned long long)(dram_read(old_addr + 4, 4)) << 32LL) + dram_read(old_addr, 4);
         for (i = 0; i < BLOCK_SIZE / 8; i ++ ){
             l2_cache_block[group][pos].data[i] = lltmp & 0xff;
