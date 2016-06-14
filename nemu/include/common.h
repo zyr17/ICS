@@ -6,7 +6,7 @@
 /* You will define this macro in PA4 */
 #define HAS_DEVICE
 
-//#define DEBUG
+#define DEBUG
 #define USE_CACHE
 #define USE_VERY_BIG_TLB
 #define DIRECTLY_MEM
