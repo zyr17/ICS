@@ -304,7 +304,6 @@ static int cmd_d(char *args) {
 
 static int cmd_cache(char *args) {
     int suc = 0;
-    C_COLOR
     if (args == NULL || strlen(args) == 0){
         NOTHING_CACHE:;
         printf("cache: input nothing!\n");
