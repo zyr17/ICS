@@ -7,7 +7,7 @@
 #define HAS_DEVICE
 
 //#define DEBUG
-//#define USE_CACHE
+#define USE_CACHE
 #define USE_VERY_BIG_TLB
 #define DIRECTLY_MEM
 //#define LOG_FILE
