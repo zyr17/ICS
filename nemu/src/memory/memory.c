@@ -195,7 +195,7 @@ void page_find_real(lnaddr_t addr){
 void page_check(lnaddr_t addr){
     printf("input ADDR: 0x%08x\n", addr);
 #ifdef USE_VERY_BIG_TLB
-    printf("now using VERY BIG TLB to boost!\n");printf("%d\n", bbtlb[addr >> 12]);
+    printf("now using VERY BIG TLB to boost!\n");
     if (!(bbtlb[addr >> 12] & 1)) printf("find in VERY BIG TLB, translated addr: 0x%08x\n", (addr & 0xfff) + bbtlb[addr >> 12]);
     else{
         printf("not find in VERY BIG TLB.\n");
